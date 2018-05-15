@@ -1,7 +1,5 @@
 <template lang="html">
-<div id="homepage">
-  <h1>This is the homepage.</h1>
-</div>
+<div id="register"></div>
 </template>
 
 <script>
