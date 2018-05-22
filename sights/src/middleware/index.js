@@ -1,13 +1,18 @@
+import store from '../store';
 
-
-export default {
-  auth(to, from, next) {
-    if (to.name === 'Callback') { // check if "to"-route is "callback" and allow access
+export const auth = {
+  ifNotAuthenticated(to, from, next) {
+    if (!store.getters.isAuthenticated) {
       next();
-    } else if (router.app.$auth.isAuthenticated()) { // if authenticated allow access
+    }
+  },
+  ifAuthenticated(to, from, next) {
+    if (store.getters.isAuthenticated) {
       next();
-    } else { // trigger auth0 login
-      router.app.$auth.login();
+    } else {
+      next('/login');
     }
   },
 };
+
+export default { auth };

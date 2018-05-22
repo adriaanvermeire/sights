@@ -5,7 +5,7 @@
       <b-card
         title='Login'
         >
-        <b-form @submit.prevent="login({email, password})">
+        <b-form @submit.prevent="login">
           <b-form-input
           id='email'
           v-model.trim="email"
@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { AUTH_REQUEST } from '@/store/actions/auth';
+
 export default {
   data() {
     return {
@@ -39,10 +41,8 @@ export default {
   },
   methods: {
     login() {
-      this.$store.dispatch('login', {
-        email: this.email,
-        password: this.password,
-      }).then(() => {
+      const { email, password } = this;
+      this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
         this.$router.push('/');
       });
     },

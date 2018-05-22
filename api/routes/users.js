@@ -18,21 +18,21 @@ router.post('/register', (req, res) => {
 
   User.addUser(newUser, (err) => {
     if (err) {
-      res.json({ succes: false, msg: 'Failed to register user' });
+      res.json({ success: false, msg: 'Failed to register user' });
     } else {
-      res.json({ succes: true, msg: 'User registered' });
+      res.json({ success: true, msg: 'User registered' });
     }
   });
 });
 
 // authenticate
 router.post('/authenticate', (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  User.getUserByUsername(username, (err, user) => {
+  User.getUserByField('email', email, (err, user) => {
     if (err) throw err;
     if (!user) {
-      res.json({ succes: false, msg: 'User not found' });
+      res.json({ success: false, msg: 'User not found' });
     } else {
       User.comparePassword(password, user.password, (err, isMatch) => {
         if (err) throw err;
@@ -40,19 +40,18 @@ router.post('/authenticate', (req, res) => {
           const token = jwt.sign(user.toJSON(), process.env.SECRET, {
             expiresIn: 604800, // 1 week
           });
-
+          const {
+            id, name, username, email,
+          } = user;
           res.json({
-            succes: true,
+            success: true,
             token: `JWT ${token}`,
             user: {
-              id: user.id,
-              name: user.name,
-              username: user.username,
-              email: user.email,
+              id, name, username, email,
             },
           });
         } else {
-          res.json({ succes: false, msg: 'Wrong password' });
+          res.json({ success: false, msg: 'Wrong password' });
         }
       });
     }

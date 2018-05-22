@@ -28,8 +28,8 @@ module.exports.getUserById = (id, callback) => {
   User.findById(id, callback);
 };
 
-module.exports.getUserByUsername = (username, callback) => {
-  const query = { username };
+module.exports.getUserByField = (field, value, callback) => {
+  const query = { [field]: value };
   User.findOne(query, callback);
 };
 

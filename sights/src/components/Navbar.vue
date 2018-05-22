@@ -9,35 +9,43 @@
     <b-navbar-nav class='ml-auto'>
       <b-nav-item :to="{ name: 'Home' }">Home</b-nav-item>
       <b-nav-item :to="{ name: 'Explore' }">Explore</b-nav-item>
-      <b-nav-item v-if="isLoggedIn" :to="{ name: 'MySights' }">My Sights</b-nav-item>
-      <b-nav-item v-if="isLoggedIn" :to="{ name: 'NewSight' }">
+      <b-nav-item v-if="isAuthenticated" :to="{ name: 'MySights' }">My Sights</b-nav-item>
+      <b-nav-item v-if="isAuthenticated" :to="{ name: 'NewSight' }">
         <icon name="plus" color='white'></icon>
       </b-nav-item>
-      <b-nav-item v-if="isLoggedIn" :to="{ name: 'Profile' }">
-        <icon name="user"></icon>
-      </b-nav-item>
-      <b-nav-item v-if="!isLoggedIn" :to="{ name: 'Register' }">
+      <b-nav-item-dropdown v-if="isAuthenticated" right>
+        <slot name='button-content'>
+          <icon name="user" color='white'></icon><span class="sr-only">Profile</span>
+        </slot>
+        <b-dropdown-item href="#">Profile</b-dropdown-item>
+        <b-dropdown-item href="#">Settings</b-dropdown-item>
+        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-item @click.prevent='logout'>Logout</b-dropdown-item>
+      </b-nav-item-dropdown>
+      <b-nav-item v-if="!isAuthenticated" :to="{ name: 'Register' }">
         <strong>Register</strong>
       </b-nav-item>
-      <b-nav-item v-if="!isLoggedIn" :to="{ name: 'Login' }">Login</b-nav-item>
+      <b-nav-item v-if="!isAuthenticated" :to="{ name: 'Login' }">Login</b-nav-item>
     </b-navbar-nav>
   </b-collapse>
 </b-navbar>
 </template>
 
 <script>
+import { AUTH_LOGOUT } from '@/store/actions/auth';
+
 export default {
   data() {
     return {};
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout');
+      this.$store.dispatch(AUTH_LOGOUT);
     },
   },
   computed: {
-    isLoggedIn() {
-      return !this.$store.getters.isLoggedIn;
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     },
   },
 };

@@ -6,12 +6,30 @@
 </template>
 
 <script>
+/* eslint-disable no-underscore-dangle */
 import Navbar from '@/components/Navbar';
+import axios from 'axios';
+import { AUTH_LOGOUT } from '@/store/actions/auth';
+import { USER_REQUEST } from '@/store/actions/user';
+
 
 export default {
   name: 'App',
   components: {
     Navbar,
+  },
+  created() {
+    axios.interceptors.response.use(undefined, err => new Promise(() => {
+      if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+        // if you ever get an unauthorized, logout the user
+        this.$store.dispatch(AUTH_LOGOUT);
+        // you can also redirect to /login if needed !
+      }
+      throw err;
+    }));
+    if (this.$store.getters.isAuthenticated) {
+      this.$store.dispatch(USER_REQUEST);
+    }
   },
 };
 </script>
