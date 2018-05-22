@@ -27,9 +27,9 @@ router.post('/register', (req, res) => {
 
 // authenticate
 router.post('/authenticate', (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  User.getUserByUsername(username, (err, user) => {
+  User.getUserByField('email', email, (err, user) => {
     if (err) throw err;
     if (!user) {
       res.json({ success: false, msg: 'User not found' });
@@ -40,15 +40,14 @@ router.post('/authenticate', (req, res) => {
           const token = jwt.sign(user.toJSON(), process.env.SECRET, {
             expiresIn: 604800, // 1 week
           });
-
+          const {
+            id, name, username, email,
+          } = user;
           res.json({
             success: true,
             token: `JWT ${token}`,
             user: {
-              id: user.id,
-              name: user.name,
-              username: user.username,
-              email: user.email,
+              id, name, username, email,
             },
           });
         } else {
