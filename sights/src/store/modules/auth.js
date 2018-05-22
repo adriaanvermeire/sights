@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
-import axios from 'axios';
 import AuthenticationService from '@/services/AuthenticationService';
+import utils from '@/utils';
+
 import { AUTH_REQUEST, AUTH_ERROR, AUTH_SUCCESS, AUTH_LOGOUT } from '../actions/auth';
 import { USER_REQUEST } from '../actions/user';
 
@@ -20,7 +21,7 @@ const actions = {
       .then((resp) => {
         const token = resp.data.token;
         localStorage.setItem('user-token', token); // store the token in localstorage
-        axios.defaults.headers.common.Authorization = token;
+        utils.setAuthorizationHeader(token);
         commit(AUTH_SUCCESS, token);
         dispatch(USER_REQUEST);
         resolve(resp);
@@ -34,7 +35,7 @@ const actions = {
   [AUTH_LOGOUT]: ({ commit }) => new Promise((resolve) => {
     commit(AUTH_LOGOUT);
     localStorage.removeItem('user-token'); // clear your user's token from localstorage
-    delete axios.defaults.headers.common.Authorization;
+    utils.setAuthorizationHeader();
     resolve();
   }),
 };
