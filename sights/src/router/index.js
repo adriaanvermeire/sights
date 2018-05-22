@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Homepage from '@/components/Home/Homepage';
-import Profile from '@/components/profile/Profile';
-import Register from '@/components/authentication/Register';
-import Login from '@/components/authentication/Login';
+import Profile from '@/components/Profile/Profile';
+import Register from '@/components/Auth/Register';
+import Login from '@/components/Auth/Login';
 import { auth } from '../middleware';
 
 
