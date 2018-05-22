@@ -5,31 +5,43 @@ Vue.use(Vuex);
 
 const state = {
   // single source of data
+  isLoggedIn: !!localStorage.getItem('token'),
 };
 
 const actions = {
   // asynchronous operations
-  addNote({ commit }) {
-    commit('add_note');
+  login({ commit }) {
+    commit('login'); // Show spinner
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        localStorage.setItem('token', 'JWT');
+        commit('login_success');
+        resolve();
+      }, 1000);
+    });
   },
-
+  logout({ commit }) {
+    localStorage.removeItem('token');
+    commit('logout');
+  },
 };
 const mutations = {
   // isolated data mutations
-  add_note(state) {
-    const newNote = {
-      text: 'New note',
-      favorite: false,
-    };
-
-    // only mutators can mutate the state
-    state.notes.push(newNote);
-    state.activeNote = newNote;
+  login(state) {
+    state.pending = true;
+  },
+  login_success(state) {
+    state.isLoggedIn = true;
+    state.pending = false;
+  },
+  logout(state) {
+    state.isLoggedIn = false;
   },
 };
 
 const getters = {
   // reusable data accessors
+  isLoggedIn: state => state.isLoggedIn,
 };
 
 const store = new Vuex.Store({
