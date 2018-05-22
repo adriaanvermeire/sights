@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <navbar></navbar>
+    <navbar class='mb-4'/>
     <router-view/>
   </div>
 </template>
@@ -16,7 +16,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss'>
+@import './assets/scss/custom-bs.scss';
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
+@import '../node_modules/bootstrap-vue/dist/bootstrap-vue.css';
 #app {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

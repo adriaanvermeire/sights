@@ -1,37 +1,28 @@
 <template lang="html">
-<nav class="navbar navbar-expand justify-content-between">
-  <router-link :to="{ name: 'Home' }" class="navbar-brand">
-    <img class='logo' src="../assets/logo-sights-inverse-notext.png" alt="">
+<b-navbar variant="primary" toggleable="sm">
+  <b-navbar-brand :to="{ name: 'Home' }">
+    <img class='logo' src="@/assets/graphics/logo-sights-inverse-notext.png" alt="">
     Sights
-  </router-link>
-  <ul class="navbar-nav d-flex align-items-center">
-    <li class="nav-item">
-      <router-link :to="{ name: 'Home' }" class='nav-link'>Home</router-link>
-    </li>
-    <li class="nav-item">
-      <router-link :to="{ name: 'Explore' }" class='nav-link'>Explore</router-link>
-    </li>
-    <li class="nav-item" v-if='isLoggedIn'>
-      <router-link :to="{ name: 'MySights' }" class='nav-link'>My Sights</router-link>
-    </li>
-    <li class="nav-item" v-if='isLoggedIn'>
-      <router-link :to="{ name: 'NewSight' }" class='nav-link'>Plus</router-link>
-    </li>
-    <li class="nav-item" v-if='isLoggedIn'>
-      <router-link  :to="{ name: 'Profile' }" class="nav-link">
-        <svg height="50" width="50">
-          <circle cx="25" cy="25" r="25" fill="white" />
-        </svg>
-      </router-link>
-    </li>
-    <li class="nav-item" v-if='!isLoggedIn'>
-      <router-link :to="{ name: 'Register' }" class="nav-link">Register</router-link>
-    </li>
-    <li class="nav-item" v-if='!isLoggedIn'>
-      <router-link :to="{ name: 'Login' }" class="nav-link">Login</router-link>
-    </li>
-  </ul>
-</nav>
+  </b-navbar-brand>
+  <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+  <b-collapse is-nav id="nav_collapse">
+    <b-navbar-nav class='ml-auto'>
+      <b-nav-item :to="{ name: 'Home' }">Home</b-nav-item>
+      <b-nav-item :to="{ name: 'Explore' }">Explore</b-nav-item>
+      <b-nav-item v-if="isLoggedIn" :to="{ name: 'MySights' }">My Sights</b-nav-item>
+      <b-nav-item v-if="isLoggedIn" :to="{ name: 'NewSight' }">
+        <icon name="plus" color='white'></icon>
+      </b-nav-item>
+      <b-nav-item v-if="isLoggedIn" :to="{ name: 'Profile' }">
+        <icon name="user"></icon>
+      </b-nav-item>
+      <b-nav-item v-if="!isLoggedIn" :to="{ name: 'Register' }">
+        <strong>Register</strong>
+      </b-nav-item>
+      <b-nav-item v-if="!isLoggedIn" :to="{ name: 'Login' }">Login</b-nav-item>
+    </b-navbar-nav>
+  </b-collapse>
+</b-navbar>
 </template>
 
 <script>
@@ -46,7 +37,7 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
+      return !this.$store.getters.isLoggedIn;
     },
   },
 };
@@ -54,27 +45,19 @@ export default {
 
 <style lang="scss" scoped>
 .navbar{
-  background-color: #09eba7;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   padding-top: 0;
   padding-bottom: 0;
-  height: 80px;
+  height: 60px;
 
-  a {
-    font-family: 'IBM Plex Sans';
-    font-weight: bold;
+  font-family: 'IBM Plex Sans';
+  font-weight: bold;
+  a, .nav-link {
     color: white;
-    font-size: 24px;
   }
-
   .logo {
-    height: 80px;
+    height: 60px;
   }
-
-  .nav-link:hover {
-    color: #414141;
-  }
-
 
 }
 </style>

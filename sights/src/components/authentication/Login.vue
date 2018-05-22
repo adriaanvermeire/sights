@@ -1,9 +1,32 @@
 <template lang="html">
-  <form @submit.prevent="login({ email, password })">
-     <input type="text" placeholder="email" v-model="email">
-     <input type="password" placeholder="password" v-model="password">
-     <button type="submit">Login</button>
-  </form>
+<b-container>
+  <b-row align-h="center">
+    <b-col cols="6">
+      <b-card
+        title='Login'
+        >
+        <b-form @submit.prevent="login({email, password})">
+          <b-form-input
+          id='email'
+          v-model.trim="email"
+          type='text'
+          placeholder='Email'
+          class='mb-2'
+          ></b-form-input>
+          <b-form-input
+          id='password'
+          v-model.trim="password"
+          placeholder="Password"
+          class='mb-2'
+          ></b-form-input>
+          <b-button :to="{ name: 'Register' }" variant='outline-primary'>Register</b-button>
+          <b-button type="submit" variant="primary">Login</b-button>
+        </b-form>
+
+      </b-card>
+    </b-col>
+  </b-row>
+</b-container>
 </template>
 
 <script>
