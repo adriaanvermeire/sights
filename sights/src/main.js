@@ -3,7 +3,7 @@ import BootstrapVue from 'bootstrap-vue';
 import 'vue-awesome/icons';
 // import feather from 'vue-icon';
 import Icon from 'vue-awesome/components/Icon';
-import { setAuthorizationHeader } from '@/utils';
+import utils from '@/utils';
 import App from './App';
 import router from './router';
 import store from './store';
@@ -17,7 +17,7 @@ Vue.component('icon', Icon);
 
 const token = localStorage.getItem('user-token');
 if (token) {
-  setAuthorizationHeader(token);
+  utils.setAuthorizationHeader(token);
 }
 
 /* eslint-disable no-new */
