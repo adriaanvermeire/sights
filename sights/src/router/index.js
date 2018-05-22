@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Homepage from '@/components/Homepage';
+import Homepage from '@/components/Home/Homepage';
 import Profile from '@/components/profile/Profile';
 import Register from '@/components/authentication/Register';
 import Login from '@/components/authentication/Login';

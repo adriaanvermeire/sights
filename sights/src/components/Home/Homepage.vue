@@ -1,6 +1,7 @@
 <template lang="html">
 <div id="homepage">
-  <h1>This is the homepage.</h1>
+  <h1 class='mb-0 mt-5'>Welcome to</h1>
+  <img src="@/assets/graphics/logo-sights.png" alt="">
 </div>
 </template>
 
