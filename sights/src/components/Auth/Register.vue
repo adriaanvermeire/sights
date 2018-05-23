@@ -2,48 +2,70 @@
 <b-container>
   <b-row align-h="center">
     <b-col cols="6">
-      <b-card
-        title='Registration'
-        >
+      <b-card title='Registration'>
         <b-form @submit.prevent="register">
-          <b-form-input
-          id='name'
-          v-model.trim="details.name"
-          type='text'
-          placeholder='Name'
-          class='mb-2'
-          ></b-form-input>
-          <b-form-input
-          id='username'
-          v-model.trim="details.username"
-          type='text'
-          placeholder='Username'
-          class='mb-2'
-          ></b-form-input>
-          <b-form-input
-          id='email'
-          v-model.trim="details.email"
-          type='email'
-          placeholder='Email'
-          class='mb-2'
-          ></b-form-input>
-          <b-form-input
-          id='password'
-          v-model.trim="details.password"
-          placeholder="Password"
-          class='mb-2'
-          type='password'
-          ></b-form-input>
-          <b-form-input
-          id='passwordVerification'
-          v-model.trim="details.passwordVerification"
-          placeholder="Password verification"
-          class='mb-2'
-          type='password'
-          ></b-form-input>
+          <b-form-row class='mb-2'>
+            <b-col cols="4" class='justify-content-end d-flex'>
+              <label for="username">Username</label>
+            </b-col>
+            <b-col cols="8">
+              <input
+              id='username' type='text' class='mb-2 form-control' name='username'
+              v-model.trim="details.username"
+              v-validate="'required|alpha|min:3'"
+              />
+              <b-form-invalid-feedback v-if="errors.has('username')"
+               class='text-right' :class='{ "d-block": errors.has("username")}'
+              >{{errors.first('username')}}</b-form-invalid-feedback>
+            </b-col>
+          </b-form-row>
+          <b-form-row class='mb-2'>
+            <b-col cols="4" class='justify-content-end d-flex'>
+              <label for="email">Email</label>
+            </b-col>
+            <b-col cols="8">
+              <input
+              id='email' type='email' class='mb-2 form-control' name='email'
+              v-model.trim="details.email"
+              v-validate="'required|email'"
+              />
+              <b-form-invalid-feedback v-if="errors.has('email')"
+              class='text-right' :class='{ "d-block": errors.has("email")}'
+              >{{errors.first('email')}}</b-form-invalid-feedback>
+            </b-col>
+          </b-form-row>
+          <b-form-row class='mb-2'>
+            <b-col cols="4" class='justify-content-end d-flex'>
+              <label for="password">Password</label>
+            </b-col>
+            <b-col cols="8">
+              <input
+              id='password' class='mb-2 form-control' type='password' name='password'
+              v-model.trim="details.password"
+              v-validate="'required|min:8'"
+              />
+              <b-form-invalid-feedback v-if="errors.has('password')"
+              class='text-right' :class='{ "d-block": errors.has("password")}'
+              >{{errors.first('password')}}</b-form-invalid-feedback>
+            </b-col>
+          </b-form-row>
+          <b-form-row class='mb-2'>
+            <b-col cols="4" class='justify-content-end d-flex'>
+              <label for="passwordVerification">Confirm password</label>
+            </b-col>
+            <b-col cols="8">
+              <input
+              id='passwordVerification' class='mb-2 form-control' type='password' name='passwordVerification'
+              v-model.trim="details.passwordVerification"
+              v-validate="'required|min:8|confirmed:password'"
+              />
+              <b-form-invalid-feedback v-if="errors.has('passwordVerification')"
+              class='text-right' :class='{ "d-block": errors.has("passwordVerification")}'
+              >{{errors.first('passwordVerification')}}</b-form-invalid-feedback>
+            </b-col>
+          </b-form-row>
           <b-button type="submit" variant="primary">Register</b-button>
         </b-form>
-
       </b-card>
     </b-col>
   </b-row>
