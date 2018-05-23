@@ -9,7 +9,7 @@
           <b-form-input
           id='email'
           v-model.trim="email"
-          type='text'
+          type='email'
           placeholder='Email'
           class='mb-2'
           ></b-form-input>
