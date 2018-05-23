@@ -55,7 +55,8 @@
             </b-col>
             <b-col cols="8">
               <input
-              id='passwordVerification' class='mb-2 form-control' type='password' name='passwordVerification'
+              id='passwordVerification' class='mb-2 form-control'
+              type='password' name='passwordVerification'
               v-model.trim="details.passwordVerification"
               v-validate="'required|min:6|confirmed:password'"
               />

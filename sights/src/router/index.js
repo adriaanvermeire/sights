@@ -4,7 +4,7 @@ import Homepage from '@/components/Home/Homepage';
 import Profile from '@/components/Profile/Profile';
 import Register from '@/components/Auth/Register';
 import Login from '@/components/Auth/Login';
-import { auth } from '../middleware';
+import { auth } from './middleware';
 
 
 Vue.use(Router);
