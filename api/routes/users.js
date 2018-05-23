@@ -1,5 +1,7 @@
 /* eslint-disable no-shadow */
 const express = require('express');
+const validate = require('express-validation');
+const validation = require('./validation');
 
 const router = express.Router();
 const passport = require('passport');
@@ -8,18 +10,26 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 // register
-router.post('/register', (req, res) => {
+router.post('/register', validate(validation.register), (req, res) => {
   const {
-    name, email, username, password, passwordVerification,
+    email, username, password, passwordVerification,
   } = req.body;
   if (password === passwordVerification) {
     const newUser = new User({
-      name, email, username, password,
+      email, username, password,
     });
 
     User.addUser(newUser, (err) => {
       if (err) {
-        res.json({ success: false, msg: 'Failed to register user' });
+        let msg = 'Failed to register user';
+        if (err.code === 11000) {
+          let type = 'none';
+          if (err.message.includes('email')) { msg = 'Email already in use.'; type = 'email'; }
+          if (err.message.includes('username')) { msg = 'Username already in use.'; type = 'username'; }
+          res.json({ success: false, msg, type });
+        } else {
+          res.json({ success: false, msg });
+        }
       } else {
         res.json({ success: true, msg: 'User registered' });
       }
@@ -30,13 +40,14 @@ router.post('/register', (req, res) => {
 });
 
 // authenticate
-router.post('/authenticate', (req, res) => {
+router.post('/authenticate', validate(validation.login), (req, res) => {
   const { email, password } = req.body;
+  const msg = 'The email and/or password you entered were not correct.';
 
   User.getUserByField('email', email, (err, user) => {
     if (err) throw err;
     if (!user) {
-      res.json({ success: false, msg: 'User not found' });
+      res.json({ success: false, msg });
     } else {
       User.comparePassword(password, user.password, (err, isMatch) => {
         if (err) throw err;
@@ -45,17 +56,17 @@ router.post('/authenticate', (req, res) => {
             expiresIn: 604800, // 1 week
           });
           const {
-            id, name, username, email,
+            id, username, email,
           } = user;
           res.json({
             success: true,
             token: `JWT ${token}`,
             user: {
-              id, name, username, email,
+              id, username, email,
             },
           });
         } else {
-          res.json({ success: false, msg: 'Wrong password' });
+          res.json({ success: false, msg });
         }
       });
     }

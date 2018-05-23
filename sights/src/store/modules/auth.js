@@ -19,12 +19,17 @@ const actions = {
     commit(AUTH_REQUEST);
     AuthenticationService.authenticate(user)
       .then((resp) => {
-        const token = resp.data.token;
-        localStorage.setItem('user-token', token); // store the token in localstorage
-        utils.setAuthorizationHeader(token);
-        commit(AUTH_SUCCESS, token);
-        dispatch(USER_REQUEST);
-        resolve(resp);
+        if (resp.data.success) {
+          const token = resp.data.token;
+          localStorage.setItem('user-token', token); // store the token in localstorage
+          utils.setAuthorizationHeader(token);
+          commit(AUTH_SUCCESS, token);
+          dispatch(USER_REQUEST);
+          resolve(resp);
+        } else {
+          commit(AUTH_ERROR);
+          reject(resp);
+        }
       })
       .catch((err) => {
         commit(AUTH_ERROR, err);
