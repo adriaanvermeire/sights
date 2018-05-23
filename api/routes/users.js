@@ -40,13 +40,14 @@ router.post('/register', validate(validation.register), (req, res) => {
 });
 
 // authenticate
-router.post('/authenticate', (req, res) => {
+router.post('/authenticate', validate(validation.login), (req, res) => {
   const { email, password } = req.body;
+  const msg = 'The email and/or password you entered were not correct.';
 
   User.getUserByField('email', email, (err, user) => {
     if (err) throw err;
     if (!user) {
-      res.json({ success: false, msg: 'User not found' });
+      res.json({ success: false, msg });
     } else {
       User.comparePassword(password, user.password, (err, isMatch) => {
         if (err) throw err;
@@ -55,17 +56,17 @@ router.post('/authenticate', (req, res) => {
             expiresIn: 604800, // 1 week
           });
           const {
-            id, name, username, email,
+            id, username, email,
           } = user;
           res.json({
             success: true,
             token: `JWT ${token}`,
             user: {
-              id, name, username, email,
+              id, username, email,
             },
           });
         } else {
-          res.json({ success: false, msg: 'Wrong password' });
+          res.json({ success: false, msg });
         }
       });
     }
