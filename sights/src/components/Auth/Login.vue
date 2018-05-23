@@ -18,6 +18,7 @@
           v-model.trim="password"
           placeholder="Password"
           class='mb-2'
+          type='password'
           ></b-form-input>
           <b-button :to="{ name: 'Register' }" variant='outline-primary'>Register</b-button>
           <b-button type="submit" variant="primary">Login</b-button>
