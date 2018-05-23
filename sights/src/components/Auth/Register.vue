@@ -97,9 +97,11 @@ export default {
           this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
             this.$router.push('/');
           });
+        } else if (resp.msg) {
+          this.errors.clear();
+          this.errors.add(resp.type, resp.msg, 'server');
         } else {
-        // TODO: Send notification to user that registration failed
-          console.log('Something went wrong!');
+          this.errors.add('passwordVerification', 'Something went wrong. Try again', 'client');
         }
       } else {
         alert('Fill in all the fields correctly, please.');

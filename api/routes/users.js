@@ -21,7 +21,15 @@ router.post('/register', validate(validation.register), (req, res) => {
 
     User.addUser(newUser, (err) => {
       if (err) {
-        res.json({ success: false, msg: 'Failed to register user' });
+        let msg = 'Failed to register user';
+        if (err.code === 11000) {
+          let type = 'none';
+          if (err.message.includes('email')) { msg = 'Email already in use.'; type = 'email'; }
+          if (err.message.includes('username')) { msg = 'Username already in use.'; type = 'username'; }
+          res.json({ success: false, msg, type });
+        } else {
+          res.json({ success: false, msg });
+        }
       } else {
         res.json({ success: true, msg: 'User registered' });
       }
