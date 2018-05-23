@@ -1,5 +1,6 @@
 /* eslint-disable no-shadow */
 const express = require('express');
+const validate = require('express-validation');
 
 const router = express.Router();
 const passport = require('passport');
