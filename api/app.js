@@ -2,12 +2,15 @@ require('dotenv').config();
 const path = require('path');
 const passport = require('passport');
 const express = require('express');
+const multer = require('multer');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
 const users = require('./routes/users');
+
+const upload = multer({ dest: 'uploads/' });
 
 mongoose.connect(process.env.DB_SERVER);
 const db = mongoose.connection;
