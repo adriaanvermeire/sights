@@ -8,9 +8,11 @@ const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
-const users = require('./routes/users');
 
 const upload = multer({ dest: 'uploads/' });
+const routes = {};
+routes.users = require('./routes/users');
+routes.sights = require('./routes/sights');
 
 mongoose.connect(process.env.DB_SERVER);
 const db = mongoose.connection;
@@ -34,12 +36,8 @@ app.use(passport.session());
 
 require('./config/passport')(passport);
 
-
-const routes = {
-  users,
-};
-
 app.use('/users', routes.users);
+app.use('/sights', routes.sights);
 
 app.get('/', (req, res) => {
   res.send('Sights API');
