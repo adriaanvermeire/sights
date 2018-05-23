@@ -12,8 +12,10 @@ import store from './store';
 import './assets/scss/custom-bs.scss';
 
 Vue.config.productionTip = false;
+
+// Vue package registration
 Vue.use(BootstrapVue);
-Vue.use(VeeValidate);
+Vue.use(VeeValidate, { events: 'change' });
 Vue.component('icon', Icon);
 
 const token = localStorage.getItem('user-token');
