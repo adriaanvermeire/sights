@@ -10,11 +10,11 @@ const User = require('../models/user');
 // register
 router.post('/register', (req, res) => {
   const {
-    name, email, username, password, passwordVerification,
+    email, username, password, passwordVerification,
   } = req.body;
   if (password === passwordVerification) {
     const newUser = new User({
-      name, email, username, password,
+      email, username, password,
     });
 
     User.addUser(newUser, (err) => {

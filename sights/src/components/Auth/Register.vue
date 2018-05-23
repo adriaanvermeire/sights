@@ -84,7 +84,6 @@ export default {
         email: '',
         password: '',
         passwordVerification: '',
-        name: '',
       },
     };
   },
