@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
+import VeeValidate from 'vee-validate';
 import 'vue-awesome/icons';
-// import feather from 'vue-icon';
+
 import Icon from 'vue-awesome/components/Icon';
 import utils from '@/utils';
 import App from './App';
@@ -12,7 +13,7 @@ import './assets/scss/custom-bs.scss';
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
-// Vue.use(feather);
+Vue.use(VeeValidate);
 Vue.component('icon', Icon);
 
 const token = localStorage.getItem('user-token');
