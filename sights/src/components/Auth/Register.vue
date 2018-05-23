@@ -12,7 +12,7 @@
               <input
               id='username' type='text' class='mb-2 form-control' name='username'
               v-model.trim="details.username"
-              v-validate="'required|alpha|min:3'"
+              v-validate="'required|alpha_num|min:3|max:30'"
               />
               <b-form-invalid-feedback v-if="errors.has('username')"
                class='text-right' :class='{ "d-block": errors.has("username")}'
@@ -42,7 +42,7 @@
               <input
               id='password' class='mb-2 form-control' type='password' name='password'
               v-model.trim="details.password"
-              v-validate="'required|min:8'"
+              v-validate="'required|min:6'"
               />
               <b-form-invalid-feedback v-if="errors.has('password')"
               class='text-right' :class='{ "d-block": errors.has("password")}'
@@ -57,7 +57,7 @@
               <input
               id='passwordVerification' class='mb-2 form-control' type='password' name='passwordVerification'
               v-model.trim="details.passwordVerification"
-              v-validate="'required|min:8|confirmed:password'"
+              v-validate="'required|min:6|confirmed:password'"
               />
               <b-form-invalid-feedback v-if="errors.has('passwordVerification')"
               class='text-right' :class='{ "d-block": errors.has("passwordVerification")}'
