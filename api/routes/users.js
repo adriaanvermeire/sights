@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
 const express = require('express');
 const validate = require('express-validation');
+const validation = require('./validation');
 
 const router = express.Router();
 const passport = require('passport');
@@ -9,7 +10,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 // register
-router.post('/register', (req, res) => {
+router.post('/register', validate(validation.register), (req, res) => {
   const {
     email, username, password, passwordVerification,
   } = req.body;
