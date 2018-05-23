@@ -89,15 +89,20 @@ export default {
   },
   methods: {
     async register() {
-      const resp = (await AuthenticationService.register(this.details)).data;
-      if (resp.success) {
-        const { email, password } = this.details;
-        this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
-          this.$router.push('/');
-        });
-      } else {
+      const res = await this.$validator.validateAll();
+      if (res) {
+        const resp = (await AuthenticationService.register(this.details)).data;
+        if (resp.success) {
+          const { email, password } = this.details;
+          this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
+            this.$router.push('/');
+          });
+        } else {
         // TODO: Send notification to user that registration failed
-        console.log('Something went wrong!');
+          console.log('Something went wrong!');
+        }
+      } else {
+        alert('Fill in all the fields correctly, please.');
       }
     },
   },
