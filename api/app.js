@@ -2,14 +2,11 @@ require('dotenv').config();
 const path = require('path');
 const passport = require('passport');
 const express = require('express');
-const multer = require('multer');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
-
-const upload = multer({ dest: 'uploads/' });
 const routes = {};
 routes.users = require('./routes/users');
 routes.sights = require('./routes/sights');
