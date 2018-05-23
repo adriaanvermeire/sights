@@ -9,20 +9,24 @@ const User = require('../models/user');
 
 // register
 router.post('/register', (req, res) => {
-  const newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
-    username: req.body.username,
-    password: req.body.password,
-  });
+  const {
+    name, email, username, password, passwordVerification,
+  } = req.body;
+  if (password === passwordVerification) {
+    const newUser = new User({
+      name, email, username, password,
+    });
 
-  User.addUser(newUser, (err) => {
-    if (err) {
-      res.json({ success: false, msg: 'Failed to register user' });
-    } else {
-      res.json({ success: true, msg: 'User registered' });
-    }
-  });
+    User.addUser(newUser, (err) => {
+      if (err) {
+        res.json({ success: false, msg: 'Failed to register user' });
+      } else {
+        res.json({ success: true, msg: 'User registered' });
+      }
+    });
+  } else {
+    res.json({ success: false, msg: 'Passwords do not match.' });
+  }
 });
 
 // authenticate
