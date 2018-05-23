@@ -65,7 +65,9 @@
               >{{errors.first('passwordVerification')}}</b-form-invalid-feedback>
             </b-col>
           </b-form-row>
-          <b-button type="submit" variant="primary">Register</b-button>
+          <span class="d-flex justify-content-end">
+            <b-button type="submit" variant="primary">Register</b-button>
+          </span>
         </b-form>
       </b-card>
     </b-col>
