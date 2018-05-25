@@ -8,7 +8,7 @@
     </b-col>
   </b-row>
   <b-row>
-    
+
   </b-row>
 </b-container>
 </template>
