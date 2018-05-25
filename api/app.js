@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const routes = {};
 routes.users = require('./routes/users');
 routes.sights = require('./routes/sights');
+routes.categories = require('./routes/categories');
 
 mongoose.connect(process.env.DB_SERVER);
 const db = mongoose.connection;
@@ -35,6 +36,7 @@ require('./config/passport')(passport);
 
 app.use('/users', routes.users);
 app.use('/sights', routes.sights);
+app.use('/categories', routes.categories);
 
 app.get('/', (req, res) => {
   res.send('Sights API');
