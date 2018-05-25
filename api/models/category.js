@@ -12,3 +12,7 @@ const Category = module.exports = mongoose.model('Category', CategorySchema);
 module.exports.getCategoryById = (id, callback) => {
   Category.findById(id, callback);
 };
+
+module.exports.all = (callback) => {
+  Category.find({}, callback);
+};
