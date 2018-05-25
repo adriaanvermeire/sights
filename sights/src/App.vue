@@ -7,7 +7,7 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import Navbar from '@/components/Appwide/Navbar';
+import Navbar from '@/components/Partials/Navbar';
 import axios from 'axios';
 import { AUTH_LOGOUT } from '@/store/actions/auth';
 import { USER_REQUEST } from '@/store/actions/user';
