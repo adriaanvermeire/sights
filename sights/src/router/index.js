@@ -4,6 +4,7 @@ import Homepage from '@/components/Home/Homepage';
 import Profile from '@/components/Profile/Profile';
 import Register from '@/components/Auth/Register';
 import Login from '@/components/Auth/Login';
+import NewSight from '@/components/Sights/NewSight';
 import { auth } from './middleware';
 
 
@@ -30,7 +31,7 @@ export default new Router({
     {
       path: '/profile/sights/new',
       name: 'NewSight',
-      component: Homepage,
+      component: NewSight,
       beforeEnter: auth.ifAuthenticated,
     },
     {

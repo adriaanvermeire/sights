@@ -1,4 +1,6 @@
 /* eslint-disable no-shadow */
+const { auth } = require('./middleware');
+
 const express = require('express');
 const validate = require('express-validation');
 const validation = require('./validation');
@@ -74,7 +76,7 @@ router.post('/authenticate', validate(validation.login), (req, res) => {
 });
 
 // profile
-router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/profile', auth, (req, res) => {
   res.json({ user: req.user });
 });
 
