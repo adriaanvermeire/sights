@@ -33,7 +33,7 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
 
   const newSight = new Sight({
     dataset: newDataset._id,
-    category: '',
+    category: req.body.category,
     author: req.user._id,
     name: req.body.name,
   });
