@@ -15,4 +15,12 @@ router.post('/', (req, res) => {
   res.send({ success: true, msg: 'Category added successfully!' });
 });
 
+router.get('/', (req, res) => {
+  Category.all((err, categories) => {
+    if (categories) {
+      return res.send({ categories });
+    } return res.sendStatus(401);
+  });
+});
+
 module.exports = router;
