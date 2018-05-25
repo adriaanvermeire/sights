@@ -107,7 +107,7 @@ export default {
           this.errors.add('passwordVerification', 'Something went wrong. Try again', 'client');
         }
       } else {
-        alert('Fill in all the fields correctly, please.');
+        // alert('Fill in all the fields correctly, please.');
       }
     },
   },

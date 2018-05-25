@@ -6,7 +6,6 @@ const validate = require('express-validation');
 const validation = require('./validation');
 
 const router = express.Router();
-const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
