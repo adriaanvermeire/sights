@@ -7,4 +7,7 @@ export default {
   getSight(id) {
     return Api().get(`sights/${id}`);
   },
+  getFeaturedSights() {
+    return Api().get('sights/explore');
+  },
 };

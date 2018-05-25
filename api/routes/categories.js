@@ -1,11 +1,13 @@
 /* eslint-disable no-shadow */
 const express = require('express');
+const validate = require('express-validation');
+const validation = require('./validation');
 
 const router = express.Router();
 const Category = require('../models/category');
 
 // TODO: implement ADMIN middleware
-router.post('/', (req, res) => {
+router.post('/', validate(validation.category), (req, res) => {
   const cat = new Category({
     name: req.body.name,
   });

@@ -50,4 +50,19 @@ router.get('/:sightId', (req, res) => {
     return res.sendStatus(404);
   });
 });
+
+router.get('/explore', (req, res) => {
+  Sight.featured((err, sights) => {
+    if (sights && sights.length > 0) {
+      res.send({ sights });
+    } else {
+      res.status(404).send({ success: false });
+    }
+  });
+});
+
+router.get('/', (req, res) => {
+  res.send('Sights endpoint');
+});
+
 module.exports = router;

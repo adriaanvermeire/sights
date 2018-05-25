@@ -17,3 +17,8 @@ const Sight = module.exports = mongoose.model('Sight', SightSchema);
 module.exports.getSightById = (id, callback) => {
   Sight.findById(id, callback);
 };
+
+// TODO: Implement better method for getting featured sights
+module.exports.featured = (callback) => {
+  Sight.find({}, callback);
+};
