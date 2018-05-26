@@ -11,7 +11,7 @@ const DatasetSchema = mongoose.Schema({
   path: String,
   size: Number,
   data: Object,
-  meta: [{
+  columns: [{
     column: String,
     type: { type: ObjectId, ref: 'Datatype' },
   }],
