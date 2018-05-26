@@ -3,10 +3,12 @@
   <input
   type="text"
   v-model.trim="sight.name"
+  name='name'
   v-validate="'required|min:5|alpha_num'">
   <input
   type="file"
   @change="onFileSelected"
+  name='dataset'
   v-validate="'required|mimes:text/csv,application/json|size:5000'">
   <b-form-select v-model="sight.category" :options="categories" class="mb-3">
   </b-form-select>

@@ -42,15 +42,6 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
   res.send({ success: true, data: newSight });
 });
 
-router.get('/:sightId', (req, res) => {
-  Sight.getSightById(req.params.sightId, (err, sight) => {
-    if (sight) {
-      return res.send({ sight });
-    }
-    return res.sendStatus(404);
-  });
-});
-
 router.get('/explore', (req, res) => {
   Sight.featured((err, sights) => {
     if (sights && sights.length > 0) {
@@ -60,6 +51,16 @@ router.get('/explore', (req, res) => {
     }
   });
 });
+
+router.get('/:sightId', (req, res) => {
+  Sight.getSightById(req.params.sightId, (err, sight) => {
+    if (sight) {
+      return res.send({ sight });
+    }
+    return res.sendStatus(404);
+  });
+});
+
 
 router.get('/', (req, res) => {
   res.send('Sights endpoint');
