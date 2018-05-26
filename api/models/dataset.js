@@ -13,7 +13,7 @@ const DatasetSchema = mongoose.Schema({
   data: Object,
   meta: [{
     column: String,
-    type: ObjectId,
+    type: { type: ObjectId, ref: 'Datatype' },
   }],
 }, { timestamps: true });
 
