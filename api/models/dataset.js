@@ -2,6 +2,7 @@
 /* eslint-disable no-multi-assign */
 const mongoose = require('mongoose');
 
+const { ObjectId } = mongoose.Schema.Types;
 // Dataset schema
 const DatasetSchema = mongoose.Schema({
   originalName: String,
@@ -9,10 +10,26 @@ const DatasetSchema = mongoose.Schema({
   filename: String,
   path: String,
   size: Number,
+  data: Object,
+  meta: [{
+    column: String,
+    type: ObjectId,
+  }],
 }, { timestamps: true });
 
-const Dataset = module.exports = mongoose.model('Dataset', DatasetSchema);
+const { statics: Statics, methods: Methods } = DatasetSchema;
 
-module.exports.getDatasetById = (id, callback) => {
-  Dataset.findById(id, callback);
+// Document Methods
+
+Methods.parse = (cb) => {
+  // use this
 };
+
+// Statics
+
+Statics.getDatasetById = (id, cb) => {
+  this.findById(id, cb);
+};
+
+
+module.exports = mongoose.model('Dataset', DatasetSchema);

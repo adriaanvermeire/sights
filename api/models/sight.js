@@ -12,13 +12,16 @@ const SightSchema = mongoose.Schema({
   charts: [{ type: ObjectId, ref: 'Chart' }],
 }, { timestamps: true });
 
-const Sight = module.exports = mongoose.model('Sight', SightSchema);
+const { statics: Statics, methods: Methods } = SightSchema;
 
-module.exports.getSightById = (id, callback) => {
-  Sight.findById(id, callback);
-};
+
+// Document Methods
+
+// Statics
+
+Statics.getSightById = (id, cb) => this.findById(id, cb);
 
 // TODO: Implement better method for getting featured sights
-module.exports.featured = (callback) => {
-  Sight.find({}, callback);
-};
+Statics.featured = cb => this.find({}, cb);
+
+module.exports = mongoose.model('Sight', SightSchema);

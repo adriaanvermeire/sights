@@ -7,8 +7,13 @@ const { ObjectId } = mongoose.Schema.Types;
 const ChartSchema = mongoose.Schema({
 }, { timestamps: true });
 
-const Chart = module.exports = mongoose.model('Chart', ChartSchema);
+const { statics: Statics, methods: Methods } = ChartSchema;
 
-module.exports.getChartById = (id, callback) => {
-  Chart.findById(id, callback);
-};
+
+// Document methods
+
+// Statics
+
+Statics.getChartById = (id, callback) => this.findById(id, callback);
+
+module.exports = mongoose.model('Chart', ChartSchema);
