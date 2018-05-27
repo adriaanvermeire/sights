@@ -31,5 +31,17 @@ Statics.getDatasetById = function getDatasetById(id, cb) {
   this.findById(id, cb);
 };
 
+Statics.create = function create(data) {
+  const {
+    originalName, mimetype, filename, path, size,
+  } = data;
+
+  const dataset = new this({
+    originalName, mimetype, filename, path, size,
+  });
+
+  return dataset.save();
+};
+
 
 module.exports = mongoose.model('Dataset', DatasetSchema);

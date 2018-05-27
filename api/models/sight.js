@@ -32,5 +32,16 @@ Statics.featured = function featured() {
     .catch(e => ({ err: e }));
 };
 
+Statics.create = function create(data) {
+  const {
+    dataset, category, author, name,
+  } = data;
+
+  const sight = new this({
+    dataset, category, author, name,
+  });
+
+  return sight.save();
+};
 
 module.exports = mongoose.model('Sight', SightSchema);
