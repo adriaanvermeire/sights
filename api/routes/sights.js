@@ -28,22 +28,37 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
   const {
     originalname: originalName, mimetype, filename, path, size,
   } = req.file;
-
-  const newDataset = new Dataset({
+  let currentSight = '';
+  Dataset.create({
     originalName, mimetype, filename, path, size,
-  });
+  })
+    .then(dataset => Sight.create({
+      dataset: dataset._id,
+      category: req.body.category,
+      author: req.user._id,
+      name: req.body.name,
+    }))
+    .then((sight) => {
+      currentSight = sight._id;
+      return sight.populate('dataset').execPopulate();
+    })
+    .then(popSight => popSight.dataset.parse())
+    .then((data) => {
+      const keys = Object.keys(data);
+      const result = data;
+      for (let i = 0; i < keys.length; i += 1) {
+        const d = keys[i];
+        const samples = sampleSize(data[d], 5);
+        const type = detectType(samples);
+        result[d] = { samples, type };
+      }
 
-  newDataset.save();
-
-  const newSight = new Sight({
-    dataset: newDataset._id,
-    category: req.body.category,
-    author: req.user._id,
-    name: req.body.name,
-  });
-
-  newSight.save();
-  res.send({ success: true, data: newSight });
+      res.send({ success: true, data: result, currentSight });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send({ success: false, err });
+    });
 });
 
 router.get('/explore', (req, res) => {
