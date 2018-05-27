@@ -1,6 +1,9 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-multi-assign */
 const mongoose = require('mongoose');
+const csv = require('csvtojson');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
 
 const { ObjectId, Mixed } = mongoose.Schema.Types;
 // Dataset schema
