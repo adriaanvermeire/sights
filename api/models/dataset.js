@@ -13,10 +13,10 @@ const DatasetSchema = mongoose.Schema({
   filename: String,
   path: String,
   size: Number,
-  columns: [{
-    column: String,
-    type: { type: ObjectId, ref: 'Datatype' },
   data: Mixed,
+  fields: [{
+    name: String,
+    type: { type: String },
   }],
 }, { timestamps: true });
 
