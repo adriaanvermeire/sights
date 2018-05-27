@@ -20,10 +20,16 @@ export default {
       sights: [],
     };
   },
+  methods: {
+    loadSights() {
+      SightService.getFeaturedSights()
+        .then(res => res.data)
+        .then((data) => { console.log(data); this.sights = data.sights; })
+        .catch(e => console.log(e));
+    },
+  },
   created() {
-    SightService.getFeaturedSights()
-      .then(res => res.data)
-      .then((data) => { this.sights = data.sights; });
+    this.loadSights();
   },
 };
 </script>
