@@ -1,5 +1,6 @@
 /* eslint-disable no-shadow */
 const { auth } = require('./middleware');
+const { detectType } = require('../utils');
 
 const express = require('express');
 const validate = require('express-validation');
