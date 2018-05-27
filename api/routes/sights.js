@@ -22,7 +22,7 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
   // req.file is the `dataset` file
   // req.body will hold the text fields, if there were any
   const {
-    originalName, mimetype, filename, path, size,
+    originalname: originalName, mimetype, filename, path, size,
   } = req.file;
 
   const newDataset = new Dataset({
