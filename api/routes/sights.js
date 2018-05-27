@@ -43,13 +43,11 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
 });
 
 router.get('/explore', (req, res) => {
-  Sight.featured((err, sights) => {
-    if (sights && sights.length > 0) {
-      res.send({ sights });
-    } else {
-      res.status(404).send({ success: false });
-    }
-  });
+  Sight.featured()
+    .then(sights => res.send({ sights }))
+    .catch(e => res.status(404).send({ success: false, err: e }));
+});
+
 });
 
 router.get('/:sightId', (req, res) => {
