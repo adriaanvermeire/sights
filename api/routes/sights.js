@@ -5,6 +5,7 @@ const express = require('express');
 const validate = require('express-validation');
 const validation = require('./validation');
 const multer = require('multer');
+const sampleSize = require('lodash.samplesize');
 
 const router = express.Router();
 const dest = `${process.env.UPLOADS}/` || 'uploads/';
