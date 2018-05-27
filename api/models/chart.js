@@ -14,6 +14,8 @@ const { statics: Statics, methods: Methods } = ChartSchema;
 
 // Statics
 
-Statics.getChartById = (id, callback) => this.findById(id, callback);
+Statics.getChartById = function getChartById(id, callback) {
+  this.findById(id, callback);
+};
 
 module.exports = mongoose.model('Chart', ChartSchema);

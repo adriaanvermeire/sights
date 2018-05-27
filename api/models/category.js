@@ -14,8 +14,12 @@ const { statics: Statics, methods: Methods } = CategorySchema;
 
 // Statics
 
-Statics.getCategoryById = (id, callback) => this.findById(id, callback);
+Statics.getCategoryById = function getCategoryById(id, callback) {
+  this.findById(id, callback);
+};
 
-Statics.all = callback => this.find({}, callback);
+Statics.all = function all(callback) {
+  this.find({}, callback);
+};
 
 module.exports = mongoose.model('Category', CategorySchema);

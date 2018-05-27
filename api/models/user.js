@@ -28,14 +28,16 @@ const { statics: Statics, methods: Methods } = UserSchema;
 
 // Statics
 
-Statics.getUserById = (id, callback) => this.findById(id, callback);
+Statics.getUserById = function getUserById(id, callback) {
+  return this.findById(id, callback);
+};
 
-Statics.getUserByField = (field, value, callback) => {
+Statics.getUserByField = function getUserByField(field, value, callback) {
   const query = { [field]: value };
   return this.findOne(query, callback);
 };
 
-Statics.addUser = (user, callback) => {
+Statics.addUser = function addUser(user, callback) {
   const newUser = user;
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -46,7 +48,7 @@ Statics.addUser = (user, callback) => {
   });
 };
 
-Statics.comparePassword = (candidatePassword, hash, callback) => {
+Statics.comparePassword = function comparePassword(candidatePassword, hash, callback) {
   bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
     if (err) throw err;
     callback(null, isMatch);

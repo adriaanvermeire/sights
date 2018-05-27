@@ -19,9 +19,18 @@ const { statics: Statics, methods: Methods } = SightSchema;
 
 // Statics
 
-Statics.getSightById = (id, cb) => this.findById(id, cb);
+Statics.getSightById = function getSightById(id) {
+  return this.findById(id).exec()
+    .then(sight => sight)
+    .catch(e => console.log(e));
+};
 
 // TODO: Implement better method for getting featured sights
-Statics.featured = cb => this.find({}, cb);
+Statics.featured = function featured() {
+  return this.find({}).exec()
+    .then(data => data)
+    .catch(e => ({ err: e }));
+};
+
 
 module.exports = mongoose.model('Sight', SightSchema);

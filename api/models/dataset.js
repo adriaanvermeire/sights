@@ -27,7 +27,7 @@ Methods.parse = (cb) => {
 
 // Statics
 
-Statics.getDatasetById = (id, cb) => {
+Statics.getDatasetById = function getDatasetById(id, cb) {
   this.findById(id, cb);
 };
 
