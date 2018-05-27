@@ -6,7 +6,7 @@ const { ObjectId } = mongoose.Schema.Types;
 // Sight schema
 const SightSchema = mongoose.Schema({
   author: { type: ObjectId, ref: 'User' },
-  dataset: { type: ObjectId, required: true },
+  dataset: { type: ObjectId, ref: 'Dataset', required: true },
   name: { type: String, required: true, index: true },
   category: { type: ObjectId, ref: 'Category' },
   charts: [{ type: ObjectId, ref: 'Chart' }],
