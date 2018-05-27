@@ -2,7 +2,7 @@
 /* eslint-disable no-multi-assign */
 const mongoose = require('mongoose');
 
-const { ObjectId } = mongoose.Schema.Types;
+const { ObjectId, Mixed } = mongoose.Schema.Types;
 // Dataset schema
 const DatasetSchema = mongoose.Schema({
   originalName: String,
@@ -10,10 +10,10 @@ const DatasetSchema = mongoose.Schema({
   filename: String,
   path: String,
   size: Number,
-  data: Object,
   columns: [{
     column: String,
     type: { type: ObjectId, ref: 'Datatype' },
+  data: Mixed,
   }],
 }, { timestamps: true });
 
