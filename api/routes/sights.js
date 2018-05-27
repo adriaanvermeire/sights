@@ -13,6 +13,8 @@ const upload = multer({ dest });
 const Dataset = require('../models/dataset');
 const Sight = require('../models/sight');
 
+const datatypes = require('../config/datatypes');
+
 const routeMiddlewareNew = [
   auth,
   upload.single('dataset'),
@@ -48,6 +50,19 @@ router.get('/explore', (req, res) => {
     .catch(e => res.status(404).send({ success: false, err: e }));
 });
 
+router.get('/datatypes', (req, res) => res.send({ datatypes }));
+
+router.post('/datatypes', (req, res) => {
+  const { currentSight, fields } = req.body;
+  Sight.findById(currentSight).exec()
+    .then(sight => sight.populate('dataset').execPopulate())
+    .then((popSight) => {
+      const sight = popSight;
+      sight.dataset.fields = fields;
+      return sight.dataset.save();
+    })
+    .then(sight => res.send({ success: true, sight }))
+    .catch(e => console.log(e));
 });
 
 router.get('/:sightId', (req, res) => {
@@ -58,7 +73,6 @@ router.get('/:sightId', (req, res) => {
     return res.sendStatus(404);
   });
 });
-
 
 router.get('/', (req, res) => {
   res.send('Sights endpoint');
