@@ -2,17 +2,32 @@
 <div id="newSight">
   <form v-if='!submitted' @submit.prevent="submitForm"
   method="post" enctype="multipart/form-data">
-    <input
-    type="text"
-    v-model.trim="sight.name"
-    name='name'
-    v-validate="'required|min:5|alpha_num'">
+    <label for="sightName">Name</label>
+     <b-form-input v-model.trim="sight.name"
+                  id='sightName'
+                  type="text"
+                  placeholder="Name of your Sight"
+                  v-validate="'required|min:5|alpha_num'"
+                  name='name'
+                  required
+    ></b-form-input>
+    <label for="sightEntrypoint">Entrypoint (optional)</label>
+     <b-form-input v-model="sight.entrypoint"
+                  id='sightEntrypoint'
+                  type="text"
+                  placeholder="ex. data"
+                  name="entrypoint"
+    ></b-form-input>
+    <label for="sightFile">Dataset</label>
     <input
     type="file"
+    id='sightFile'
     @change="onFileSelected"
     name='dataset'
-    v-validate="'required|mimes:text/csv,application/json|size:5000'">
-    <b-form-select v-model="sight.category" :options="categories" class="mb-3">
+    v-validate="'required|mimes:text/csv,application/json|size:5000'"
+    required>
+    <label for="sightCategory">Category</label>
+    <b-form-select id='sightCategory' v-model="sight.category" :options="categories" class="mb-3" required>
     </b-form-select>
     <button type="submit" name="button">Create Sight</button>
   </form>
@@ -33,6 +48,7 @@ export default {
         name: '',
         dataset: null,
         category: null,
+        entrypoint: '',
       },
       categories: [],
       submitted: false,
@@ -45,10 +61,16 @@ export default {
       fd.append('dataset', this.sight.dataset, this.sight.dataset.name);
       fd.append('name', this.sight.name);
       fd.append('category', this.sight.category);
+      fd.append('entrypoint', this.sight.entrypoint);
       const response = (await SightService.addSight(fd)).data;
-      this.data = response.data;
-      this.$store.dispatch(USER_SIGHT, { sight: response.currentSight });
-      this.submitted = true;
+      if (response.success) {
+        this.data = response.data;
+        this.$store.dispatch(USER_SIGHT, { sight: response.currentSight });
+        this.submitted = true;
+      } else {
+        // TODO: Change this to notification
+        console.log(response.err);
+      }
     },
     onFileSelected(e) {
       this.sight.dataset = e.target.files[0];
