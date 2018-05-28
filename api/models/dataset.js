@@ -19,6 +19,7 @@ const DatasetSchema = mongoose.Schema({
     name: String,
     type: { type: String },
   }],
+  entrypoint: String,
 }, { timestamps: true });
 
 const { statics: Statics, methods: Methods } = DatasetSchema;
@@ -33,30 +34,34 @@ Methods.parse = async function parse() {
     } else if (this.mimetype === 'application/json') {
       const rawData = await fs.readFileAsync(this.path);
       data = JSON.parse(rawData);
-    }
-    this.data = {};
-    for (let i = 0; i < data.length; i += 1) {
-      for (const k in data[i]) {
-        if (k) {
-          const v = data[i][k];
-          if (this.data[k]) { this.data[k].push(v); } else { this.data[k] = [v]; }
-        }
+      if (this.entrypoint) {
+        data = data[this.entrypoint];
       }
     }
-    return this.save()
-      .then(set => set.data)
-      .then((data) => {
-        const keys = Object.keys(data);
-        console.log(keys);
-        for (let i = 0; i < keys.length; i += 1) {
-          console.log(keys[i]);
-          this.fields.push({
-            name: keys[i],
-          });
+    if (data && data.length) {
+      this.data = {};
+      for (let i = 0; i < data.length; i += 1) {
+        for (const k in data[i]) {
+          if (k) {
+            const v = data[i][k];
+            if (this.data[k]) { this.data[k].push(v); } else { this.data[k] = [v]; }
+          }
         }
-      })
-      .then(() => this.save())
-      .then(set => set.data);
+      }
+      const dataKeys = Object.keys(this.data);
+      for (const key of dataKeys) {
+        this.fields.push({ name: key });
+      }
+      return this.save()
+        .then(set => ({ success: true, data: set.data }));
+    }
+    if (this.mimetype === 'application/json') {
+      if (this.entrypoint) {
+        return { success: false, err: 'The entrypoint you supplied doesn\'t work with this dataset. Try another value.' };
+      }
+      return { success: false, err: 'No data was found in your dataset. Try using an entrypoint for your JSON.' };
+    }
+    return { success: false, err: 'No data was found in your dataset. Check if your CSV is correctly formatted.' };
   } catch (e) {
     console.log(e);
     throw new Error(400);
@@ -71,11 +76,11 @@ Statics.getDatasetById = function getDatasetById(id, cb) {
 
 Statics.create = function create(data) {
   const {
-    originalName, mimetype, filename, path, size,
+    originalName, mimetype, filename, path, size, entrypoint,
   } = data;
 
   const dataset = new this({
-    originalName, mimetype, filename, path, size,
+    originalName, mimetype, filename, path, size, entrypoint,
   });
 
   return dataset.save();
