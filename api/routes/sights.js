@@ -44,17 +44,22 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
       return sight.populate('dataset').execPopulate();
     })
     .then(popSight => popSight.dataset.parse())
-    .then((data) => {
-      const keys = Object.keys(data);
-      const result = data;
-      for (let i = 0; i < keys.length; i += 1) {
-        const d = keys[i];
-        const samples = sampleSize(data[d], 5);
-        const type = detectType(samples);
-        result[d] = { samples, type };
-      }
+    .then((response) => {
+      if (response.success) {
+        const { data } = response;
+        const keys = Object.keys(data);
+        const result = data;
+        for (let i = 0; i < keys.length; i += 1) {
+          const d = keys[i];
+          const samples = sampleSize(data[d].data, 5);
+          const type = detectType(samples);
+          result[d] = { samples, type };
+        }
 
-      res.send({ success: true, data: result, currentSight });
+        res.send({ success: true, data: result, currentSight });
+      } else {
+        res.send({ success: false, err: response.err });
+      }
     })
     .catch((err) => {
       console.log(err);
