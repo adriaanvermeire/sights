@@ -1,13 +1,14 @@
 /* eslint-disable no-shadow */
 import Vue from 'vue';
 import UserService from '@/services/UserService';
-import { USER_REQUEST, USER_ERROR, USER_SUCCESS } from '../actions/user';
+import { USER_REQUEST, USER_ERROR, USER_SUCCESS, USER_SIGHT, USER_NOSIGHT } from '../actions/user';
 import { AUTH_LOGOUT } from '../actions/auth';
 
 const state = {
   // single source of data
   status: '',
   profile: {},
+  currentSight: '',
 };
 
 const actions = {
@@ -25,6 +26,12 @@ const actions = {
         dispatch(AUTH_LOGOUT);
       });
   },
+  [USER_SIGHT]({ commit }, payload) {
+    commit(USER_SIGHT, payload.sight);
+  },
+  [USER_NOSIGHT]({ commit }) {
+    commit(USER_NOSIGHT);
+  },
 };
 
 const mutations = {
@@ -41,6 +48,12 @@ const mutations = {
   },
   [AUTH_LOGOUT](state) {
     state.profile = {};
+  },
+  [USER_SIGHT](state, sight) {
+    state.currentSight = sight;
+  },
+  [USER_NOSIGHT](state) {
+    state.currentSight = '';
   },
 };
 

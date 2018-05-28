@@ -7,12 +7,19 @@ const CategorySchema = mongoose.Schema({
   name: { type: String, required: true, index: true },
 }, { timestamps: true });
 
-const Category = module.exports = mongoose.model('Category', CategorySchema);
+const { statics: Statics, methods: Methods } = CategorySchema;
 
-module.exports.getCategoryById = (id, callback) => {
-  Category.findById(id, callback);
+
+// Document methods
+
+// Statics
+
+Statics.getCategoryById = function getCategoryById(id, callback) {
+  this.findById(id, callback);
 };
 
-module.exports.all = (callback) => {
-  Category.find({}, callback);
+Statics.all = function all(callback) {
+  this.find({}, callback);
 };
+
+module.exports = mongoose.model('Category', CategorySchema);

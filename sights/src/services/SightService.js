@@ -10,4 +10,10 @@ export default {
   getFeaturedSights() {
     return Api().get('sights/explore');
   },
+  getDatatypes() {
+    return Api().get('sights/datatypes');
+  },
+  submitTypes(data) {
+    return Api().post('sights/datatypes', data);
+  },
 };

@@ -1,14 +1,19 @@
 <template lang="html">
-  <ul>
-    <li v-for="sight in sights" :key='sight._id'>
-      <router-link
-      :to="{
-        name: 'SightDetail',
-        params: { id: sight._id || 1 }
-        }" class='text-dark'
-      >{{ sight.name }}</router-link>
-    </li>
-  </ul>
+  <div id="explore">
+    <ul>
+      <li v-for="sight in sights" :key='sight._id'>
+        <router-link
+        :to="{
+          name: 'SightDetail',
+          params: { id: sight._id || 1 }
+          }" class='text-dark'
+        >{{ sight.name }}</router-link>
+      </li>
+    </ul>
+    <p v-show="!sights">
+      There are no Sights to be found!
+    </p>
+  </div>
 </template>
 
 <script>
@@ -20,10 +25,16 @@ export default {
       sights: [],
     };
   },
+  methods: {
+    loadSights() {
+      SightService.getFeaturedSights()
+        .then(res => res.data)
+        .then((data) => { console.log(data); this.sights = data.sights; })
+        .catch(e => console.log(e));
+    },
+  },
   created() {
-    SightService.getFeaturedSights()
-      .then(res => res.data)
-      .then((data) => { this.sights = data.sights; });
+    this.loadSights();
   },
 };
 </script>

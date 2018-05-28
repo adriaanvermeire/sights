@@ -22,18 +22,22 @@ const UserSchema = mongoose.Schema({
   },
 }, { timestamps: true });
 
-const User = module.exports = mongoose.model('User', UserSchema);
+const { statics: Statics, methods: Methods } = UserSchema;
 
-module.exports.getUserById = (id, callback) => {
-  User.findById(id, callback);
+// Document Methods
+
+// Statics
+
+Statics.getUserById = function getUserById(id, callback) {
+  return this.findById(id, callback);
 };
 
-module.exports.getUserByField = (field, value, callback) => {
+Statics.getUserByField = function getUserByField(field, value, callback) {
   const query = { [field]: value };
-  User.findOne(query, callback);
+  return this.findOne(query, callback);
 };
 
-module.exports.addUser = (user, callback) => {
+Statics.addUser = function addUser(user, callback) {
   const newUser = user;
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -44,9 +48,11 @@ module.exports.addUser = (user, callback) => {
   });
 };
 
-module.exports.comparePassword = (candidatePassword, hash, callback) => {
+Statics.comparePassword = function comparePassword(candidatePassword, hash, callback) {
   bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
     if (err) throw err;
     callback(null, isMatch);
   });
 };
+
+module.exports = mongoose.model('User', UserSchema);

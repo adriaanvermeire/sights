@@ -1,5 +1,4 @@
 <template lang="html">
-<div id="newSight">
   <form v-if='!submitted' @submit.prevent="submitForm"
   method="post" enctype="multipart/form-data">
     <input
@@ -16,15 +15,11 @@
     </b-form-select>
     <button type="submit" name="button">Create Sight</button>
   </form>
-  <pick-types v-if='submitted' v-bind:data='data'/>
-</div>
 </template>
 
 <script>
 import SightService from '@/services/SightService';
 import CategoryService from '@/services/CategoryService';
-import PickTypes from '@/components/Sights/NewSight/PickTypes';
-import { USER_SIGHT } from '@/store/actions/user';
 
 export default {
   data() {
@@ -36,7 +31,6 @@ export default {
       },
       categories: [],
       submitted: false,
-      data: [],
     };
   },
   methods: {
@@ -45,9 +39,7 @@ export default {
       fd.append('dataset', this.sight.dataset, this.sight.dataset.name);
       fd.append('name', this.sight.name);
       fd.append('category', this.sight.category);
-      const response = (await SightService.addSight(fd)).data;
-      this.data = response.data;
-      this.$store.dispatch(USER_SIGHT, { sight: response.currentSight });
+      this.data = (await SightService.addSight(fd)).data.data;
       this.submitted = true;
     },
     onFileSelected(e) {
@@ -60,9 +52,6 @@ export default {
     rawCategories.forEach((cat) => {
       this.categories.push({ value: cat._id, text: cat.name });
     });
-  },
-  components: {
-    PickTypes,
   },
 };
 </script>

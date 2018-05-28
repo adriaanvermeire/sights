@@ -15,7 +15,7 @@ Vue.config.productionTip = false;
 
 // Vue package registration
 Vue.use(BootstrapVue);
-Vue.use(VeeValidate, { events: 'change' });
+Vue.use(VeeValidate, { events: 'change', fieldsBagName: 'validationFields' });
 Vue.component('icon', Icon);
 
 const token = localStorage.getItem('user-token');
