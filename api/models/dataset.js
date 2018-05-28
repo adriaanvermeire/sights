@@ -6,6 +6,8 @@ const csv = require('csvtojson');
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 
+const { countOccurences } = require('../utils');
+
 const { ObjectId, Mixed } = mongoose.Schema.Types;
 // Dataset schema
 const DatasetSchema = mongoose.Schema({
@@ -50,6 +52,7 @@ Methods.parse = async function parse() {
       }
       const dataKeys = Object.keys(this.data);
       for (const key of dataKeys) {
+        this.data[key] = countOccurences(this.data[key]);
         this.fields.push({ name: key });
       }
       return this.save()
