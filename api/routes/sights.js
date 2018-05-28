@@ -28,9 +28,10 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
   const {
     originalname: originalName, mimetype, filename, path, size,
   } = req.file;
+  const { entrypoint } = req.body;
   let currentSight = '';
   Dataset.create({
-    originalName, mimetype, filename, path, size,
+    originalName, mimetype, filename, path, size, entrypoint,
   })
     .then(dataset => Sight.create({
       dataset: dataset._id,
