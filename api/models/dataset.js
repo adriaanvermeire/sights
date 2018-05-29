@@ -6,7 +6,10 @@ const csv = require('csvtojson');
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 
-const { countOccurences } = require('../utils');
+const {
+  countOccurences, getUniqueValues, getVolatility, isNumberType, getSum, calculateMedian,
+  getExtremes, getStandardDeviation, countRelativeOccurences,
+} = require('../utils');
 
 const { ObjectId, Mixed } = mongoose.Schema.Types;
 // Dataset schema
