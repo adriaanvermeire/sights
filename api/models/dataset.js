@@ -49,6 +49,27 @@ Methods.preAnalysis = function preAnalysis() {
   // When updating a Mixed field in mongoose you have to mark it modified to retain the changes
   this.markModified('data');
 };
+
+Methods.postAnalysis = function postAnalysis() {
+  const numberFields = this.fields.filter(isNumberType);
+  if (numberFields.length) {
+    for (const { name } of numberFields) {
+      const fieldData = this.data[name];
+      fieldData.data = fieldData.data.map(Number);
+      const sum = fieldData.data.reduce(getSum);
+      const mean = sum / fieldData.total;
+      const median = calculateMedian(fieldData.data);
+      const { min, max } = getExtremes(fieldData.data);
+      const stdDeviation = getStandardDeviation(fieldData.data, mean);
+      this.data[name] = {
+        ...fieldData, sum, mean, median, min, max,
+      };
+    }
+  }
+  // When updating a Mixed field in mongoose you have to mark it modified to retain the changes
+  this.markModified('data');
+};
+
 Methods.parse = async function parse() {
   let data = [];
   try {
