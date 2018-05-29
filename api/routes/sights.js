@@ -78,13 +78,14 @@ router.get('/datatypes', (req, res) => res.send({ datatypes }));
 router.post('/datatypes', (req, res) => {
   const { currentSight, fields } = req.body;
   Sight.findById(currentSight).exec()
-    .then(sight => sight.populate('dataset').execPopulate())
-    .then((popSight) => {
-      const sight = popSight;
-      sight.dataset.fields = fields;
-      return sight.dataset.save();
+    .then(sight => Dataset.findById(sight.dataset).exec())
+    .then((ds) => {
+      const dataset = ds;
+      dataset.fields = fields;
+      dataset.postAnalysis();
+      return dataset.save();
     })
-    .then(sight => res.send({ success: true, sight }))
+    .then(dataset => res.send({ success: true, dataset }))
     .catch(e => console.log(e));
 });
 
