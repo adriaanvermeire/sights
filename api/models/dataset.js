@@ -31,6 +31,24 @@ const { statics: Statics, methods: Methods } = DatasetSchema;
 
 // Document Methods
 
+Methods.preAnalysis = function preAnalysis() {
+  const keys = Object.keys(this.data);
+  for (const key of keys) {
+    const data = this.data[key];
+    const total = data.length;
+    const counts = countOccurences(data);
+    const relativeCounts = countRelativeOccurences(counts, total);
+    const uniqueValues = getUniqueValues(counts);
+    const isBinary = uniqueValues === 2;
+    const { isSteady, isVolatile } = getVolatility(uniqueValues, total);
+    this.fields.push({ name: key });
+    this.data[key] = {
+      data, total, counts, isSteady, isVolatile, isBinary, relativeCounts,
+    };
+  }
+  // When updating a Mixed field in mongoose you have to mark it modified to retain the changes
+  this.markModified('data');
+};
 Methods.parse = async function parse() {
   let data = [];
   try {
