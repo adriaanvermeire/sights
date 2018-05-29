@@ -53,11 +53,8 @@ Methods.parse = async function parse() {
           }
         }
       }
-      const dataKeys = Object.keys(this.data);
-      for (const key of dataKeys) {
-        this.data[key] = countOccurences(this.data[key]);
-        this.fields.push({ name: key });
-      }
+
+      this.preAnalysis();
       return this.save()
         .then(set => ({ success: true, data: set.data }));
     }
