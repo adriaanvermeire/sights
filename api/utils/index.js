@@ -32,24 +32,16 @@ module.exports.detectType = function detectType(samples) {
 };
 
 module.exports.countOccurences = function countOccurences(array) {
-  const result = {
-    total: array.length,
-    data: array,
-    counts: {},
-    uniqueValues: 0,
-    isVolatile: false,
-    isSteady: false,
-  };
+  const counts = {};
   for (let i = 0; i < array.length; i += 1) {
     const el = array[i];
-    if (Object.prototype.hasOwnProperty.call(result.counts, el)) {
-      result.counts[el] += 1;
+    if (Object.prototype.hasOwnProperty.call(counts, el)) {
+      counts[el] += 1;
     } else {
-      result.counts[el] = 1;
+      counts[el] = 1;
     }
   }
-  result.uniqueValues = Object.keys(result.counts).length;
-  if ((result.uniqueValues / result.total) > 0.6) result.isVolatile = true;
-  else if (result.uniqueValues / result.total <= 0.1) result.isSteady = true;
-  return result;
+  return counts;
+};
+
 };
