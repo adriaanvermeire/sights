@@ -11,7 +11,7 @@ const {
   getExtremes, getStandardDeviation, countRelativeOccurences,
 } = require('../utils');
 
-const { ObjectId, Mixed } = mongoose.Schema.Types;
+const { Mixed } = mongoose.Schema.Types;
 // Dataset schema
 const DatasetSchema = mongoose.Schema({
   originalName: String,
@@ -55,7 +55,7 @@ Methods.postAnalysis = function postAnalysis() {
   if (numberFields.length) {
     for (const { name } of numberFields) {
       const fieldData = this.data[name];
-      fieldData.data = fieldData.data.map(Number);
+      fieldData.data = fieldData.data.map(d => Number(d) || 0);
       const sum = fieldData.data.reduce(getSum);
       const mean = sum / fieldData.total;
       const median = calculateMedian(fieldData.data);
