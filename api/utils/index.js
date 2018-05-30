@@ -60,7 +60,6 @@ module.exports.isNumberType = function isNumberType(field) {
   return field.type === 'number' || field.type === 'floating point number';
 };
 
-
 module.exports.getSum = function getSum(acc, curr) {
   return acc + curr;
 };

@@ -62,7 +62,7 @@ Methods.postAnalysis = function postAnalysis() {
       const { min, max } = getExtremes(fieldData.data);
       const stdDeviation = getStandardDeviation(fieldData.data, mean);
       this.data[name] = {
-        ...fieldData, sum, mean, median, min, max,
+        ...fieldData, sum, mean, median, min, max, stdDeviation,
       };
     }
   }
