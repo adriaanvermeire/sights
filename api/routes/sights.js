@@ -76,16 +76,21 @@ router.get('/explore', (req, res) => {
 router.get('/datatypes', (req, res) => res.send({ datatypes }));
 
 router.post('/datatypes', (req, res) => {
-  const { currentSight, fields } = req.body;
+  let { currentSight } = req.body;
+  const { fields } = req.body;
   Sight.findById(currentSight).exec()
-    .then(sight => Dataset.findById(sight.dataset).exec())
+    .then((sight) => {
+      currentSight = sight;
+      return Dataset.findById(sight.dataset).exec();
+    })
     .then((ds) => {
       const dataset = ds;
       dataset.fields = fields;
       dataset.postAnalysis();
       return dataset.save();
     })
-    .then(dataset => res.send({ success: true, dataset }))
+    .then(() => currentSight.generateGraphs())
+    .then(graphs => res.send({ success: true, graphs }))
     .catch(e => console.log(e));
 });
 

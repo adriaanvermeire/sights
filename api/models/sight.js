@@ -17,6 +17,10 @@ const { statics: Statics, methods: Methods } = SightSchema;
 
 // Document Methods
 
+Methods.generateGraphs = function generateGraphs() {
+
+};
+
 // Statics
 
 Statics.getSightById = function getSightById(id) {
