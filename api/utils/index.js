@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 const FLOATING_POINT = /^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$/i;
 const NUMBER = /^[-+]?[0-9]+$/i;
 
@@ -32,24 +33,79 @@ module.exports.detectType = function detectType(samples) {
 };
 
 module.exports.countOccurences = function countOccurences(array) {
-  const result = {
-    total: array.length,
-    data: array,
-    counts: {},
-    uniqueValues: 0,
-    isVolatile: false,
-    isSteady: false,
-  };
+  const counts = {};
   for (let i = 0; i < array.length; i += 1) {
     const el = array[i];
-    if (Object.prototype.hasOwnProperty.call(result.counts, el)) {
-      result.counts[el] += 1;
+    if (Object.prototype.hasOwnProperty.call(counts, el)) {
+      counts[el] += 1;
     } else {
-      result.counts[el] = 1;
+      counts[el] = 1;
     }
   }
-  result.uniqueValues = Object.keys(result.counts).length;
-  if ((result.uniqueValues / result.total) > 0.6) result.isVolatile = true;
-  else if (result.uniqueValues / result.total <= 0.1) result.isSteady = true;
-  return result;
+  return counts;
+};
+
+module.exports.getUniqueValues = function getUniqueValues(obj) {
+  return Object.keys(obj).length;
+};
+
+module.exports.getVolatility = function getVolatility(uniqueValues, total) {
+  return {
+    isVolatile: (uniqueValues / total) >= 0.6 || false,
+    isSteady: (uniqueValues / total) <= 0.1 || false,
+  };
+};
+
+module.exports.isNumberType = function isNumberType(field) {
+  return field.type === 'number' || field.type === 'floating point number';
+};
+
+module.exports.getSum = function getSum(acc, curr) {
+  return acc + curr;
+};
+
+module.exports.calculateMedian = function calculateMedian(arr) {
+  const array = arr.slice(0); // create copy
+  const middle = (array.length + 1) / 2;
+  const sorted = array.sort();
+  return (sorted.length % 2) ?
+    sorted[middle - 1] :
+    (sorted[middle - 1.5] + sorted[middle - 0.5]) / 2;
+};
+
+module.exports.getExtremes = function getExtremes(arr) {
+  let max = -Infinity;
+  let min = Infinity;
+  for (let i = 0; i < arr.length; i += 1) {
+    const a = arr[i];
+    if (a > max) max = a;
+    if (a < min) min = a;
+  }
+  return { max, min };
+};
+
+module.exports.getStandardDeviation = function getStandardDeviation(arr, mean) {
+  const distances = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    const a = arr[i];
+    distances.push((a - mean) ** 2);
+  }
+  return Math.sqrt(distances.reduce(module.exports.getSum) / arr.length);
+};
+
+module.exports.countRelativeOccurences = function countRelativeOccurences(counts, total, top = 5) {
+  const keys = Object.keys(counts);
+  const max = keys.length > top ? top : keys.length;
+  const countsArray = [];
+  for (const field of keys) {
+    if (Object.prototype.hasOwnProperty.call(counts, field)) {
+      countsArray.push([field, counts[field]]);
+    }
+  }
+  countsArray.sort((a, b) => b[1] - a[1]);
+  const relativeCounts = {};
+  for (let i = 0; i < max; i += 1) {
+    relativeCounts[countsArray[i][0]] = ((countsArray[i][1] / total) * 100).toFixed(2);
+  }
+  return relativeCounts;
 };
