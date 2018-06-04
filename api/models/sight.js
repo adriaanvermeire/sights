@@ -1,6 +1,9 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-multi-assign */
 const mongoose = require('mongoose');
+const Chart = require('./chart');
+
+const { pickRandom } = require('../utils');
 
 const { ObjectId } = mongoose.Schema.Types;
 // Sight schema
@@ -17,8 +20,21 @@ const { statics: Statics, methods: Methods } = SightSchema;
 
 // Document Methods
 
-Methods.generateGraphs = function generateGraphs() {
-
+Methods.generateSimpleGraphs = async function generateSimpleGraphs() {
+  const { dataset } = (await this.populate('dataset').execPopulate());
+  const fields = Object.keys(dataset.data);
+  const charts = [];
+  for (const field of fields) {
+    if (!(dataset.ignoreCols.includes(field))) {
+      console.log(field);
+      const fieldData = dataset.data[field];
+      // add rules for getting type of chart
+      charts.push(Chart.createSimple({ data: fieldData, field }));
+    }
+  }
+  this.charts = await Promise.all(charts);
+  console.log('done');
+  await this.save();
 };
 
 // Statics

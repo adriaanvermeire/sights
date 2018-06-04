@@ -51,9 +51,13 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
         const result = data;
         for (let i = 0; i < keys.length; i += 1) {
           const d = keys[i];
-          const samples = sampleSize(data[d].data, 5);
-          const type = detectType(samples);
-          result[d] = { samples, type };
+          if (!data[d].ignore) {
+            const samples = sampleSize(data[d].values, 5);
+            const type = detectType(samples);
+            result[d] = { samples, type };
+          } else {
+            result[d] = undefined;
+          }
         }
 
         res.send({ success: true, data: result, currentSight });
@@ -75,32 +79,24 @@ router.get('/explore', (req, res) => {
 
 router.get('/datatypes', (req, res) => res.send({ datatypes }));
 
-router.post('/datatypes', (req, res) => {
-  let { currentSight } = req.body;
+router.post('/datatypes', async (req, res) => {
+  const { currentSight } = req.body;
   const { fields } = req.body;
-  Sight.findById(currentSight).exec()
-    .then((sight) => {
-      currentSight = sight;
-      return Dataset.findById(sight.dataset).exec();
-    })
-    .then((ds) => {
-      const dataset = ds;
-      dataset.fields = fields;
-      dataset.postAnalysis();
-      return dataset.save();
-    })
-    .then(() => currentSight.generateGraphs())
-    .then(graphs => res.send({ success: true, graphs }))
-    .catch(e => console.log(e));
+  const sight = await Sight.findById(currentSight).exec();
+  const dataset = await Dataset.findById(sight.dataset).exec();
+  dataset.fields = fields;
+  dataset.postAnalysis();
+  await dataset.save();
+  await sight.generateSimpleGraphs();
+  return res.send({ success: true });
 });
 
-router.get('/:sightId', (req, res) => {
-  Sight.getSightById(req.params.sightId, (err, sight) => {
-    if (sight) {
-      return res.send({ sight });
-    }
-    return res.sendStatus(404);
-  });
+router.get('/:sightId', async (req, res) => {
+  const sight = await Sight.findById(req.params.sightId).populate('charts').exec();
+  if (sight) {
+    return res.send(sight);
+  }
+  return res.sendStatus(404);
 });
 
 router.get('/', (req, res) => {

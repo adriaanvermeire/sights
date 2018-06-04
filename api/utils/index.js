@@ -1,4 +1,6 @@
 /* eslint-disable no-restricted-syntax */
+const chrono = require('chrono-node');
+
 const FLOATING_POINT = /^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$/i;
 const NUMBER = /^[-+]?[0-9]+$/i;
 
@@ -17,6 +19,20 @@ function mostFrequent(arr) {
   return mostFreq;
 }
 
+function toPercentage(num, total, decimals = 2) {
+  return ((num / total) * 100).toFixed(decimals);
+}
+
+module.exports.objectToArray = function objToArray(object) {
+  const keys = Object.keys(object);
+  const values = Object.values(object);
+  const result = [];
+  for (let i = 0; i < keys.length; i += 1) {
+    result.push([keys[i], values[i]]);
+  }
+  return result;
+};
+
 module.exports.detectType = function detectType(samples) {
   const results = [];
   for (let i = 0; i < samples.length; i += 1) {
@@ -25,6 +41,8 @@ module.exports.detectType = function detectType(samples) {
       results.push('floating point number');
     } else if (NUMBER.test(sample)) {
       results.push('number');
+    } else if (chrono.strict.parseDate(sample)) {
+      results.push('timestamp');
     } else {
       results.push('string');
     }
@@ -34,6 +52,7 @@ module.exports.detectType = function detectType(samples) {
 
 module.exports.countOccurences = function countOccurences(array) {
   const counts = {};
+  const result = [];
   for (let i = 0; i < array.length; i += 1) {
     const el = array[i];
     if (Object.prototype.hasOwnProperty.call(counts, el)) {
@@ -42,16 +61,22 @@ module.exports.countOccurences = function countOccurences(array) {
       counts[el] = 1;
     }
   }
-  return counts;
+  const fields = Object.keys(counts);
+  for (let i = 0; i < fields.length; i += 1) {
+    const field = fields[i];
+    result.push([field, counts[field]]);
+  }
+
+  return result;
 };
 
-module.exports.getUniqueValues = function getUniqueValues(obj) {
-  return Object.keys(obj).length;
+module.exports.getUniqueValues = function getUniqueValues(array) {
+  return array.length;
 };
 
 module.exports.getVolatility = function getVolatility(uniqueValues, total) {
   return {
-    isVolatile: (uniqueValues / total) >= 0.6 || false,
+    isVolatile: (uniqueValues / total) >= 0.7 || false,
     isSteady: (uniqueValues / total) <= 0.1 || false,
   };
 };
@@ -96,16 +121,44 @@ module.exports.getStandardDeviation = function getStandardDeviation(arr, mean) {
 module.exports.countRelativeOccurences = function countRelativeOccurences(counts, total, top = 5) {
   const keys = Object.keys(counts);
   const max = keys.length > top ? top : keys.length;
-  const countsArray = [];
-  for (const field of keys) {
-    if (Object.prototype.hasOwnProperty.call(counts, field)) {
-      countsArray.push([field, counts[field]]);
-    }
-  }
-  countsArray.sort((a, b) => b[1] - a[1]);
-  const relativeCounts = {};
+  const remainder = keys.length - max;
+  const relativeCounts = [];
   for (let i = 0; i < max; i += 1) {
-    relativeCounts[countsArray[i][0]] = ((countsArray[i][1] / total) * 100).toFixed(2);
+    const field = counts[i][0];
+    const percentage = toPercentage(counts[i][1], total);
+    relativeCounts.push([field, percentage]);
   }
+  let other = 0;
+  for (let i = max; i < remainder; i += 1) {
+    other += counts[i][1];
+    if (i === remainder - 1) other = toPercentage(other, total);
+  }
+  if (other > 0) relativeCounts[max] = ['other', other];
   return relativeCounts;
 };
+
+
+module.exports.complementedFilter = function complementedFilter(arr, test) {
+  const complement = [];
+  const filtered = arr.filter((element) => {
+    if (!test(element)) {
+      complement.push(element);
+      return false;
+    }
+    return true;
+  });
+  return { complement, filtered };
+};
+
+module.exports.pickRandom = function pickRandom(array) {
+  return array[Math.floor(Math.random() * array.length)];
+};
+
+module.exports.longestCategory = function longestCategory(categories) {
+  let maxLength = -Infinity;
+  for (const [category] of categories) {
+    maxLength = category.length > maxLength ? category.length : maxLength;
+  }
+  return maxLength;
+};
+
