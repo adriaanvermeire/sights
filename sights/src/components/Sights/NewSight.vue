@@ -27,7 +27,10 @@
     v-validate="'required|mimes:text/csv,application/json|size:5000'"
     required>
     <label for="sightCategory">Category</label>
-    <b-form-select id='sightCategory' v-model="sight.category" :options="categories" class="mb-3" required>
+    <b-form-select
+    id='sightCategory'
+    v-model="sight.category"
+    :options="categories" class="mb-3" required>
     </b-form-select>
     <button type="submit" name="button">Create Sight</button>
   </form>
