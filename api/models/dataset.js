@@ -1,6 +1,8 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-restricted-syntax */
+const ORDINAL = /number$/;
+
 const mongoose = require('mongoose');
 const csv = require('csvtojson');
 const Promise = require('bluebird');
@@ -19,6 +21,7 @@ const DatasetSchema = mongoose.Schema({
   filename: String,
   path: String,
   size: Number,
+  ignoreCols: [String],
   data: Mixed,
   fields: [{
     name: String,
@@ -33,37 +36,86 @@ const { statics: Statics, methods: Methods } = DatasetSchema;
 
 Methods.preAnalysis = function preAnalysis() {
   const keys = Object.keys(this.data);
+  const ignoreCols = [];
+
   for (const key of keys) {
-    const data = this.data[key];
-    const total = data.length;
-    const counts = countOccurences(data);
-    const relativeCounts = countRelativeOccurences(counts, total);
-    const uniqueValues = getUniqueValues(counts);
-    const isBinary = uniqueValues === 2;
-    const { isSteady, isVolatile } = getVolatility(uniqueValues, total);
+    const missingForKey = [];
+    const values = this.data[key];
+    const total = values.length;
     this.fields.push({ name: key });
-    this.data[key] = {
-      data, total, counts, isSteady, isVolatile, isBinary, relativeCounts,
-    };
+    this.data[key].map((d, i) => { if (!d) missingForKey.push(i); return d; });
+    if (missingForKey.length >= total * 0.7) {
+      ignoreCols.push(key);
+    }
+    this.data[key] = { values, total: total - missingForKey.length, missing: missingForKey };
   }
+  // values that aren't filled in correctly will be ignored
+  this.ignoreCols = ignoreCols;
+
   // When updating a Mixed field in mongoose you have to mark it modified to retain the changes
   this.markModified('data');
 };
 
-Methods.postAnalysis = function postAnalysis() {
-  const numberFields = this.fields.filter(isNumberType);
-  if (numberFields.length) {
-    for (const { name } of numberFields) {
-      const fieldData = this.data[name];
-      fieldData.data = fieldData.data.map(d => Number(d) || 0);
-      const sum = fieldData.data.reduce(getSum);
-      const mean = sum / fieldData.total;
-      const median = calculateMedian(fieldData.data);
-      const { min, max } = getExtremes(fieldData.data);
-      const stdDeviation = getStandardDeviation(fieldData.data, mean);
-      this.data[name] = {
-        ...fieldData, sum, mean, median, min, max, stdDeviation,
-      };
+Methods.generalAnalysis = function generalAnalysis(fieldData) {
+  const { total, values } = fieldData;
+  const counts = countOccurences(values);
+  const uniqueValues = getUniqueValues(counts);
+  const relativeCounts = countRelativeOccurences(counts, total);
+  const isBinary = uniqueValues === 2;
+  const { isSteady, isVolatile } = getVolatility(uniqueValues, total);
+  if (uniqueValues >= total * 0.9) this.ignoreCols.push(fieldData.name);
+  return {
+    ...fieldData, counts, uniqueValues, relativeCounts, isBinary, isSteady, isVolatile,
+  };
+};
+
+Methods.nominalAnalysis = function nominalAnalysis(fieldData) {
+  fieldData.counts.sort((a, b) => b[0] - a[0]);
+  return fieldData;
+};
+
+Methods.ordinalAnalysis = function ordinalAnalysis(fieldData) {
+  let { values } = fieldData;
+  const { total } = fieldData;
+  values = values.map(v => Number(v));
+  fieldData.counts.sort((a, b) => a[0] - b[0]);
+  const sum = values.reduce(getSum);
+  const mean = +(sum / total).toFixed(2);
+  const median = calculateMedian(values);
+  const { min, max } = getExtremes(values);
+  const stdDeviation = getStandardDeviation(values, mean);
+  return {
+    ...fieldData, sum, mean, median, min, max, stdDeviation,
+  };
+};
+
+Methods.handleMissingData = function handleMissingData(fieldData) {
+  // pairwise deletion
+  const values = fieldData.values.filter((v, i) => !(fieldData.missing.includes(i)));
+  // TODO: implement more ways to handle the missing of data
+  // mean imputation
+  // mode imputation
+  // median imputation
+  return { ...fieldData, values };
+};
+
+Methods.postAnalysis = async function postAnalysis() {
+  for (const { name, type } of this.fields) {
+    if (!(name in this.ignoreCols)) {
+      let fieldData = this.data[name];
+      fieldData.name = name;
+      if (fieldData.missing.length) {
+        fieldData = this.handleMissingData(fieldData);
+      }
+      fieldData.type = type;
+      fieldData = this.generalAnalysis(fieldData);
+
+      if (ORDINAL.test(type)) { // ORDINAL DATA
+        fieldData = this.ordinalAnalysis(fieldData);
+      } else { // NOMINAL DATA
+        fieldData = this.nominalAnalysis(fieldData);
+      }
+      this.data[name] = fieldData;
     }
   }
   // When updating a Mixed field in mongoose you have to mark it modified to retain the changes

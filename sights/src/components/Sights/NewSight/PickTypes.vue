@@ -42,7 +42,7 @@ export default {
         fields,
         currentSight: this.$store.state.user.currentSight,
       })
-        .then((response) => { console.log(response); this.$router.push({ name: 'Home' }); })
+        .then((response) => { this.$router.push({ name: 'Home' }); })
         .catch(e => console.log(e));
     },
   },
