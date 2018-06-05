@@ -91,6 +91,15 @@ router.post('/datatypes', async (req, res) => {
   return res.send({ success: true });
 });
 
+router.post('/charts/:id', async (req, res) => {
+  let sight = await Sight.findById(req.params.id).exec();
+  const chartIds = req.body.charts.map(c => c._id);
+  sight.charts = chartIds;
+  await sight.save();
+  sight = await sight.populate('charts').execPopulate();
+  return res.send(sight);
+});
+
 router.get('/:sightId', async (req, res) => {
   const sight = await Sight.findById(req.params.sightId).populate('charts').exec();
   if (sight) {
