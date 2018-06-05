@@ -40,7 +40,7 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
       name: req.body.name,
     }))
     .then((sight) => {
-      currentSight = sight._id;
+      currentSight = sight;
       return sight.populate('dataset').execPopulate();
     })
     .then(popSight => popSight.dataset.parse())

@@ -50,7 +50,9 @@ import Avatar from 'vue-avatar';
 
 export default {
   data() {
-    return {};
+    return {
+      sight: '',
+    };
   },
   methods: {
     logout() {
@@ -65,6 +67,9 @@ export default {
     },
     username() {
       return this.$store.state.user.profile.username;
+    },
+    sightName() {
+      return this.$store.state.sight.active.name;
     },
   },
   components: {
