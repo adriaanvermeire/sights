@@ -4,7 +4,7 @@
       <li v-for="sight in sights" :key='sight._id'>
         <router-link
         :to="{
-          name: 'SightDetail',
+          name: 'SightDashboard',
           params: { id: sight._id || 1 }
           }" class='text-dark'
         >{{ sight.name }}</router-link>
