@@ -1,23 +1,28 @@
 <template lang="html">
-<div class="navigation navbar navbar-expand bg-primary d-flex justify-content-between align-items-center">
-  <router-link :to='{ name: "Home" }' class='navbar-brand'>
-    <img class='logo' src="@/assets/graphics/logo-sights-inverse-notext.png" alt="">
-    Sights
-  </router-link>
-  <div class="collapse navigation-links d-flex align-items-center">
+<div class="navigation navbar navbar-expand bg-primary row justify-content-between">
+  <div class='justify-content-start d-flex col-3'>
+    <router-link :to='{ name: "Home" }' class='navbar-brand'>
+      <img class='logo' src="@/assets/graphics/logo-sights-inverse-notext.png" alt="">
+      Sights
+    </router-link>
+  </div>
+  <div class="col-3 d-flex justify-content-center">
+    <h2 class='text-white m-0' v-if='sightName'>{{ sightName }}</h2>
+  </div>
+  <div class="collapse navigation-links d-flex align-items-center col-3 justify-content-end">
     <ul class='navbar-nav d-flex m-0 p-0 d-flex align-items-center'>
       <li class="nav-item">
-        <router-link class='nav-link':to='{ name: "Home"}'>Home</router-link>
+        <router-link class='nav-link' :to='{ name: "Home"}'>Home</router-link>
       </li>
       <li class="nav-item">
-        <router-link class='nav-link':to='{ name: "Explore"}'>Explore</router-link>
+        <router-link class='nav-link' :to='{ name: "Explore"}'>Explore</router-link>
       </li>
       <template v-if='isAuthenticated'>
       <li class="nav-item">
-        <router-link class='nav-link':to='{ name: "MySights"}'>My Sights</router-link>
+        <router-link class='nav-link' :to='{ name: "MySights"}'>My Sights</router-link>
       </li>
       <li class="nav-item">
-        <router-link class='nav-link':to='{ name: "NewSight"}'>Add Sight</router-link>
+        <router-link class='nav-link' :to='{ name: "NewSight"}'>Add Sight</router-link>
       </li>
       <li class="nav-item pr-0 dropdown">
         <a href="#" class='nav-link dropdown-toggle' id='profileDropdown' role='button' data-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
