@@ -4,7 +4,11 @@
         <transition-group name='card-drag' tag='div' class='row d-flex px-4'>
             <card :width='1' v-for="chart of draggableCards" :key="chart._id" class='draggable'>
                 <template slot="title">
-                    <h2>{{ chart.fields[0] || 'No title' }}</h2>
+                    <h5 class='m-0' v-if='/bar|column/.test(chart.type)'>Top of {{ chart.fields[0] || 'No title' }}</h5>
+                    <h5 class='m-0' v-else>{{ chart.fields[0] || 'No title' }}</h5>
+                </template>
+                <template slot="subtitle" v-if='/bar|column/.test(chart.type)'>
+                    Showing the most occurring values for <i>{{ chart.fields[0] }}</i>.
                 </template>
                 <template slot="actions">
                     <div class="action">
