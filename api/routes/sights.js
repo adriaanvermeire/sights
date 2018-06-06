@@ -40,7 +40,7 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
       name: req.body.name,
     }))
     .then((sight) => {
-      currentSight = sight._id;
+      currentSight = sight;
       return sight.populate('dataset').execPopulate();
     })
     .then(popSight => popSight.dataset.parse())
@@ -89,6 +89,15 @@ router.post('/datatypes', async (req, res) => {
   await dataset.save();
   await sight.generateSimpleGraphs();
   return res.send({ success: true });
+});
+
+router.post('/charts/:id', async (req, res) => {
+  let sight = await Sight.findById(req.params.id).exec();
+  const chartIds = req.body.charts.map(c => c._id);
+  sight.charts = chartIds;
+  await sight.save();
+  sight = await sight.populate('charts').execPopulate();
+  return res.send(sight);
 });
 
 router.get('/:sightId', async (req, res) => {

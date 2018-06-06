@@ -1,6 +1,6 @@
 import NewSight from '@/components/Sights/NewSight';
 import Explore from '@/components/Sights/Explore';
-import SightDetail from '@/components/Sights/SightDetail';
+import SightDashboard from '@/components/Sights/SightDashboard';
 import { auth } from '../middleware';
 
 export default [
@@ -17,7 +17,7 @@ export default [
   },
   {
     path: '/sights/:id',
-    name: 'SightDetail',
-    component: SightDetail,
+    name: 'SightDashboard',
+    component: SightDashboard,
   },
 ];

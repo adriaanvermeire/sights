@@ -42,7 +42,7 @@
 import SightService from '@/services/SightService';
 import CategoryService from '@/services/CategoryService';
 import PickTypes from '@/components/Sights/NewSight/PickTypes';
-import { USER_SIGHT } from '@/store/actions/user';
+import { SIGHT_INACTIVE, SIGHT_ACTIVE } from '@/store/actions/sight';
 
 export default {
   data() {
@@ -68,7 +68,7 @@ export default {
       const response = (await SightService.addSight(fd)).data;
       if (response.success) {
         this.data = response.data;
-        this.$store.dispatch(USER_SIGHT, { sight: response.currentSight });
+        this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
         this.submitted = true;
       } else {
         // TODO: Change this to notification
@@ -88,6 +88,10 @@ export default {
   },
   components: {
     PickTypes,
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$store.dispatch(SIGHT_INACTIVE);
+    next();
   },
 };
 </script>
