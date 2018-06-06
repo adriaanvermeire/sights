@@ -10,11 +10,13 @@
         <column-chart
             suffix="%" v-if="chartData.type === 'column'"
             :data="chartData.data.relativeCounts"
-            :xtitle="chartData.data.name" ytitle="Amount" :min="0" :max="100"></column-chart>
+            :xtitle="chartData.data.name" ytitle="Amount" :min="0" :max="100"
+            label='Amount'></column-chart>
         <bar-chart
             suffix="%" v-if="chartData.type === 'bar'"
             :data="chartData.data.relativeCounts"
-            :ytitle="chartData.data.name" xtitle="Amount"></bar-chart>
+            :ytitle="chartData.data.name" xtitle="Amount"
+            label='Amount'></bar-chart>
         <area-chart
             v-if="chartData.type === 'area'" :data="chartData.data.counts"
             :library='{ elements: { point: { radius: chartData.markers ? 3 : 0, hitRadius: 10, hoverRadius: 4 } } }'
