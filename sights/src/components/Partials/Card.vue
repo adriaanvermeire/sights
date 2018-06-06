@@ -3,14 +3,18 @@
     <div class="card">
         <div class="card-header" v-if='hasHeader'><slot name='header'></slot></div>
         <div class="card-body">
-            <div class="card-title d-flex"
+            <div class="card-title d-flex m-0"
                 :class='{"justify-content-center": !hasActions, "justify-content-between": hasActions}'
                 v-if='hasTitle'>
                 <slot name='title'></slot>
-                <slot name="actions"></slot>
+                <div class="actions d-flex justify-content-end">
+                    <slot name="actions"></slot>
+                </div>
             </div>
-            <div class="card-subtitle"  v-if='hasSubtitle'>
-                <h3 class='text-muted'><slot name='subtitle'></slot></h3>
+            <div class="card-subtitle d-flex"
+                :class='{"justify-content-center": !hasActions, "justify-content-between": hasActions}'
+                v-if='hasSubtitle'>
+                <h6 class='text-muted'><small><slot name='subtitle'></slot></small></h6>
             </div>
             <div class="card-text">
                 <slot></slot>
