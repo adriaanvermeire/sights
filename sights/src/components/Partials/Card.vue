@@ -36,7 +36,7 @@
         </div>
         <div id="card-info-overlay" v-if='hasInfoOverlay'>
             <div id="info">
-                <div class="top-bar d-flex align-items-center">
+                <div class="top-bar d-flex align-items-center pt-2">
                     <button class="btn btn-link back-btn mr-md-3 mr-sm-5" @click='hideInfo'>
                         <icon name="angle-right" scale='2'></icon>
                     </button>
@@ -89,7 +89,7 @@ export default {
 
 .card-wrap {
     overflow: hidden;
-    position: relative;
+    display: flex;
     justify-content: center;
 }
 
