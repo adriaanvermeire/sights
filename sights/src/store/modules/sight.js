@@ -9,6 +9,7 @@ const state = {
   charts: [],
   name: '',
   id: false,
+  createdAt: false,
 };
 
 const actions = {
@@ -32,6 +33,7 @@ const mutations = {
     state.charts = sight.charts;
     state.name = sight.name;
     state.id = sight._id;
+    state.createdAt = sight.created_at;
   },
   [SIGHT_INACTIVE](state) {
     state.author = false;
@@ -39,6 +41,7 @@ const mutations = {
     state.charts = [];
     state.name = '';
     state.id = false;
+    state.createdAt = false;
   },
 };
 
@@ -49,6 +52,7 @@ const getters = {
   sightCategory: state => state.category,
   sightName: state => state.name,
   sightId: state => state.id,
+  sightCreation: state => state.createdAt,
 };
 
 const store = {
