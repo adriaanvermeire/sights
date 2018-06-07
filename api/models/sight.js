@@ -26,10 +26,8 @@ Methods.generateSimpleGraphs = async function generateSimpleGraphs() {
   const charts = [];
   for (const field of fields) {
     if (!(dataset.ignoreCols.includes(field))) {
-      console.log(field);
       const fieldData = dataset.data[field];
-      // add rules for getting type of chart
-      charts.push(Chart.createSimple({ data: fieldData, field }));
+      charts.push(Chart.createUnivariate({ data: fieldData, field }));
     }
   }
   this.charts = await Promise.all(charts);
