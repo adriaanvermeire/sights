@@ -33,7 +33,7 @@ const mutations = {
     state.charts = sight.charts;
     state.name = sight.name;
     state.id = sight._id;
-    state.createdAt = sight.created_at;
+    state.createdAt = sight.createdAt;
   },
   [SIGHT_INACTIVE](state) {
     state.author = false;
