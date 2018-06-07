@@ -40,7 +40,7 @@ export default {
       });
       SightService.submitTypes({
         fields,
-        currentSight: this.$store.state.sight.active._id,
+        currentSight: this.$store.getters.sightId,
       }) // TODO: Add notification for successfully creating sight
         .then((response) => { this.$router.push({ name: 'Home' }); })
         .catch(e => console.log(e));

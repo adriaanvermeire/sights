@@ -4,13 +4,17 @@ import { SIGHT_CHARTS, SIGHT_ACTIVE, SIGHT_INACTIVE } from '../actions/sight';
 
 const state = {
   // single source of data
-  active: {},
+  author: false,
+  category: false,
+  charts: [],
+  name: '',
+  id: false,
 };
 
 const actions = {
   // asynchronous operations
   [SIGHT_CHARTS]: async ({ commit, state }, payload) => {
-    const sight = (await SightService.updateCharts(state.active._id, payload.charts)).data;
+    const sight = (await SightService.updateCharts(state.id, payload.charts)).data;
     commit(SIGHT_ACTIVE, sight);
   },
   [SIGHT_ACTIVE]({ commit }, payload) {
@@ -23,16 +27,28 @@ const actions = {
 const mutations = {
   // isolated data mutations
   [SIGHT_ACTIVE](state, sight) {
-    state.active = sight;
+    state.author = sight.author.username;
+    state.category = sight.category.name;
+    state.charts = sight.charts;
+    state.name = sight.name;
+    state.id = sight._id;
   },
   [SIGHT_INACTIVE](state) {
-    state.active = '';
+    state.author = false;
+    state.category = false;
+    state.charts = [];
+    state.name = '';
+    state.id = false;
   },
 };
 
 const getters = {
   // reusable data accessors
-  charts: state => state.active.charts,
+  sightCharts: state => state.charts,
+  sightAuthor: state => state.author,
+  sightCategory: state => state.category,
+  sightName: state => state.name,
+  sightId: state => state.id,
 };
 
 const store = {

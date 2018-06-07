@@ -74,7 +74,7 @@ export default {
       return this.$store.state.user.profile.username;
     },
     sightName() {
-      return this.$store.state.sight.active.name;
+      return this.$store.getters.sightName;
     },
   },
   components: {
