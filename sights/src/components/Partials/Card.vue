@@ -155,6 +155,8 @@ export default {
         width: 100%;
         top: 0;
         right: 0;
+        border-radius: 0.25rem;
+
         .info-active & {
             background-color: $gray;
             opacity: 0.8;
