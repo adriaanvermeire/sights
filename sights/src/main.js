@@ -18,6 +18,8 @@ Vue.config.productionTip = false;
 // Vue package registration
 Vue.use(VeeValidate, { events: 'change', fieldsBagName: 'validationFields' });
 Vue.use(VueChartkick, { adapter: Chart });
+Vue.use(require('vue-moment'));
+
 Vue.component('icon', Icon);
 
 const token = localStorage.getItem('user-token');
