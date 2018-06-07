@@ -10,7 +10,6 @@ const state = {
 const actions = {
   // asynchronous operations
   [SIGHT_CHARTS]: async ({ commit, state }, payload) => {
-    console.log(state.active);
     const sight = (await SightService.updateCharts(state.active._id, payload.charts)).data;
     commit(SIGHT_ACTIVE, sight);
   },
