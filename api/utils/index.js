@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 const chrono = require('chrono-node');
 
-const FLOATING_POINT = /^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$/i;
+const FLOATING_POINT = /^[-+]?[0-9]*[.,][0-9]+([eE][-+]?[0-9]+)?$/i;
 const NUMBER = /^[-+]?[0-9]+$/i;
 
 function mostFrequent(arr) {
