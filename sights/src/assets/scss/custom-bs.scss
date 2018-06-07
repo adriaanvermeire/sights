@@ -1,27 +1,10 @@
+
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import './vars.scss';
 
-// Override / set color variables
-$white: #fff;
-$black: #000;
-$green: #00e389;
-$blue: #3399ff;
-$orange: #f26c22;
-$yellow: #ffd925;
-$red: #e5001e;
-
-// Create grayscale
-$gray-dark: #292b2c;
-$gray: #3f3f3f;
-$gray-light: #7e7e7e;
-$gray-lighter: #ededed;
-$gray-lightest: #fafafa;
-
-// Set brand colors
-$primary: #09eba7;
-$success: $green;
-$info: $yellow;
-$warning: $orange;
-$danger: $red;
+html, body {
+  height: 100%;
+}
 
 $font-family-sans-serif: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
 $headings-font-family: 'IBM Plex Sans';
@@ -29,8 +12,10 @@ $headings-font-family: 'IBM Plex Sans';
 .fa-icon {
   width: auto;
   height: 1em; /* or any other relative font sizes */
-
+  
   /* You would have to include the following two lines to make this work in Safari */
   max-width: 100%;
   max-height: 100%;
 }
+
+@import "node_modules/bootstrap/scss/bootstrap";
