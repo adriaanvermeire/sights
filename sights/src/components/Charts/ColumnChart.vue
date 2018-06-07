@@ -37,6 +37,19 @@ export default {
           data: this.chartData,
         },
       ],
+    },
+    {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            max: 100,
+          },
+        }],
+      },
+      legend: {
+        display: false,
+      },
     });
   },
 };
