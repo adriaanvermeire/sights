@@ -77,13 +77,13 @@ Methods.nominalAnalysis = function nominalAnalysis(fieldData) {
 Methods.ordinalAnalysis = function ordinalAnalysis(fieldData) {
   let { values } = fieldData;
   const { total } = fieldData;
-  values = values.map(v => Number(v));
+  values = values.map(v => Number(v.replace(',', '.')));
   fieldData.counts.sort((a, b) => a[0] - b[0]);
   const sum = values.reduce(getSum);
   const mean = +(sum / total).toFixed(2);
   const median = calculateMedian(values);
   const { min, max } = getExtremes(values);
-  const stdDeviation = getStandardDeviation(values, mean);
+  const stdDeviation = getStandardDeviation(values, mean).toFixed(2);
   return {
     ...fieldData, sum, mean, median, min, max, stdDeviation,
   };
