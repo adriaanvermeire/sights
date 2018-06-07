@@ -2,10 +2,16 @@
     <div id="dashboard-meta-banner" class='px-4'>
         <div id="dashboard-meta-content">
             <div id="category">
-                Category: {{ category ||''}}
+                Category:
+                <router-link :to="{ name: 'Home'}">
+                    <b>{{ category ||''}}</b>
+                </router-link>
             </div>
             <div id="profile-data">
-                Made by {{ author || ''}}
+                Made by
+                <router-link :to="{ name: 'Home'}">
+                    <b>{{ author || ''}}</b>
+                </router-link>
             </div>
         </div>
     </div>
@@ -14,6 +20,7 @@
 <script>
 export default {
   computed: {
+    createdAt() { return this.$store.getters.sightCreation; },
     author() { return this.$store.getters.sightAuthor; },
     category() { return this.$store.getters.sightCategory; },
   },
@@ -24,11 +31,17 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+@import '@/assets/scss/vars.scss';
+
 #dashboard-meta-banner {
     height: 50px;
     #dashboard-meta-content {
         display: flex;
         justify-content:space-between;
+
+        a {
+            color: $black;
+        }
     }
 }
 </style>
