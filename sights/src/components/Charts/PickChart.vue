@@ -11,7 +11,7 @@
         :field='chartData.data.name'
         :height="300"/>
       <line-chart
-        v-if='chartData.type == "line"'
+        v-if='/line|area/.test(chartData.type)'
         :data='chartData.data.counts'
         :field='chartData.data.name'
         :height="300"/>
@@ -32,7 +32,6 @@ export default {
   computed: {
     library() {
       return {
-        elements: { point: { radius: this.chartData.markers ? 3 : 0, hitRadius: 10, hoverRadius: 4 } },
         chart: {
         },
       };
@@ -41,7 +40,6 @@ export default {
   props: ['chart'],
   mounted() {
     this.chartData = this.chart;
-    console.log(this.chartData);
   },
   components: {
     BarChart,
