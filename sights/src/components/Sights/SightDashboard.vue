@@ -1,18 +1,27 @@
 <template lang="html">
-  <dashboard :cards='sight.charts'>
-  </dashboard>
+  <div id="dashboard">
+    <dashboard :cards='sight.charts'>
+    </dashboard>
+    <sidebar v-show='showSidebar'></sidebar>
+  </div>
 </template>
 
 <script>
 import { SIGHT_INACTIVE, SIGHT_ACTIVE } from '@/store/actions/sight';
 import SightService from '@/services/SightService';
 import Dashboard from '../Partials/Dashboard';
+import Sidebar from '../Partials/Sidebar';
 
 export default {
   computed: {
     sight: {
       get() {
         return this.$store.state.sight.active;
+      },
+    },
+    showSidebar: {
+      get() {
+        return this.$store.state.sidebar.open;
       },
     },
   },
@@ -23,6 +32,7 @@ export default {
   },
   components: {
     Dashboard,
+    Sidebar,
   },
   beforeRouteLeave(to, from, next) {
     this.$store.dispatch(SIGHT_INACTIVE);
