@@ -1,6 +1,6 @@
 <template>
     <draggable v-model="draggableCards" v-bind:options="dragOptions">
-        <transition-group name='card-drag' tag='div' class='row d-flex px-5 flex-md-row'>
+        <transition-group name='card-drag' tag='div' class='row d-flex px-md-5 px-2 flex-md-row'>
             <card :width='1' v-for="chart of draggableCards" :key="chart._id" :id="`card-${chart._id}`" class='draggable align-items-stretch d-flex'>
                 <template slot="title">
                     <h5 class='m-0' v-if='/bar|column/.test(chart.type)'>Top of {{ chart.fields[0] || 'No title' }}</h5>
@@ -84,27 +84,6 @@
                             </tbody>
                         </table>
                         </template>
-                        <!-- <ul id="labels">
-                            <li></li>
-                            <li># Entries:</li>
-                            <li># Missing values:</li>
-                            <hr>
-                                <li>Total sum:</li>
-                                <li>Minimum:</li>
-                                <li>Maximum:</li>
-                                <li>Mean:</li>
-                                <li>Median:</li>
-                                <li>Std. deviation:</li>
-                            </template>
-
-                        </ul> -->
-                        <!-- <ul id='values'>
-
-                            <hr>
-                            <template v-if='/number/.test(chart.data.type)'>
-
-                            </template>
-                        </ul> -->
                     </div>
                 </template>
             </card>
@@ -185,26 +164,19 @@ export default {
     }
 }
 
+table {
+    thead {
+        background-color: $green;
+    }
+    th, td {
+        border: none;
+        text-align: left;
+    }
+}
+
 td:first-child{
-    text-align: right;
     width: 50%;
 }
 td:last-child {
-    text-align: center;
-}
-
-#labels, #values {
-    list-style-type: none;
-    padding: 0;
-}
-
-#labels {
-    text-align: right;
-    font-weight: bold;
-    margin-right: 1rem;
-}
-
-#values {
-    text-align: left;
 }
 </style>

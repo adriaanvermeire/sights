@@ -35,14 +35,14 @@
             </div>
         </div>
         <div id="card-info-overlay" v-if='hasInfoOverlay'>
-            <div id="info">
-                <div class="top-bar d-flex align-items-center pt-2">
-                    <button class="btn btn-link back-btn mr-md-3 mr-sm-5" @click='hideInfo'>
+            <div id="info" class='p-3'>
+                <div class="top-bar d-flex align-items-center">
+                    <button class="btn btn-link back-btn mr-3" @click='hideInfo'>
                         <icon name="angle-right" scale='2'></icon>
                     </button>
                     <slot name="infoTitle"></slot>
                 </div>
-                <div id="info-content" class='px-md-3 px-sm-5'>
+                <div id="info-content" class=''>
                     <slot name="infoOverlay"></slot>
                 </div>
             </div>
