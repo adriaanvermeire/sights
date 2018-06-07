@@ -44,6 +44,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+
+  &>*:first-child{
+    flex: 0 0 auto;
+  }
+
+  &>*:nth-child(2){
+    flex: 1 1 auto;
+  }
+
 }
 
 </style>

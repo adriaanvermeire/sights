@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import BootstrapVue from 'bootstrap-vue';
 import VeeValidate from 'vee-validate';
 import 'vue-awesome/icons';
 import VueChartkick from 'vue-chartkick';
@@ -12,13 +11,15 @@ import router from './router';
 import store from './store';
 // styles
 import './assets/scss/custom-bs.scss';
+import './assets/scss/vars.scss';
 
 Vue.config.productionTip = false;
 
 // Vue package registration
-Vue.use(BootstrapVue);
 Vue.use(VeeValidate, { events: 'change', fieldsBagName: 'validationFields' });
 Vue.use(VueChartkick, { adapter: Chart });
+Vue.use(require('vue-moment'));
+
 Vue.component('icon', Icon);
 
 const token = localStorage.getItem('user-token');

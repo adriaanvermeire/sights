@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import auth from './modules/auth';
 import user from './modules/user';
 import sight from './modules/sight';
+import sidebar from './modules/sidebar';
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     auth,
     user,
     sight,
+    sidebar,
   },
 });
 

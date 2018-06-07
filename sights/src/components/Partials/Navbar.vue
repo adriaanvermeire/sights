@@ -1,16 +1,12 @@
 <template lang="html">
-<div class="navigation navbar navbar-expand bg-primary row justify-content-between">
-  <div class='justify-content-start d-flex col-3'>
-    <router-link :to='{ name: "Home" }' class='navbar-brand'>
+<nav class="navbar navbar-expand-lg navbar-light bg-primary d-flex justify-content-between">
+  <router-link :to='{ name: "Home" }' class='navbar-brand'>
       <img class='logo' src="@/assets/graphics/logo-sights-inverse-notext.png" alt="">
       Sights
-    </router-link>
-  </div>
-  <div class="col-3 d-flex justify-content-center">
-    <h2 class='text-white m-0' v-if='sightName'>{{ sightName }}</h2>
-  </div>
-  <div class="collapse navigation-links d-flex align-items-center col-3 justify-content-end">
-    <ul class='navbar-nav d-flex m-0 p-0 d-flex align-items-center'>
+  </router-link>
+  <h2 class='text-white m-0' v-if='sightName'>{{ sightName }}</h2>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class='navbar-nav align-items-center'>
       <li class="nav-item">
         <router-link class='nav-link' :to='{ name: "Home"}'>Home</router-link>
       </li>
@@ -46,7 +42,7 @@
       </template>
     </ul>
   </div>
-</div>
+</nav>
 </template>
 
 <script>
@@ -74,7 +70,7 @@ export default {
       return this.$store.state.user.profile.username;
     },
     sightName() {
-      return this.$store.state.sight.active.name;
+      return this.$store.getters.sightName;
     },
   },
   components: {
@@ -84,7 +80,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.navigation{
+nav{
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   padding-top: 0;
   padding-bottom: 0;
@@ -92,9 +88,15 @@ export default {
 
   font-family: 'IBM Plex Sans';
   font-weight: bold;
-  a, .nav-link {
-    color: white;
+
+  &, & * {
+    color: white !important;
   }
+
+  #navbarCollapse {
+    flex-grow: 0;
+  }
+
   .logo {
     height: 60px;
   }

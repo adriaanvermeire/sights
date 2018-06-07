@@ -3,23 +3,23 @@
   <form v-if='!submitted' @submit.prevent="submitForm"
   method="post" enctype="multipart/form-data">
     <label for="sightName">Name</label>
-     <b-form-input v-model.trim="sight.name"
+     <input v-model.trim="sight.name"
                   id='sightName'
                   type="text"
                   placeholder="Name of your Sight"
                   v-validate="'required|min:5|alpha_num'"
                   name='name'
-                  required
-    ></b-form-input>
+                  class='form-control' required>
     <label for="sightEntrypoint">Entrypoint (optional)</label>
-     <b-form-input v-model="sight.entrypoint"
+     <input v-model="sight.entrypoint"
                   id='sightEntrypoint'
                   type="text"
                   placeholder="ex. data"
                   name="entrypoint"
-    ></b-form-input>
+                  class='form-control'>
     <label for="sightFile">Dataset</label>
     <input
+    class='form-control'
     type="file"
     id='sightFile'
     @change="onFileSelected"
@@ -27,11 +27,12 @@
     v-validate="'required|mimes:text/csv,application/json|size:5000'"
     required>
     <label for="sightCategory">Category</label>
-    <b-form-select
+    <select
     id='sightCategory'
     v-model="sight.category"
-    :options="categories" class="mb-3" required>
-    </b-form-select>
+    class="mb-3 form-control" required>
+    <option v-for='category of categories' :value="category.value" :key='category.text'>{{category.text}}</option>
+    </select>
     <button type="submit" name="button">Create Sight</button>
   </form>
   <pick-types v-if='submitted' v-bind:data='data'/>

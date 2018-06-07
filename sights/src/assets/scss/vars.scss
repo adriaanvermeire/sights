@@ -1,0 +1,25 @@
+
+// Override / set color variables
+$white: #fff;
+$black: #414141;
+$green: #09eba7;
+$blue: #118AB2;
+$orange: #ED6A5A;
+$yellow: #ffD166;
+$red: #EF476F;
+
+// Create grayscale
+$gray-dark: #292b2c;
+$gray: #4C5B5C;
+$gray-light: #7e7e7e;
+$gray-lighter: #ededed;
+$gray-lightest: #fafafa;
+
+// Set brand colors
+$theme-colors: (
+    'primary': $green,
+    'success': $green,
+    'info': $yellow,
+    'warning': $orange,
+    'danger': $red
+);

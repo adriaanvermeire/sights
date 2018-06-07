@@ -101,7 +101,11 @@ router.post('/charts/:id', async (req, res) => {
 });
 
 router.get('/:sightId', async (req, res) => {
-  const sight = await Sight.findById(req.params.sightId).populate('charts').exec();
+  const sight = await Sight.findById(req.params.sightId)
+    .populate('charts')
+    .populate({ path: 'author', select: 'username -_id' })
+    .populate({ path: 'category', select: 'name -_id' })
+    .exec();
   if (sight) {
     return res.send(sight);
   }

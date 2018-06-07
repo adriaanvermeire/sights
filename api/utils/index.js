@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 const chrono = require('chrono-node');
 
-const FLOATING_POINT = /^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$/i;
+const FLOATING_POINT = /^[-+]?[0-9]*[.,][0-9]+([eE][-+]?[0-9]+)?$/i;
 const NUMBER = /^[-+]?[0-9]+$/i;
 
 function mostFrequent(arr) {
@@ -128,12 +128,12 @@ module.exports.countRelativeOccurences = function countRelativeOccurences(counts
     const percentage = toPercentage(counts[i][1], total);
     relativeCounts.push([field, percentage]);
   }
-  let other = 0;
-  for (let i = max; i < remainder; i += 1) {
-    other += counts[i][1];
-    if (i === remainder - 1) other = toPercentage(other, total);
-  }
-  if (other > 0) relativeCounts[max] = ['other', other];
+  // let other = 0;
+  // for (let i = max; i < remainder; i += 1) {
+  //   other += counts[i][1];
+  //   if (i === remainder - 1) other = toPercentage(other, total);
+  // }
+  // if (other > 0) relativeCounts[max] = ['other', other];
   return relativeCounts;
 };
 
