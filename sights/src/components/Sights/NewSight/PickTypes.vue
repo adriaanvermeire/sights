@@ -3,19 +3,20 @@
     <p>We recognized the following fields. Please select what their type is.</p>
     <p>The type will specify how each of the fields will be evaluated and
       used to create your graphs.</p>
-    <b-button @click.prevent='submit' variant="primary">Next step</b-button>
+    <button @click.prevent='submit' class='btn btn-primary'>Next step</button>
 
     <div class="typeChecks d-flex flex-wrap mb-5">
       <div v-for="field in fields" :key="field.name" class="field card w-25 p-2 m-3">
         <h2>{{ field.name }}</h2>
-        <b-form-select v-model="field.type" :options="datatypes" class="mb-3">
-        </b-form-select>
+        <select v-model="field.type" class="mb-3 form-control">
+          <option v-for="type of datatypes" :value="type" :key='type'>{{ type }}</option>
+        </select>
         <ul>
           <li v-for='(sample, index) in field.samples' :key='sample + index'>{{ sample }}</li>
         </ul>
       </div>
     </div>
-    <b-button @click.prevent='submit' variant="primary">Next step</b-button>
+    <button @click.prevent='submit' class="btn btn-primary">Next step</button>
   </div>
 </template>
 
