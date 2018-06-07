@@ -1,6 +1,10 @@
 <template>
     <div id="dashboard-meta-banner" class='px-4'>
         <div id="dashboard-meta-content">
+            <div id="creationTime">
+                Created on:
+                <b>{{ createdAt | moment("LL") }}</b>
+            </div>
             <div id="category">
                 Category:
                 <router-link :to="{ name: 'Home'}">
