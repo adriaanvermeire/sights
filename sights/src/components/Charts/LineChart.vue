@@ -34,10 +34,19 @@ export default {
           backgroundColor: this.bgColors,
           borderColor: this.boColors,
           borderWidth: 1,
+          pointRadius: this.chartData.markers ? 3 : 0,
+          hitRadius: 10,
+          hoverRadius: 4,
           data: this.chartData,
         },
       ],
-    });
+    },
+    {
+      legend: {
+        display: false,
+      },
+    },
+    );
   },
 };
 </script>

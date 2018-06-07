@@ -1,14 +1,16 @@
 <template>
-<div :class="{ 'col': !width, 'col-3': width == 1, 'col-6': width == 2 }" class='mb-4'>
-    <div class="card">
-        <div class="top-half w-50 h-50" @mouseover='toggleDrag' @mouseout="toggleDrag">
+<div
+    :class="cardWidth"
+    class='mb-4 card-wrap'>
+    <div class="card w-100">
+        <div class="top-half w-25 h-25" @mouseover='toggleDrag' @mouseout="toggleDrag">
             <button class="btn btn-link btn-drag p-0" v-show='showDrag'>
                 <icon name="ellipsis-v" color='grey'></icon>
                 <icon name="ellipsis-v" color='grey'></icon>
             </button>
         </div>
         <div class="card-header" v-if='hasHeader'><slot name='header'></slot></div>
-        <div class="card-body">
+        <div class="card-body d-flex flex-column justify-content-between">
             <div class="card-title d-flex m-0"
                 :class='{"justify-content-center": !hasActions, "justify-content-between": hasActions}'
                 v-if='hasTitle'>
@@ -33,11 +35,16 @@
             </div>
         </div>
         <div id="card-info-overlay" v-if='hasInfoOverlay'>
-            <div class="info">
-                <button class="btn btn-link back-btn" @click='hideInfo'>
-                    <icon name="angle-right" scale='2'></icon>
-                </button>
-                <slot name="infoOverlay"></slot>
+            <div id="info">
+                <div class="top-bar d-flex align-items-center">
+                    <button class="btn btn-link back-btn mr-md-3 mr-sm-5" @click='hideInfo'>
+                        <icon name="angle-right" scale='2'></icon>
+                    </button>
+                    <slot name="infoTitle"></slot>
+                </div>
+                <div id="info-content" class='px-md-3 px-sm-5'>
+                    <slot name="infoOverlay"></slot>
+                </div>
             </div>
             <div class="blur" @click='hideInfo'></div>
         </div>
@@ -68,15 +75,22 @@ export default {
     hasActions() { return this.$slots.actions; },
     hasInfoOverlay() { return this.$slots.infoOverlay; },
     hasDragOverlay() { return this.$slots.infoOverlay; },
+    cardWidth() {
+      return {
+        col: !this.width,
+        'col-xl-3 col-lg-4 col-md-6 col-sm-12': this.width === 1,
+        'col-6': this.width === 2 };
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/vars.scss';
 
-.col, .col-3, .col-6 {
+.card-wrap {
     overflow: hidden;
     position: relative;
+    justify-content: center;
 }
 
 #drag-overlay {
@@ -100,9 +114,9 @@ export default {
 }
 
 #card-info-overlay {
-    .info {
+    #info {
         height: 100%;
-        transition: all 0.3s ease-out;
+        transition: transform 0.3s ease-out;
         width: 80%;
         position: absolute;
         top: 0;
@@ -112,7 +126,10 @@ export default {
         border-left: none;
         border-radius: 0.25rem;
         z-index: 10;
+        display: none;
+        overflow-y: scroll;
         .info-active & {
+            display: block;
             transform: translateX(0);
         }
 
