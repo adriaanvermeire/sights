@@ -1,5 +1,5 @@
 <template>
-    <draggable v-model="draggableCards" v-bind:options="dragOptions">
+    <draggable v-model="draggableCards" v-bind:options="dragOptions" class='container-fluid'>
         <transition-group name='card-drag' tag='div' class='row d-flex px-md-5 px-2 flex-md-row'>
             <card :width='1' v-for="chart of draggableCards" :key="chart._id" :id="`card-${chart._id}`" class='draggable align-items-stretch d-flex'>
                 <template slot="title">
