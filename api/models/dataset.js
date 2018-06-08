@@ -104,6 +104,7 @@ Methods.postAnalysis = async function postAnalysis() {
     if (!(name in this.ignoreCols)) {
       let fieldData = this.data[name];
       fieldData.name = name;
+      fieldData.originalValues = [fieldData.values];
       if (fieldData.missing.length) {
         fieldData = this.handleMissingData(fieldData);
       }

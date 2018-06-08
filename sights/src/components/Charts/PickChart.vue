@@ -1,20 +1,17 @@
 <template>
-    <div :id="`chart-${chartData._id}`">
+    <div :id="`chart-${chart._id}`">
       <bar-chart
-        v-if='chartData.type == "bar"'
-        :data='chartData.data.relativeCounts'
-        :field='chartData.data.name'
-        :height="300"/>
+        v-if='type == "bar" && chart.univariate'
+        :data='dataOne.relativeCounts'
+        :field='dataOne.name' :height='300'/>
       <column-chart
-        v-if='chartData.type == "column"'
-        :data='chartData.data.relativeCounts'
-        :field='chartData.data.name'
-        :height="300"/>
+        v-else-if='type == "column" && chart.univariate'
+        :data='dataOne.relativeCounts'
+        :field='dataOne.name' :height='300'/>
       <line-chart
-        v-if='/line|area/.test(chartData.type)'
-        :data='chartData.data.counts'
-        :field='chartData.data.name'
-        :height="300"/>
+        v-else-if='/line|area/.test(type) && chart.univariate'
+        :data='dataOne.counts'
+        :field='dataOne.name' :height='300'/>
     </div>
 </template>
 
@@ -26,7 +23,8 @@ import LineChart from '@/components/Charts/LineChart';
 export default {
   data() {
     return {
-      chartData: {},
+      type: '',
+      dataOne: {},
     };
   },
   computed: {
@@ -39,7 +37,8 @@ export default {
   },
   props: ['chart'],
   mounted() {
-    this.chartData = this.chart;
+    this.type = this.chart.type;
+    this.dataOne = this.chart.data[0];
   },
   components: {
     BarChart,

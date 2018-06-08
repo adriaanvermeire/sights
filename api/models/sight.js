@@ -20,22 +20,47 @@ const { statics: Statics, methods: Methods } = SightSchema;
 
 // Document Methods
 
-Methods.generateSimpleGraphs = async function generateSimpleGraphs() {
+Methods.generateUnivariateGraphs = async function generateUnivariateGraphs() {
   const { dataset } = (await this.populate('dataset').execPopulate());
   const fields = Object.keys(dataset.data);
   const charts = [];
   for (const field of fields) {
     if (!(dataset.ignoreCols.includes(field))) {
-      console.log(field);
       const fieldData = dataset.data[field];
-      // add rules for getting type of chart
-      charts.push(Chart.createSimple({ data: fieldData, field }));
+      charts.push(Chart.createUnivariate({ data: fieldData, field }));
     }
   }
   this.charts = await Promise.all(charts);
-  console.log('done');
+  console.log('univariate done');
   await this.save();
 };
+
+Methods.generateBivariateGraphs = async function generateBivariateGraphs() {
+  const { dataset } = await this.populate('dataset').execPopulate();
+  const fields = Object.keys(dataset.data);
+  const independents = fields.filter(field => dataset.data[field].isSteady);
+  const dependents = fields.filter(field => !dataset.data[field].isSteady &&
+                                            !dataset.data[field].isVolatile &&
+                                            !(dataset.ignoreCols.includes(field)));
+
+  const charts = [];
+  const chartPromises = [];
+  for (const dep of dependents) {
+    for (const indep of independents) {
+      if (indep !== dep && !charts.includes([indep, dep]) && !charts.includes([dep, indep])) {
+        charts.push([indep, dep]);
+        const data = [];
+        data.push(dataset.data[indep].originalValues);
+        data.push(dataset.data[dep].originalValues);
+        chartPromises.push(Chart.createBivariate({ data, fields: [indep, dep] }));
+      }
+    }
+  }
+  this.charts.push(...await Promise.all(chartPromises));
+  console.log('bivariate done');
+  await this.save();
+};
+
 
 // Statics
 

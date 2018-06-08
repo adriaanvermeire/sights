@@ -1,38 +1,28 @@
 <script>
-import { Bar } from 'vue-chartjs';
-import ChartMixin from '@/mixins/ChartMixin';
+import { Line } from 'vue-chartjs';
+import BivariateChartMixin from '@/mixins/BivariateChartMixin';
 
 export default {
-  extends: Bar,
-  mixins: [ChartMixin],
-  props: ['data', 'field'],
+  extends: Line,
+  mixins: [BivariateChartMixin],
   mounted() {
     // Overwriting base render method with actual data.
     this.renderChart({
       labels: this.labels,
       datasets: [
         {
-          label: this.field,
           backgroundColor: this.bgColors,
           borderColor: this.boColors,
-          borderWidth: 1,
           data: this.dataXY,
         },
       ],
     },
     {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            max: 100,
-          },
-        }],
-      },
       legend: {
         display: false,
       },
-    });
+    },
+    );
   },
 };
 </script>

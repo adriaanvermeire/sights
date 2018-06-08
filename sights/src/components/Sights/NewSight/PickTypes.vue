@@ -1,22 +1,33 @@
 <template lang="html">
-  <div id="pickTypes" clas='d-flex justify-content-center'>
+  <div class="container-fluid">
+   <div id="pickTypes" class='d-flex justify-content-center flex-column align-items-center'>
     <p>We recognized the following fields. Please select what their type is.</p>
     <p>The type will specify how each of the fields will be evaluated and
       used to create your graphs.</p>
-    <button @click.prevent='submit' class='btn btn-primary'>Next step</button>
-
-    <div class="typeChecks d-flex flex-wrap mb-5">
-      <div v-for="field in fields" :key="field.name" class="field card w-25 p-2 m-3">
+    <button @click.prevent='submit' class='btn btn-primary mb-2'>Generate Sight</button>
+    <div class="form-group m-0">
+      <input type="checkbox" id='bivariate' v-model='bivariate' name='bivariate'>
+      <label for="bivariate">Also generate bivariate (2 variables) charts <b>(experimental !)</b></label>
+    </div>
+    <div class="typeChecks d-flex mb-2 justify-content-center row px-2">
+      <div v-for="field in fields" :key="field.name" class="field card col-lg-2 col-md-3 col-12 p-2 m-3">
         <h2>{{ field.name }}</h2>
         <select v-model="field.type" class="mb-3 form-control">
           <option v-for="type of datatypes" :value="type" :key='type'>{{ type }}</option>
         </select>
-        <ul>
-          <li v-for='(sample, index) in field.samples' :key='sample + index'>{{ sample }}</li>
-        </ul>
+        <div class="examples">
+          <b class='mr-1'>Small sample of data:</b>
+         <p>{{ field.samples | join }}</p>
+        </div>
       </div>
     </div>
-    <button @click.prevent='submit' class="btn btn-primary">Next step</button>
+    <button @click.prevent='submit' class="btn btn-primary mb-2">Generate Sight</button>
+    <div class="form-group">
+      <input type="checkbox" id='bivariate' v-model='bivariate' name='bivariate'>
+      <label for="bivariate">Also generate bivariate (2 variables) charts <b>(experimental !)</b></label>
+    </div>
+
+  </div>
   </div>
 </template>
 
@@ -29,6 +40,7 @@ export default {
     return {
       datatypes: [],
       fields: [],
+      bivariate: false,
     };
   },
   props: ['data'],
@@ -42,8 +54,9 @@ export default {
       SightService.submitTypes({
         fields,
         currentSight: this.$store.getters.sightId,
+        bivariate: this.bivariate,
       }) // TODO: Add notification for successfully creating sight
-        .then((response) => { this.$router.push({ name: 'Home' }); })
+        .then(() => { this.$router.push({ name: 'Home' }); })
         .catch(e => console.log(e));
     },
   },

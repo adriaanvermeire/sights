@@ -87,7 +87,10 @@ router.post('/datatypes', async (req, res) => {
   dataset.fields = fields;
   dataset.postAnalysis();
   await dataset.save();
-  await sight.generateSimpleGraphs();
+  await sight.generateUnivariateGraphs();
+  if (req.body.bivariate) {
+    await sight.generateBivariateGraphs();
+  }
   return res.send({ success: true });
 });
 
