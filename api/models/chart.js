@@ -40,7 +40,7 @@ Methods.figureOutType = function figureOutType() {
       type = 'bar';
     }
   } else { // Bivariate (two fields)
-    type = 'line';
+    type = 'scatter';
   }
   this.changeType(type);
 };

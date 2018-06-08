@@ -18,36 +18,34 @@ export default {
       ],
     };
   },
+  props: ['dependent', 'independent'],
   computed: {
     labels() {
       const labels = [];
-      for (let i = 0; i < this.data.length; i += 1) {
-        const el = this.data[i];
+      for (let i = 0; i < this.independent.length; i += 1) {
+        const el = this.independent[i];
         labels.push(el[0]);
       }
       return labels;
     },
     dataXY() {
-      const _data = [];
-      for (let i = 0; i < this.data.length; i += 1) {
-        if (this.chartId === 'horizontalbar-chart') {
-          _data.push({ x: this.data[i][1], y: this.data[i][0] });
-        } else {
-          _data.push({ x: this.data[i][0], y: this.data[i][1] });
-        }
+      const data = [];
+      for (let i = 0; i < this.independent.length; i += 1) {
+        const el = { x: this.independent[i], y: this.dependent[i] };
+        data.push(el);
       }
-      return _data;
+      return data;
     },
     bgColors() {
       const bg = [];
-      for (let i = 0; i < this.data.length; i += 1) {
+      for (let i = 0; i < this.dependent.length; i += 1) {
         bg.push(this.bgColorTheme[i % this.bgColorTheme.length]);
       }
       return bg;
     },
     boColors() {
       const bo = [];
-      for (let i = 0; i < this.data.length; i++) {
+      for (let i = 0; i < this.dependent.length; i += 1) {
         bo.push(this.boColorTheme[i % this.boColorTheme.length]);
       }
       return bo;

@@ -27,6 +27,17 @@ if (token) {
   utils.setAuthorizationHeader(token);
 }
 
+Vue.filter('join', (array) => {
+  if (!array.length) return '';
+  const commad = array.map((a, i) => {
+    if (!a) a = 'n/a';
+    if (i === array.length - 2) return `${a} and`;
+    else if (i === array.length - 1) return `${a}`;
+    return `${a},`;
+  });
+  return commad.join(' ');
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

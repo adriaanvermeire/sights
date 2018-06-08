@@ -3,7 +3,7 @@
         <transition-group name='card-drag' tag='div' class='row d-flex px-2 flex-md-row'>
             <template  v-for="chart of draggableCards">
                 <univariate-card v-if='chart.univariate' :chart='chart' :key='chart._id'/>
-                <bivariate-card v-if='chart.bivariate' :chart='chart' :key='chart._id'/>
+                <bivariate-card v-if='!chart.univariate' :chart='chart' :key='chart._id'/>
             </template>
         </transition-group>
     </draggable>
