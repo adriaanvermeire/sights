@@ -1,94 +1,50 @@
 <template lang="html">
-<div id="newSight">
-  <form v-if='!submitted' @submit.prevent="submitForm"
-  method="post" enctype="multipart/form-data">
-    <label for="sightName">Name</label>
-     <input v-model.trim="sight.name"
-                  id='sightName'
-                  type="text"
-                  placeholder="Name of your Sight"
-                  v-validate="'required|min:5|alpha_num'"
-                  name='name'
-                  class='form-control' required>
-    <label for="sightEntrypoint">Entrypoint (optional)</label>
-     <input v-model="sight.entrypoint"
-                  id='sightEntrypoint'
-                  type="text"
-                  placeholder="ex. data"
-                  name="entrypoint"
-                  class='form-control'>
-    <label for="sightFile">Dataset</label>
-    <input
-    class='form-control'
-    type="file"
-    id='sightFile'
-    @change="onFileSelected"
-    name='dataset'
-    v-validate="'required|mimes:text/csv,application/json|size:5000'"
-    required>
-    <label for="sightCategory">Category</label>
-    <select
-    id='sightCategory'
-    v-model="sight.category"
-    class="mb-3 form-control" required>
-    <option v-for='category of categories' :value="category.value" :key='category.text'>{{category.text}}</option>
-    </select>
-    <button type="submit" name="button">Create Sight</button>
-  </form>
-  <pick-types v-if='submitted' v-bind:data='data'/>
+<div id="newSight" >
+  <form-wizard title='Adding a new Sight' subtitle="You're not only making a Sight, you're making it easy." color='#09eba7'>
+    <tab-content title='Creating dataset' :beforeChange="formSubmit" icon='ti ti-plus'>
+      <new-sight-form v-if='!submitted' />
+    </tab-content>
+    <tab-content title='Parsing dataset' icon='ti ti-reload'>
+
+    </tab-content>
+    <tab-content title='Verifying types' icon='ti ti-check'>
+      <pick-types v-if='submitted' v-bind:data='data'/>
+    </tab-content>
+    <tab-content title='Generating charts' icon='ti ti-bar-chart'>
+
+    </tab-content>
+    <template slot="footer" slot-scope="props">
+      <div class="wizard-footer-right">
+        <wizard-button v-if="!props.isLastStep" @click.native="props.nextTab()" class="wizard-footer-right" :style="props.fillButtonStyle">Next</wizard-button>
+        <wizard-button v-else class="wizard-footer-right finish-button" :style="props.fillButtonStyle">{{props.isLastStep ? 'Done' : 'Next'}}</wizard-button>
+      </div>
+    </template>
+  </form-wizard>
 </div>
 </template>
 
 <script>
-import SightService from '@/services/SightService';
-import CategoryService from '@/services/CategoryService';
 import PickTypes from '@/components/Sights/NewSight/PickTypes';
-import { SIGHT_INACTIVE, SIGHT_ACTIVE } from '@/store/actions/sight';
+import NewSightForm from '@/components/Sights/NewSight/NewSightForm';
+import { FormWizard, TabContent, WizardButton } from 'vue-form-wizard';
+import 'vue-form-wizard/dist/vue-form-wizard.min.css';
+import { SIGHT_INACTIVE } from '@/store/actions/sight';
 
 export default {
   data() {
     return {
-      sight: {
-        name: '',
-        dataset: null,
-        category: null,
-        entrypoint: '',
-      },
-      categories: [],
       submitted: false,
       data: [],
     };
   },
   methods: {
-    async submitForm() {
-      const fd = new FormData();
-      fd.append('dataset', this.sight.dataset, this.sight.dataset.name);
-      fd.append('name', this.sight.name);
-      fd.append('category', this.sight.category);
-      fd.append('entrypoint', this.sight.entrypoint);
-      const response = (await SightService.addSight(fd)).data;
-      if (response.success) {
-        this.data = response.data;
-        this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
-        this.submitted = true;
-      } else {
-        // TODO: Change this to notification
-        console.log(response.err);
-      }
+    formSubmit(data) {
+      this.data = data;
+      this.submitted = true;
     },
-    onFileSelected(e) {
-      this.sight.dataset = e.target.files[0];
-    },
-  },
-  async mounted() {
-    const rawCategories = (await CategoryService.all()).data.categories;
-    console.log(rawCategories);
-    rawCategories.forEach((cat) => {
-      this.categories.push({ value: cat._id, text: cat.name });
-    });
   },
   components: {
-    PickTypes,
+    PickTypes, NewSightForm, FormWizard, TabContent, WizardButton,
   },
   beforeRouteLeave(to, from, next) {
     this.$store.dispatch(SIGHT_INACTIVE);
