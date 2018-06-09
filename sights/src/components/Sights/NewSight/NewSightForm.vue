@@ -61,10 +61,11 @@ export default {
       fd.append('name', this.sight.name);
       fd.append('category', this.sight.category);
       fd.append('entrypoint', this.sight.entrypoint);
+      this.$emit('sight-submit');
       const response = (await SightService.addSight(fd)).data;
       if (response.success) {
         this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
-        this.$emit('sight-submit', response.data);
+        this.$emit('submit-success', response.data);
       } else {
         // TODO: Change this to notification
         console.log(response.err);

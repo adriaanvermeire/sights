@@ -1,24 +1,21 @@
 <template lang="html">
 <div id="newSight" >
-  <form-wizard title='Adding a new Sight' subtitle="You're not only making a Sight, you're making it easy." color='#09eba7'>
-    <tab-content title='Creating dataset' :beforeChange="formSubmit" icon='ti ti-plus'>
-      <new-sight-form v-if='!submitted' />
+  <form-wizard ref='wizard' @on-complete='onComplete'
+    title='Adding a new Sight' :hide-buttons='true'
+    subtitle="You're not only making a Sight, you're making it easy."
+    color='#09eba7'>
+    <tab-content title='Creating dataset' icon='ti ti-plus'>
+      <new-sight-form @sight-submit='formSubmit' @submit-success='submitSuccess'/>
     </tab-content>
     <tab-content title='Parsing dataset' icon='ti ti-reload'>
-
+      <p>Loading</p>
     </tab-content>
     <tab-content title='Verifying types' icon='ti ti-check'>
-      <pick-types v-if='submitted' v-bind:data='data'/>
+      <pick-types v-if='parsingComplete' v-bind:data='data' @charts-submit='chartsSubmit' @charts-success='chartsSuccess'/>
     </tab-content>
     <tab-content title='Generating charts' icon='ti ti-bar-chart'>
-
+      <p>Generating Charts</p>
     </tab-content>
-    <template slot="footer" slot-scope="props">
-      <div class="wizard-footer-right">
-        <wizard-button v-if="!props.isLastStep" @click.native="props.nextTab()" class="wizard-footer-right" :style="props.fillButtonStyle">Next</wizard-button>
-        <wizard-button v-else class="wizard-footer-right finish-button" :style="props.fillButtonStyle">{{props.isLastStep ? 'Done' : 'Next'}}</wizard-button>
-      </div>
-    </template>
   </form-wizard>
 </div>
 </template>
@@ -33,14 +30,30 @@ import { SIGHT_INACTIVE } from '@/store/actions/sight';
 export default {
   data() {
     return {
-      submitted: false,
+      loading: false,
       data: [],
+      parsingComplete: false,
     };
   },
   methods: {
-    formSubmit(data) {
+    formSubmit() {
+      this.loading = true;
+      this.$refs.wizard.nextTab();
+    },
+    submitSuccess(data) {
+      this.loading = false;
       this.data = data;
-      this.submitted = true;
+      this.parsingComplete = true;
+      this.$refs.wizard.nextTab();
+    },
+    chartsSubmit() {
+      this.$refs.wizard.nextTab();
+    },
+    chartsSuccess() {
+      this.$refs.wizard.$emit('on-complete');
+    },
+    onComplete() {
+      this.$router.push({ name: 'Home' });
     },
   },
   components: {

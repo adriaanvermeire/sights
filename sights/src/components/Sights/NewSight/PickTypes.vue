@@ -45,19 +45,22 @@ export default {
   },
   props: ['data'],
   methods: {
-    submit() {
+    async submit() {
       const fields = this.fields.map((field) => {
         const f = field;
         delete f.samples;
         return f;
       });
-      SightService.submitTypes({
+      this.$emit('charts-submit');
+      const response = (await SightService.submitTypes({
         fields,
         currentSight: this.$store.getters.sightId,
         bivariate: this.bivariate,
-      }) // TODO: Add notification for successfully creating sight
-        .then(() => { this.$router.push({ name: 'Home' }); })
-        .catch(e => console.log(e));
+      })).data;
+      // TODO: Add notification for successfully creating sight
+      if (response.success) {
+        this.$emit('charts-success');
+      }
     },
   },
   created() {
