@@ -1,16 +1,20 @@
 <template lang="html">
-  <div class="container-fluid">
-   <div id="pickTypes" class='d-flex justify-content-center flex-column align-items-center'>
+<div class="container-fluid">
+  <div id="pickTypes" class='d-flex justify-content-center flex-column align-items-center'>
     <p>We recognized the following fields. Please select what their type is.</p>
     <p>The type will specify how each of the fields will be evaluated and
       used to create your graphs.</p>
     <button @click.prevent='submit' class='btn btn-primary mb-2'>Generate Sight</button>
     <div class="form-group m-0">
       <input type="checkbox" id='bivariate' v-model='bivariate' name='bivariate'>
-      <label for="bivariate">Also generate bivariate (2 variables) charts <b>(experimental !)</b></label>
+      <label for="bivariate">
+        Also generate bivariate (2 variables) charts <b>(experimental !)</b>
+      </label>
     </div>
     <div class="typeChecks d-flex mb-2 justify-content-center row px-2">
-      <div v-for="field in fields" :key="field.name" class="field card col-lg-2 col-md-3 col-12 p-2 m-3">
+      <div
+        v-for="field in fields" :key="field.name"
+        class="field card col-lg-2 col-md-3 col-12 p-2 m-3">
         <h2>{{ field.name }}</h2>
         <select v-model="field.type" class="mb-3 form-control">
           <option v-for="type of datatypes" :value="type" :key='type'>{{ type }}</option>
@@ -24,11 +28,12 @@
     <button @click.prevent='submit' class="btn btn-primary mb-2">Generate Sight</button>
     <div class="form-group">
       <input type="checkbox" id='bivariate' v-model='bivariate' name='bivariate'>
-      <label for="bivariate">Also generate bivariate (2 variables) charts <b>(experimental !)</b></label>
+      <label for="bivariate">
+        Also generate bivariate (2 variables) charts <b>(experimental !)</b>
+      </label>
     </div>
-
   </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -52,11 +57,12 @@ export default {
         return f;
       });
       this.$emit('charts-submit');
-      const response = (await SightService.submitTypes({
+      const rawResponse = (await SightService.submitTypes({
         fields,
         currentSight: this.$store.getters.sightId,
         bivariate: this.bivariate,
-      })).data;
+      }));
+      const response = rawResponse.data;
       // TODO: Add notification for successfully creating sight
       if (response.success) {
         this.$emit('charts-success');
