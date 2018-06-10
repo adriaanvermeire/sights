@@ -77,7 +77,7 @@ Methods.nominalAnalysis = function nominalAnalysis(fieldData) {
 Methods.ordinalAnalysis = function ordinalAnalysis(fieldData) {
   let { values } = fieldData;
   const { total } = fieldData;
-  values = values.map(v => Number(v.replace(',', '.')));
+  values = values.map(v => Number(`${v}`.replace(',', '.')));
   fieldData.counts.sort((a, b) => a[0] - b[0]);
   const sum = values.reduce(getSum).toFixed(2);
   const mean = +(sum / total).toFixed(2);

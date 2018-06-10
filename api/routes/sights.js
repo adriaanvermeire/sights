@@ -59,7 +59,6 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
             result[d] = undefined;
           }
         }
-
         res.send({ success: true, data: result, currentSight });
       } else {
         res.send({ success: false, err: response.err });
@@ -117,6 +116,10 @@ router.get('/:sightId', async (req, res) => {
 
 router.get('/', (req, res) => {
   res.send('Sights endpoint');
+});
+
+router.use((err, req, res, next) => {
+  res.status(400).send({ err });
 });
 
 module.exports = router;
