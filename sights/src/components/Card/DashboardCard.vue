@@ -1,5 +1,5 @@
 <script>
-import Card from '@/components/Partials/Card';
+import Card from './CardBase';
 import PickChart from '../Charts/PickChart';
 
 export default {
