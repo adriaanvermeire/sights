@@ -29,7 +29,7 @@ export default {
     loadSights() {
       SightService.getFeaturedSights()
         .then(res => res.data)
-        .then((data) => { console.log(data); this.sights = data.sights; })
+        .then((data) => { this.sights = data.sights; })
         .catch(e => console.log(e));
     },
   },

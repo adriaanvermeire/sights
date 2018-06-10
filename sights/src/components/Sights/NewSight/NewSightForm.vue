@@ -4,7 +4,8 @@
     method="post" enctype="multipart/form-data" class=''>
     <span v-for='error in errors' :key='error' class='text-danger'>{{ error }}</span>
     <div class="row mb-3 w-100">
-      <div class="col-12 col-md-2 d-flex justify-content-md-end justify-content-center align-items-center">
+      <div class="col-12 col-md-2
+        d-flex justify-content-md-end justify-content-center align-items-center">
         <label for="sightName"><strong>Name</strong><span class="text-danger"> *</span></label>
       </div>
       <div class="col-md col-12">
@@ -13,12 +14,13 @@
                       type="text"
                       placeholder="Name of your Sight"
                       v-validate="'required|min:5|alpha_num'"
-                      name='name'
+                      name='sightName' autocomplete='sightName'
                       class='form-control' required>
       </div>
     </div>
     <div class="row mb-3 w-100 p-0">
-      <div class="col-12 col-md-2 d-flex justify-content-md-end justify-content-center align-items-center">
+      <div class="col-12 col-md-2
+        d-flex justify-content-md-end justify-content-center align-items-center">
         <label for="sightFile"><strong>Dataset</strong><span class="text-danger"> *</span></label>
       </div>
       <div class="col-12 col-md-1 col-lg">
@@ -31,7 +33,8 @@
         v-validate="'required|mimes:text/csv,application/json|size:5000'"
         required>
       </div>
-      <div class="col-md col-lg-1 col-12 d-flex justify-content-md-end justify-content-center align-items-center">
+      <div class="col-md col-lg-1 col-12
+        d-flex justify-content-md-end justify-content-center align-items-center">
         <label for="sightEntrypoint"><strong>Entrypoint</strong></label>
       </div>
       <div class="col-12 col-md-6">
@@ -39,13 +42,17 @@
                       id='sightEntrypoint'
                       type="text"
                       placeholder="JSON entrypoint: i.e. data"
-                      name="entrypoint"
+                      name="entrypoint" autocomplete='entrypoint'
                       class='form-control'>
       </div>
     </div>
     <div class="row mb-3 w-100">
-      <div class="col-12 col-md-2 d-flex justify-content-md-end justify-content-center justify-content-end">
-        <label for="sightCategory"><strong>Category</strong><span class="text-danger"> *</span></label>
+      <div class="col-12 col-md-2
+        d-flex justify-content-md-end justify-content-center justify-content-end">
+        <label for="sightCategory">
+          <strong>Category</strong>
+          <span class="text-danger"> *</span>
+        </label>
       </div>
       <div class="col-md col-12">
         <select
@@ -60,7 +67,9 @@
     </div>
     <div class="row">
       <div class="col d-flex justify-content-end">
-        <button type="submit" name="button" class='btn btn-primary align-self-end'>Create Sight</button>
+        <button type="submit" name="button" class='btn btn-primary align-self-end'>
+          Create Sight
+        </button>
       </div>
     </div>
   </form>
@@ -68,7 +77,6 @@
 </template>
 
 <script>
-import joi from 'joi-error-formatter';
 import SightService from '@/services/SightService';
 import CategoryService from '@/services/CategoryService';
 import { SIGHT_ACTIVE } from '@/store/actions/sight';
@@ -118,7 +126,8 @@ export default {
     },
     parseErrorResponse(response) {
       const { errors } = response.data.err;
-      for (const error of errors) {
+      for (let i = 0; i < errors.length; i += 1) {
+        const error = errors[i];
         this.errors.push(error.messages.join(', '));
       }
     },

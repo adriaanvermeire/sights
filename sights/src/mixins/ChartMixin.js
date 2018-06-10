@@ -47,7 +47,7 @@ export default {
     },
     boColors() {
       const bo = [];
-      for (let i = 0; i < this.data.length; i++) {
+      for (let i = 0; i < this.data.length; i += 1) {
         bo.push(this.boColorTheme[i % this.boColorTheme.length]);
       }
       return bo;

@@ -1,7 +1,10 @@
 <template>
 <card :width='1' :id="`card-${chart._id}`" class='draggable align-items-stretch d-flex'>
     <template slot="title">
-        <h5 class='m-0' v-if='/bar|column/.test(chart.type)'>Top of {{ chart.fields[0] || 'No title' }}</h5>
+        <h5 class='m-0'
+            v-if='/bar|column/.test(chart.type)'>
+            Top of {{ chart.fields[0] || 'No title' }}
+        </h5>
         <h5 class='m-0' v-else>{{ chart.fields[0] || 'No title' }}</h5>
     </template>
     <template slot="subtitle" v-if='/bar|column/.test(chart.type)'>
