@@ -1,5 +1,5 @@
 <template>
-    <div id="dashboard">
+    <div id="dashboard-wrapper">
         <dashboard-meta-banner />
         <dashboard-cards />
     </div>

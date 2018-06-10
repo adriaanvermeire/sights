@@ -1,94 +1,101 @@
 <template lang="html">
-<div id="newSight">
-  <form v-if='!submitted' @submit.prevent="submitForm"
-  method="post" enctype="multipart/form-data">
-    <label for="sightName">Name</label>
-     <input v-model.trim="sight.name"
-                  id='sightName'
-                  type="text"
-                  placeholder="Name of your Sight"
-                  v-validate="'required|min:5|alpha_num'"
-                  name='name'
-                  class='form-control' required>
-    <label for="sightEntrypoint">Entrypoint (optional)</label>
-     <input v-model="sight.entrypoint"
-                  id='sightEntrypoint'
-                  type="text"
-                  placeholder="ex. data"
-                  name="entrypoint"
-                  class='form-control'>
-    <label for="sightFile">Dataset</label>
-    <input
-    class='form-control'
-    type="file"
-    id='sightFile'
-    @change="onFileSelected"
-    name='dataset'
-    v-validate="'required|mimes:text/csv,application/json|size:5000'"
-    required>
-    <label for="sightCategory">Category</label>
-    <select
-    id='sightCategory'
-    v-model="sight.category"
-    class="mb-3 form-control" required>
-    <option v-for='category of categories' :value="category.value" :key='category.text'>{{category.text}}</option>
-    </select>
-    <button type="submit" name="button">Create Sight</button>
-  </form>
-  <pick-types v-if='submitted' v-bind:data='data'/>
+<div id="newSight" >
+  <form-wizard ref='wizard' @on-complete='onComplete'
+    title='Adding a new Sight' :hide-buttons='true'
+    subtitle="You're not only making a Sight, you're making it easy."
+    color='#09eba7' error-color='#EF476F'>
+    <!-- Custom step to disable links -->
+    <wizard-step
+      slot-scope="props"
+      slot="step"
+      :tab="props.tab"
+      :transition="props.transition"
+      :index="props.index">
+    </wizard-step>
+    <tab-content ref='tab0' title='Creating dataset' icon='ti ti-plus'>
+      <new-sight-form
+        ref='form'
+        @sight-submit='formSubmit'
+        @submit-error='submitError' @submit-success='submitSuccess'/>
+    </tab-content>
+    <tab-content title='Parsing dataset' icon='ti ti-reload'>
+      <spinner
+      @animation-end='parsingAnimationEnded'
+      ref='parsingSpinner' text='Parsing dataset' finish-text='Finished parsing!' />
+    </tab-content>
+    <tab-content title='Verifying types' icon='ti ti-check'>
+      <pick-types
+        v-if='parsingComplete' v-bind:data='data'
+        @charts-submit='chartsSubmit' @charts-success='chartsSuccess'/>
+    </tab-content>
+    <tab-content title='Generating charts' icon='ti ti-bar-chart'>
+      <spinner
+      @animation-end='generatingAnimationEnded'
+      ref='generatingSpinner' text='Generating Charts!' finish-text='Finished this Sight!' />
+    </tab-content>
+  </form-wizard>
 </div>
 </template>
 
 <script>
-import SightService from '@/services/SightService';
-import CategoryService from '@/services/CategoryService';
 import PickTypes from '@/components/Sights/NewSight/PickTypes';
-import { SIGHT_INACTIVE, SIGHT_ACTIVE } from '@/store/actions/sight';
+import Spinner from '@/components/Spinner/Spinner';
+import NewSightForm from '@/components/Sights/NewSight/NewSightForm';
+import { FormWizard, TabContent, WizardStep } from 'vue-form-wizard';
+import 'vue-form-wizard/dist/vue-form-wizard.min.css';
+import { SIGHT_INACTIVE } from '@/store/actions/sight';
 
 export default {
   data() {
     return {
-      sight: {
-        name: '',
-        dataset: null,
-        category: null,
-        entrypoint: '',
-      },
-      categories: [],
-      submitted: false,
+      parsing: false,
       data: [],
+      parsingComplete: false,
+      generating: false,
     };
   },
-  methods: {
-    async submitForm() {
-      const fd = new FormData();
-      fd.append('dataset', this.sight.dataset, this.sight.dataset.name);
-      fd.append('name', this.sight.name);
-      fd.append('category', this.sight.category);
-      fd.append('entrypoint', this.sight.entrypoint);
-      const response = (await SightService.addSight(fd)).data;
-      if (response.success) {
-        this.data = response.data;
-        this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
-        this.submitted = true;
-      } else {
-        // TODO: Change this to notification
-        console.log(response.err);
-      }
-    },
-    onFileSelected(e) {
-      this.sight.dataset = e.target.files[0];
+  computed: {
+    sight() {
+      return this.$store.getters.sightId;
     },
   },
-  async mounted() {
-    const rawCategories = (await CategoryService.all()).data.categories;
-    console.log(rawCategories);
-    rawCategories.forEach((cat) => {
-      this.categories.push({ value: cat._id, text: cat.name });
-    });
+  methods: {
+    formSubmit() {
+      this.$refs.tab0.validationError = false;
+      this.parsing = true;
+      this.$refs.wizard.nextTab();
+    },
+    async submitSuccess(data) {
+      this.parsing = false;
+      this.data = data;
+      this.parsingComplete = true;
+      this.$refs.parsingSpinner.finish();
+    },
+    submitError(error) {
+      this.$refs.tab0.validationError = true;
+      this.$refs.form.showError(error);
+      this.$refs.wizard.prevTab();
+    },
+    parsingAnimationEnded() {
+      this.$refs.wizard.nextTab();
+    },
+    chartsSubmit() {
+      this.generating = true;
+      this.$refs.wizard.nextTab();
+    },
+    chartsSuccess() {
+      this.generating = false;
+      this.$refs.generatingSpinner.finish();
+    },
+    generatingAnimationEnded() {
+      this.$refs.wizard.$emit('on-complete');
+    },
+    onComplete() {
+      this.$router.push({ name: 'SightDetail', params: { id: this.sight } });
+    },
   },
   components: {
-    PickTypes,
+    PickTypes, NewSightForm, FormWizard, TabContent, WizardStep, Spinner,
   },
   beforeRouteLeave(to, from, next) {
     this.$store.dispatch(SIGHT_INACTIVE);
@@ -99,3 +106,13 @@ export default {
 
 <style lang="scss" scoped>
 </style>
+
+<style>
+  .vue-form-wizard .wizard-nav-pills>li>a {
+    cursor: default !important;
+  }
+  .vue-form-wizard .wizard-nav-pills>li>a .wizard-icon-circle:focus{
+    outline: none;
+  }
+</style>
+

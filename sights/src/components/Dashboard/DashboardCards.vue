@@ -21,7 +21,6 @@ export default {
     UnivariateCard, BivariateCard, draggable,
   },
   methods: {
-
     toggleSidebar(id) {
       console.log(`Clicked chart with id: ${id}`);
       if (!this.sidebarOpen) {

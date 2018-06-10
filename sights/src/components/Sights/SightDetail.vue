@@ -1,34 +1,46 @@
 <template lang="html">
-  <dashboard/>
+  <div id="dashboard">
+    <spinner v-if='loading' text='Loading Sight' />
+    <dashboard v-show='!loading' :sight='sight'/>
+  </div>
 </template>
 
 <script>
 import { SIGHT_INACTIVE, SIGHT_ACTIVE } from '@/store/actions/sight';
 import SightService from '@/services/SightService';
+import Spinner from '@/components/Spinner/Spinner';
 import Dashboard from '../Dashboard/Dashboard';
 import Sidebar from '../Partials/Sidebar';
 
 export default {
+  data() {
+    return {
+      loading: true,
+      sight: {},
+    };
+  },
   computed: {
-    sight: {
-      get() {
-        return this.$store.state.sight.active;
-      },
-    },
     showSidebar: {
       get() {
         return this.$store.state.sidebar.open;
       },
     },
   },
+  methods: {
+    async loadSight() {
+      const id = this.$route.params.id;
+      return (await SightService.getSight(id)).data;
+    },
+  },
   async mounted() {
-    const id = this.$route.params.id;
-    const sight = (await SightService.getSight(id)).data;
-    await this.$store.dispatch(SIGHT_ACTIVE, { sight });
+    this.sight = await this.loadSight();
+    this.loading = false;
+    await this.$store.dispatch(SIGHT_ACTIVE, { sight: this.sight });
   },
   components: {
     Dashboard,
     Sidebar,
+    Spinner,
   },
   beforeRouteLeave(to, from, next) {
     this.$store.dispatch(SIGHT_INACTIVE);
