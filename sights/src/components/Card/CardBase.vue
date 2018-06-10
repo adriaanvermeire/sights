@@ -81,7 +81,7 @@ export default {
     hasFooter() { return this.$slots.footer; },
     hasActions() { return this.$slots.actions; },
     hasInfoOverlay() { return this.$slots.infoOverlay; },
-    hasDragOverlay() { return this.$slots.infoOverlay; },
+    hasDragOverlay() { return this.$slots.dragOverlay; },
     cardWidth() {
       return {
         col: !this.width,
