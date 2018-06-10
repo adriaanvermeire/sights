@@ -2,7 +2,13 @@
   <div id="explore" class='container-fluid mx-auto'>
     <ul id='categories' class='d-flex'>
       <li class='text-muted'>Categories:</li>
-      <li class="category nav-item"><button class="btn btn-outline-dark">Test</button></li>
+      <li
+        v-for='category in categories' :key='category._id'
+        class="category nav-item">
+        <button
+          @click='filter({category: category._id})'
+          class="btn btn-outline-dark">{{ category.name }}</button>
+      </li>
     </ul>
     <template v-show='!loading'>
       <div class="sights-wrapper row">
@@ -29,9 +35,9 @@ export default {
     };
   },
   methods: {
-    async loadSights() {
+    async loadSights(filter) {
       try {
-        const response = (await SightService.getFeaturedSights()).data;
+        const response = (await SightService.getSights(filter)).data;
         this.sights = response.sights;
       } catch (err) {
         console.log(err);
@@ -44,6 +50,9 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    async filter({ category }) {
+      this.loadSights({ category });
     },
   },
   async created() {
