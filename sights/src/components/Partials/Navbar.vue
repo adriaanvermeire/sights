@@ -21,8 +21,10 @@
         <router-link class='nav-link' :to='{ name: "NewSight"}'>Add Sight</router-link>
       </li>
       <li class="nav-item pr-0 dropdown">
-        <a href="#" class='nav-link dropdown-toggle' id='profileDropdown' role='button' data-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-          <avatar :username="username" :size='40'></avatar>
+        <a
+          href="#" class='nav-link dropdown-toggle' id='profileDropdown'
+          role='button' data-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+          <avatar :username="username" :size='40' />
         </a>
         <div class="dropdown-menu" aria-labelledby="profileDropdown">
           <router-link class="dropdown-item" :to="{ name: 'Profile' }">Profile</router-link>
@@ -67,7 +69,7 @@ export default {
       return this.$store.getters.isAuthenticated;
     },
     username() {
-      return this.$store.state.user.profile.username;
+      return this.$store.state.user.profile.username || '';
     },
     sightName() {
       return this.$store.getters.sightName;
