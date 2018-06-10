@@ -17,12 +17,9 @@ router.post('/', validate(validation.category), (req, res) => {
   res.send({ success: true, msg: 'Category added successfully!' });
 });
 
-router.get('/', (req, res) => {
-  Category.all((err, categories) => {
-    if (categories) {
-      return res.send({ categories });
-    } return res.sendStatus(401);
-  });
+router.get('/', async (req, res) => {
+  const categories = await Category.all();
+  return res.send({ categories });
 });
 
 module.exports = router;

@@ -18,8 +18,8 @@ Statics.getCategoryById = function getCategoryById(id, callback) {
   this.findById(id, callback);
 };
 
-Statics.all = function all(callback) {
-  this.find({}, callback);
+Statics.all = function all() {
+  return this.find({}, 'name').lean().exec();
 };
 
 module.exports = mongoose.model('Category', CategorySchema);
