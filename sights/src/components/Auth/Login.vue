@@ -38,8 +38,8 @@
                 </div>
               </div>
               <span class='d-flex justify-content-end'>
-                <b-button :to="{ name: 'Register' }" variant='outline-primary'>Register</b-button>
-                <b-button type="submit" variant="primary" class='ml-2'>Login</b-button>
+                <button :to="{ name: 'Register' }" class='btn btn-outline-primary'>Register</button>
+                <button type="submit" class='btn btn-primary ml-2'>Login</button>
               </span>
             </form>
           </div>
