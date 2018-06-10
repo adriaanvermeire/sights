@@ -7,8 +7,17 @@ export default {
   getSight(id) {
     return Api().get(`sights/${id}`);
   },
-  getFeaturedSights() {
-    return Api().get('sights/explore');
+  getSights(filter) {
+    if (filter) {
+      const params = {
+        category: filter.category || '',
+      };
+
+      return Api().get('sights/filter', {
+        params,
+      });
+    }
+    return Api().get('sights/filter');
   },
   getDatatypes() {
     return Api().get('sights/datatypes');

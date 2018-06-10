@@ -69,8 +69,12 @@ Statics.getSightById = function getSightById(id) {
 };
 
 // TODO: Implement better method for getting featured sights
-Statics.featured = function featured() {
-  return this.find({}, '-charts -dataset -createdAt -updatedAt')
+Statics.filter = function filter(query) {
+  const { category } = query;
+  const q = {
+    category: ObjectId(category),
+  };
+  return this.find({ category: { $regex: query.category || '' } }, 'name')
     .populate({ path: 'author', select: 'username -_id' })
     .populate({ path: 'category', select: 'name -_id' }).lean()
     .exec()
