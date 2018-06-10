@@ -64,9 +64,10 @@ export default {
     login() {
       const { email, password } = this;
       this.errors.clear();
-      this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
-        this.$router.push('/');
-      })
+      this.$store.dispatch(AUTH_REQUEST, { email, password })
+        .then(() => {
+          this.$router.push('/');
+        })
         .catch((err) => {
           this.errors.add('password', err.data.msg, 'server');
         });
