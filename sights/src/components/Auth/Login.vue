@@ -1,51 +1,53 @@
 <template lang="html">
-<b-container>
-  <b-row align-h="center">
-    <b-col cols="6">
-      <b-card
-        title='Login'
-        >
-        <b-form @submit.prevent="login">
-          <b-form-row class='mb-2'>
-            <b-col cols="4" class='justify-content-end d-flex'>
-              <label for="email">Email</label>
-            </b-col>
-            <b-col cols="8">
-              <input
-              id='email' type='email' class='mb-2 form-control' name='email'
-              v-model.trim="email"
-              v-validate="'required|email'"
-              />
-              <b-form-invalid-feedback v-if="errors.has('email')"
-              class='text-right' :class='{ "d-block": errors.has("email")}'
-              >{{errors.first('email')}}</b-form-invalid-feedback>
-            </b-col>
-          </b-form-row>
-          <b-form-row class='mb-2'>
-            <b-col cols="4" class='justify-content-end d-flex'>
-              <label for="password">Password</label>
-            </b-col>
-            <b-col cols="8">
-              <input
-              id='password' class='mb-2 form-control' type='password' name='password'
-              v-model.trim="password"
-              v-validate="'required'"
-              />
-              <b-form-invalid-feedback v-if="errors.has('password')"
-              class='text-right' :class='{ "d-block": errors.has("password")}'
-              >{{errors.first('password')}}</b-form-invalid-feedback>
-            </b-col>
-          </b-form-row>
-          <span class='d-flex justify-content-end'>
-            <b-button :to="{ name: 'Register' }" variant='outline-primary'>Register</b-button>
-            <b-button type="submit" variant="primary" class='ml-2'>Login</b-button>
-          </span>
-        </b-form>
-
-      </b-card>
-    </b-col>
-  </b-row>
-</b-container>
+<div class='container'>
+  <div class='row justify-content-center d-flex'>
+    <div class='col-6'>
+      <div class='card' title='Login'>
+        <div class="card-body">
+          <div class="card-title">Login</div>
+          <div class="card-text">
+            <form @submit.prevent="login">
+              <div class='form-row mb-2'>
+                <div class='col-4 justify-content-end d-flex'>
+                  <label for="email">Email</label>
+                </div>
+                <div class='col-8'>
+                  <input
+                  id='email' type='email' class='mb-2 form-control' name='email'
+                  v-model.trim="email"
+                  v-validate="'required|email'"
+                  />
+                  <span v-if="errors.has('email')"
+                  class='text-right' :class='{ "d-block": errors.has("email")}'
+                  >{{errors.first('email')}}</span>
+                </div>
+              </div>
+              <div class='form-row mb-2'>
+                <div class='col-4 justify-content-end d-flex'>
+                  <label for="password">Password</label>
+                </div>
+                <div class='col-8'>
+                  <input
+                  id='password' class='mb-2 form-control' type='password' name='password'
+                  v-model.trim="password"
+                  v-validate="'required'"
+                  />
+                  <span v-if="errors.has('password')"
+                  class='text-right' :class='{ "d-block": errors.has("password")}'
+                  >{{errors.first('password')}}</span>
+                </div>
+              </div>
+              <span class='d-flex justify-content-end'>
+                <b-button :to="{ name: 'Register' }" variant='outline-primary'>Register</b-button>
+                <b-button type="submit" variant="primary" class='ml-2'>Login</b-button>
+              </span>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
