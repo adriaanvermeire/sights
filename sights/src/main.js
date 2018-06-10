@@ -29,7 +29,8 @@ if (token) {
 
 Vue.filter('join', (array) => {
   if (!array.length) return '';
-  const commad = array.map((a, i) => {
+  const commad = array.map((el, i) => {
+    let a = el;
     if (!a) a = 'n/a';
     if (i === array.length - 2) return `${a} and`;
     else if (i === array.length - 1) return `${a}`;

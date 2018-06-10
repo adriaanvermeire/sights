@@ -12,7 +12,10 @@
         <div class="card-header" v-if='hasHeader'><slot name='header'></slot></div>
         <div class="card-body d-flex flex-column justify-content-between">
             <div class="card-title d-flex m-0"
-                :class='{"justify-content-center": !hasActions, "justify-content-between": hasActions}'
+                :class='{
+                    "justify-content-center": !hasActions,
+                    "justify-content-between": hasActions
+                    }'
                 v-if='hasTitle'>
                 <slot name='title'></slot>
                 <div class="actions d-flex justify-content-end">
@@ -20,7 +23,10 @@
                 </div>
             </div>
             <div class="card-subtitle d-flex"
-                :class='{"justify-content-center": !hasActions, "justify-content-between": hasActions}'
+                :class='{
+                    "justify-content-center": !hasActions,
+                    "justify-content-between": hasActions
+                    }'
                 v-if='hasSubtitle'>
                 <h6 class='text-muted'><small><slot name='subtitle'></slot></small></h6>
             </div>
@@ -30,7 +36,8 @@
         </div>
         <div class="card-footer" v-if='hasFooter'><slot name='footer'></slot></div>
         <div id="drag-overlay" class='drag-overlay' v-if='hasDragOverlay'>
-            <div class="drag-overlay-content drag-overlay d-flex justify-content-center align-items-center flex-column">
+            <div class="drag-overlay-content drag-overlay
+                d-flex justify-content-center align-items-center flex-column">
                 <slot name="dragOverlay"></slot>
             </div>
         </div>

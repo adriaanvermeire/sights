@@ -1,5 +1,4 @@
 /* eslint-disable no-shadow */
-import SightService from '@/services/SightService';
 import { SIDEBAR_SHOW, SIDEBAR_HIDE } from '../actions/sidebar';
 
 const state = {
