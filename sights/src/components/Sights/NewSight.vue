@@ -8,13 +8,13 @@
       <new-sight-form @sight-submit='formSubmit' @submit-success='submitSuccess'/>
     </tab-content>
     <tab-content title='Parsing dataset' icon='ti ti-reload'>
-      <p>Loading</p>
+      <spinner text='Parsing dataset...'/>
     </tab-content>
     <tab-content title='Verifying types' icon='ti ti-check'>
       <pick-types v-if='parsingComplete' v-bind:data='data' @charts-submit='chartsSubmit' @charts-success='chartsSuccess'/>
     </tab-content>
     <tab-content title='Generating charts' icon='ti ti-bar-chart'>
-      <p>Generating Charts</p>
+      <spinner text='Generating Charts...'/>
     </tab-content>
   </form-wizard>
 </div>
@@ -22,6 +22,7 @@
 
 <script>
 import PickTypes from '@/components/Sights/NewSight/PickTypes';
+import Spinner from '@/components/Spinner/Spinner';
 import NewSightForm from '@/components/Sights/NewSight/NewSightForm';
 import { FormWizard, TabContent, WizardButton } from 'vue-form-wizard';
 import 'vue-form-wizard/dist/vue-form-wizard.min.css';
@@ -57,7 +58,7 @@ export default {
     },
   },
   components: {
-    PickTypes, NewSightForm, FormWizard, TabContent, WizardButton,
+    PickTypes, NewSightForm, FormWizard, TabContent, WizardButton, Spinner,
   },
   beforeRouteLeave(to, from, next) {
     this.$store.dispatch(SIGHT_INACTIVE);
