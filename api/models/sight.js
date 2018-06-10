@@ -3,8 +3,6 @@
 const mongoose = require('mongoose');
 const Chart = require('./chart');
 
-const { pickRandom } = require('../utils');
-
 const { ObjectId } = mongoose.Schema.Types;
 // Sight schema
 const SightSchema = mongoose.Schema({
@@ -65,14 +63,17 @@ Methods.generateBivariateGraphs = async function generateBivariateGraphs() {
 // Statics
 
 Statics.getSightById = function getSightById(id) {
-  return this.findById(id).exec()
+  return this.findById(id).lean().exec()
     .then(sight => sight)
     .catch(e => console.log(e));
 };
 
 // TODO: Implement better method for getting featured sights
 Statics.featured = function featured() {
-  return this.find({}).exec()
+  return this.find({}, '-charts -dataset -createdAt -updatedAt')
+    .populate({ path: 'author', select: 'username -_id' })
+    .populate({ path: 'category', select: 'name -_id' }).lean()
+    .exec()
     .then(data => data)
     .catch(e => ({ err: e }));
 };
