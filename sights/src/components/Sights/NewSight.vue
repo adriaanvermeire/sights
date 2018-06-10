@@ -3,7 +3,7 @@
   <form-wizard ref='wizard' @on-complete='onComplete'
     title='Adding a new Sight' :hide-buttons='true'
     subtitle="You're not only making a Sight, you're making it easy."
-    color='#09eba7'>
+    color='#09eba7' error-color='#EF476F'>
     <!-- Custom step to disable links -->
     <wizard-step
       slot-scope="props"
@@ -12,17 +12,26 @@
       :transition="props.transition"
       :index="props.index">
     </wizard-step>
-    <tab-content title='Creating dataset' icon='ti ti-plus'>
-      <new-sight-form @sight-submit='formSubmit' @submit-success='submitSuccess'/>
+    <tab-content ref='tab0' title='Creating dataset' icon='ti ti-plus'>
+      <new-sight-form
+        ref='form'
+        @sight-submit='formSubmit'
+        @submit-error='submitError' @submit-success='submitSuccess'/>
     </tab-content>
     <tab-content title='Parsing dataset' icon='ti ti-reload'>
-      <spinner v-if='parsing' text='Parsing dataset'/>
+      <spinner
+      @animation-end='parsingAnimationEnded'
+      ref='parsingSpinner' text='Parsing dataset' finish-text='Finished parsing!' />
     </tab-content>
     <tab-content title='Verifying types' icon='ti ti-check'>
-      <pick-types v-if='parsingComplete' v-bind:data='data' @charts-submit='chartsSubmit' @charts-success='chartsSuccess'/>
+      <pick-types
+        v-if='parsingComplete' v-bind:data='data'
+        @charts-submit='chartsSubmit' @charts-success='chartsSuccess'/>
     </tab-content>
     <tab-content title='Generating charts' icon='ti ti-bar-chart'>
-      <spinner v-if='generating' text='Generating Charts'/>
+      <spinner
+      @animation-end='generatingAnimationEnded'
+      ref='generatingSpinner' text='Generating Charts!' finish-text='Finished this Sight!' />
     </tab-content>
   </form-wizard>
 </div>
@@ -45,16 +54,29 @@ export default {
       generating: false,
     };
   },
+  computed: {
+    sight() {
+      return this.$store.getters.sightId;
+    },
+  },
   methods: {
     formSubmit() {
+      this.$refs.tab0.validationError = false;
       this.parsing = true;
-      console.log(this.$refs.wizard);
       this.$refs.wizard.nextTab();
     },
-    submitSuccess(data) {
+    async submitSuccess(data) {
       this.parsing = false;
       this.data = data;
       this.parsingComplete = true;
+      this.$refs.parsingSpinner.finish();
+    },
+    submitError(error) {
+      this.$refs.tab0.validationError = true;
+      this.$refs.form.showError(error);
+      this.$refs.wizard.prevTab();
+    },
+    parsingAnimationEnded() {
       this.$refs.wizard.nextTab();
     },
     chartsSubmit() {
@@ -63,10 +85,13 @@ export default {
     },
     chartsSuccess() {
       this.generating = false;
+      this.$refs.generatingSpinner.finish();
+    },
+    generatingAnimationEnded() {
       this.$refs.wizard.$emit('on-complete');
     },
     onComplete() {
-      this.$router.push({ name: 'Home' });
+      this.$router.push({ name: 'SightDetail', params: { id: this.sight } });
     },
   },
   components: {
@@ -81,3 +106,13 @@ export default {
 
 <style lang="scss" scoped>
 </style>
+
+<style>
+  .vue-form-wizard .wizard-nav-pills>li>a {
+    cursor: default !important;
+  }
+  .vue-form-wizard .wizard-nav-pills>li>a .wizard-icon-circle:focus{
+    outline: none;
+  }
+</style>
+

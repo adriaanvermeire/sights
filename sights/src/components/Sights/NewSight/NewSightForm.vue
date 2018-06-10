@@ -1,42 +1,74 @@
 <template>
-<form @submit.prevent="submitForm"
-  method="post" enctype="multipart/form-data">
-    <label for="sightName">Name</label>
-     <input v-model.trim="sight.name"
-                  id='sightName'
-                  type="text"
-                  placeholder="Name of your Sight"
-                  v-validate="'required|min:5|alpha_num'"
-                  name='name'
-                  class='form-control' required>
-    <label for="sightEntrypoint">Entrypoint (optional)</label>
-     <input v-model="sight.entrypoint"
-                  id='sightEntrypoint'
-                  type="text"
-                  placeholder="ex. data"
-                  name="entrypoint"
-                  class='form-control'>
-    <label for="sightFile">Dataset</label>
-    <input
-    class='form-control'
-    type="file"
-    id='sightFile'
-    @change="onFileSelected"
-    name='dataset'
-    v-validate="'required|mimes:text/csv,application/json|size:5000'"
-    required>
-    <label for="sightCategory">Category</label>
-    <select
-    id='sightCategory'
-    v-model="sight.category"
-    class="mb-3 form-control" required>
-    <option v-for='category of categories' :value="category.value" :key='category.text'>{{category.text}}</option>
-    </select>
-    <button type="submit" name="button">Create Sight</button>
+<div class="form-wrapper container">
+  <form @submit.prevent="submitForm"
+    method="post" enctype="multipart/form-data" class=''>
+    <span v-for='error in errors' :key='error' class='text-danger'>{{ error }}</span>
+    <div class="row mb-3 w-100">
+      <div class="col-12 col-md-2 d-flex justify-content-md-end justify-content-center align-items-center">
+        <label for="sightName"><strong>Name</strong><span class="text-danger"> *</span></label>
+      </div>
+      <div class="col-md col-12">
+        <input v-model.trim="sight.name"
+                      id='sightName'
+                      type="text"
+                      placeholder="Name of your Sight"
+                      v-validate="'required|min:5|alpha_num'"
+                      name='name'
+                      class='form-control' required>
+      </div>
+    </div>
+    <div class="row mb-3 w-100 p-0">
+      <div class="col-12 col-md-2 d-flex justify-content-md-end justify-content-center align-items-center">
+        <label for="sightFile"><strong>Dataset</strong><span class="text-danger"> *</span></label>
+      </div>
+      <div class="col-12 col-md-1 col-lg">
+        <input
+        class='form-control-file'
+        type="file"
+        id='sightFile'
+        @change="onFileSelected"
+        name='dataset'
+        v-validate="'required|mimes:text/csv,application/json|size:5000'"
+        required>
+      </div>
+      <div class="col-md col-lg-1 col-12 d-flex justify-content-md-end justify-content-center align-items-center">
+        <label for="sightEntrypoint"><strong>Entrypoint</strong></label>
+      </div>
+      <div class="col-12 col-md-6">
+        <input v-model="sight.entrypoint"
+                      id='sightEntrypoint'
+                      type="text"
+                      placeholder="JSON entrypoint: i.e. data"
+                      name="entrypoint"
+                      class='form-control'>
+      </div>
+    </div>
+    <div class="row mb-3 w-100">
+      <div class="col-12 col-md-2 d-flex justify-content-md-end justify-content-center justify-content-end">
+        <label for="sightCategory"><strong>Category</strong><span class="text-danger"> *</span></label>
+      </div>
+      <div class="col-md col-12">
+        <select
+        id='sightCategory'
+        v-model="sight.category"
+        class="mb-3 form-control" required>
+        <option
+          v-for='category of categories'
+          :value="category.value" :key='category.text'>{{category.text}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col d-flex justify-content-end">
+        <button type="submit" name="button" class='btn btn-primary align-self-end'>Create Sight</button>
+      </div>
+    </div>
   </form>
+</div>
 </template>
 
 <script>
+import joi from 'joi-error-formatter';
 import SightService from '@/services/SightService';
 import CategoryService from '@/services/CategoryService';
 import { SIGHT_ACTIVE } from '@/store/actions/sight';
@@ -52,27 +84,43 @@ export default {
       },
       data: [],
       categories: [],
+      errors: [],
     };
   },
   methods: {
     async submitForm() {
+      this.errors = [];
       const fd = new FormData();
       fd.append('dataset', this.sight.dataset, this.sight.dataset.name);
       fd.append('name', this.sight.name);
       fd.append('category', this.sight.category);
       fd.append('entrypoint', this.sight.entrypoint);
       this.$emit('sight-submit');
-      const response = (await SightService.addSight(fd)).data;
-      if (response.success) {
-        this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
-        this.$emit('submit-success', response.data);
-      } else {
+      try {
+        const response = (await SightService.addSight(fd)).data;
+        if (response.success) {
+          this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
+          this.$emit('submit-success', response.data);
+        } else {
         // TODO: Change this to notification
-        console.log(response.err);
+          this.$emit('submit-error', response.err);
+        }
+      } catch (error) {
+        this.parseErrorResponse(error.response);
+        this.$emit('submit-error');
       }
     },
     onFileSelected(e) {
       this.sight.dataset = e.target.files[0];
+    },
+    showError(error) {
+      this.errors.push(error);
+    },
+    parseErrorResponse(response) {
+      const { errors } = response.data.err;
+      for (const error of errors) {
+        this.errors.push(error.messages.join(', '));
+      }
     },
   },
   async mounted() {
