@@ -20,6 +20,7 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  likes: [String], // Object id's for posts liked by the user
 }, { timestamps: true });
 
 const { statics: Statics, methods: Methods } = UserSchema;

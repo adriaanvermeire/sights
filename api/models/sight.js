@@ -13,6 +13,7 @@ const SightSchema = mongoose.Schema({
   name: { type: String, required: true },
   category: { type: SchemaId, ref: 'Category' },
   charts: [{ type: SchemaId, ref: 'Chart' }],
+  likes: [String], // Object id's of users who liked
 }, { timestamps: true });
 
 SightSchema.index(
