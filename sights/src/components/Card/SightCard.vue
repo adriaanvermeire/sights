@@ -23,7 +23,11 @@
           </p>
         </div>
     </div>
-    <div class="card-footer p-1">
+    <div class="card-footer p-1 px-3 d-flex justify-content-between">
+      <div id="likeCount">
+        <icon name="heart"></icon>
+        {{ likes }}
+      </div>
       <router-link :to="{ name: 'SightDetail', params: { id }}" class='text-dark'><small>Visit Sight >></small></router-link>
     </div>
 </div>
@@ -41,15 +45,16 @@ export default {
       title: '',
       author: '',
       category: '',
+      likes: 0,
     };
   },
   props: ['sight'],
   methods: {
     async like(event, id) {
       if (this.author !== this.user) {
-      const button = event.currentTarget;
-      this.liked = !this.liked;
-      button.classList.toggle('liked');
+        const button = event.currentTarget;
+        this.liked = !this.liked;
+        button.classList.toggle('liked');
         this.likes = (await SightService.like(id, this.userId)).data.likeCount;
       } else {
         console.log('You can\'t like your own sights!');
@@ -68,7 +73,8 @@ export default {
     this.title = this.sight.name;
     this.author = this.sight.author.username;
     this.category = this.sight.category.name;
-    // this.liked =
+    this.liked = this.sight.liked;
+    this.likes = this.sight.likes.length;
     this.id = this.sight._id;
   },
   components: {
