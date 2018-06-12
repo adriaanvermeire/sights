@@ -1,13 +1,13 @@
 <template lang="html">
-<b-form @submit='submit'>
-   <b-form-input v-model="name"
+<form @submit='submit'>
+   <input v-model="name"
                 type="text"
                 placeholder="Enter the category"
-  ></b-form-input>
-  <b-button variant="primary" type="submit">
+  >
+  <button variant="primary" type="submit">
       Create Category
-  </b-button>
-</b-form>
+  </button>
+</form>
 </template>
 
 <script>
