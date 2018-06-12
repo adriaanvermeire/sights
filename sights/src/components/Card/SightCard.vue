@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import SightService from '@/services/SightService';
 import Card from './CardBase';
 
 export default {
@@ -44,11 +45,23 @@ export default {
   },
   props: ['sight'],
   methods: {
-    like(event, id) {
+    async like(event, id) {
+      if (this.author !== this.user) {
       const button = event.currentTarget;
       this.liked = !this.liked;
       button.classList.toggle('liked');
-      // this.sightService.like(id, user);
+        this.likes = (await SightService.like(id, this.userId)).data.likeCount;
+      } else {
+        console.log('You can\'t like your own sights!');
+      }
+    },
+  },
+  computed: {
+    user() {
+      return this.$store.getters.getProfile.username;
+    },
+    userId() {
+      return this.$store.getters.getProfile._id;
     },
   },
   mounted() {
