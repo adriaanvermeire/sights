@@ -28,4 +28,7 @@ export default {
   updateCharts(id, charts) {
     return Api().post(`sights/charts/${id}`, { charts });
   },
+  like(id, user) {
+    return Api().post(`sights/like/${id}`, { user });
+  },
 };
