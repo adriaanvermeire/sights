@@ -94,18 +94,24 @@ Statics.getSightById = function getSightById(id) {
 };
 
 // TODO: Implement better method for getting featured sights
-Statics.filter = function filter(query) {
+Statics.filter = async function filter(query, user) {
   const category = query.category ? ObjectId(query.category) : undefined;
   const q = {
     category,
   };
   clean(q);
-  return this.find(q, 'name')
+  const sights = await this.find(q, 'name likes')
     .populate({ path: 'author', select: 'username -_id' })
-    .populate({ path: 'category', select: 'name -_id' }).lean()
-    .exec()
-    .then(data => data)
-    .catch(e => ({ err: e }));
+    .populate({ path: 'category', select: 'name -_id' })
+    .lean()
+    .exec();
+
+  if (user) {
+    for (const sight of sights) {
+      sight.liked = sight.likes.includes(user.id);
+    }
+  }
+  return sights;
 };
 
 Statics.create = function create(data) {

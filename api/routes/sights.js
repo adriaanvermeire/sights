@@ -71,7 +71,14 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
     });
 });
 
-router.get('/filter', (req, res) => {
+router.get('/filter', filterAuth, (req, res) => {
+  const { category } = req.query;
+  Sight.filter({ category }, req.user)
+    .then(sights => res.send({ sights }))
+    .catch(e => res.status(404).send({ success: false, err: e }));
+});
+
+router.get('/filter-no-auth', (req, res) => {
   const { category } = req.query;
   Sight.filter({ category })
     .then(sights => res.send({ sights }))
