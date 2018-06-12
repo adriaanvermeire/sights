@@ -1,22 +1,36 @@
 <template lang="html">
-  <div id="explore" class='container-fluid mx-auto'>
-    <ul id='categories' class='d-flex'>
-      <li class='text-muted'>Categories:</li>
-      <li
-        v-for='category in categories' :key='category._id'
-        class="category nav-item">
-        <button
-          @click='filter({category: category._id})'
-          class="btn btn-outline-dark">{{ category.name }}</button>
-      </li>
-    </ul>
+  <div id="explore" class='container-fluid mx-auto px-5 pb-5'>
+    <div id="top-bar" class="d-flex justify-content-between align-items-center mb-3">
+      <ul id='categories' class='d-flex p-0 m-0'>
+        <li class='text-muted'>Categories:</li>
+        <li
+          v-for='category in categories' :key='category._id'
+          class="category nav-item">
+          <a-button
+            v-if='selectedCategory === category.name'
+            @click.native='filter({ name: category.name, category: category._id })'
+            variant='success'>
+            {{ category.name }}
+          </a-button>
+          <a-button
+            v-else
+            @click.native='filter({ name: category.name, category: category._id })'
+            variant='light'>
+            {{ category.name }}
+          </a-button>
+        </li>
+      </ul>
+      <search placeholder='Search sights here...'></search>
+    </div>
     <template v-show='!loading'>
-      <div class="sights-wrapper row">
-        <sight-card v-for='sight in sights' :key='sight._id' :sight='sight'/>
-        <p v-if="!sights.length">
-          There are no Sights to be found!
-        </p>
-      </div>
+         <div class="centered">
+          <section id='cards'>
+            <sight-card v-for='sight in sights' :key='sight._id' :sight='sight'/>
+            <p v-if="!sights.length">
+              There are no Sights to be found!
+            </p>
+          </section>
+        </div>
     </template>
   </div>
 </template>
@@ -25,6 +39,7 @@
 import SightService from '@/services/SightService';
 import CategoryService from '@/services/CategoryService';
 import SightCard from '@/components/Card/SightCard';
+import Search from '@/components/Inputs/Search';
 
 export default {
   data() {
@@ -32,6 +47,7 @@ export default {
       sights: [],
       loading: true,
       categories: [],
+      selectedCategory: '',
     };
   },
   methods: {
@@ -51,8 +67,14 @@ export default {
         console.log(err);
       }
     },
-    async filter({ category }) {
-      this.loadSights({ category });
+    async filter({ category, name }) {
+      if (name === this.selectedCategory) { // disable filter
+        this.selectedCategory = '';
+        this.loadSights();
+      } else {
+        this.selectedCategory = name;
+        this.loadSights({ category });
+      }
     },
   },
   async created() {
@@ -61,7 +83,7 @@ export default {
     this.loading = false;
   },
   components: {
-    SightCard,
+    SightCard, Search,
   },
 };
 </script>
@@ -74,5 +96,44 @@ export default {
   li {
     margin-right: 1rem;
   }
+}
+#cards {
+  display: grid;
+  grid-gap: 1rem;
+  justify-content: space-between;
+}
+
+</style>
+
+<style lang="scss">
+
+@media screen and (max-width: 40em) {
+  #cards {
+    grid-template-columns: repeat(auto-fill, 100%);
+  }
+}
+@media screen and (min-width: 40em) {
+  #cards {
+    grid-template-columns: repeat(auto-fill, 48%);
+  }
+}
+
+@media screen and (min-width: 60em) {
+  #cards {
+      grid-template-columns: repeat(auto-fill, minmax(19%, 32%));
+  }
+}
+
+@media screen and (min-width: 80em) {
+  #cards {
+    grid-template-columns: repeat(auto-fill, minmax(0, 19%));
+  }
+}
+
+
+@media screen and (min-width: 52em) {
+    .centered {
+
+    }
 }
 </style>
