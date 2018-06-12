@@ -67,6 +67,23 @@ Methods.generateBivariateGraphs = async function generateBivariateGraphs() {
   await this.save();
 };
 
+Methods.like = async function like(user) {
+  const _id = user._id.toString();
+  if (this.author.toString() !== _id) {
+    if (!this.likes.includes(_id)) {
+      console.log('Liking');
+      this.likes.push(_id);
+      user.likes.push(this._id);
+    } else {
+      console.log('Unliking');
+      this.likes.splice(this.likes.indexOf(_id), 1);
+      user.likes.splice(user.likes.indexOf(this._id), 1);
+    }
+    await Promise.all([this.save(), user.save()]);
+  }
+  return this.likes.length;
+};
+
 
 // Statics
 
