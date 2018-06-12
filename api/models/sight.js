@@ -2,16 +2,23 @@
 /* eslint-disable no-multi-assign */
 const mongoose = require('mongoose');
 const Chart = require('./chart');
+const { clean } = require('../utils');
 
-const { ObjectId } = mongoose.Schema.Types;
+const { ObjectId: SchemaId } = mongoose.Schema.Types;
+const { ObjectId } = mongoose.Types;
 // Sight schema
 const SightSchema = mongoose.Schema({
-  author: { type: ObjectId, ref: 'User' },
-  dataset: { type: ObjectId, ref: 'Dataset', required: true },
-  name: { type: String, required: true, index: true },
-  category: { type: ObjectId, ref: 'Category' },
-  charts: [{ type: ObjectId, ref: 'Chart' }],
+  author: { type: SchemaId, ref: 'User' },
+  dataset: { type: SchemaId, ref: 'Dataset', required: true },
+  name: { type: String, required: true },
+  category: { type: SchemaId, ref: 'Category' },
+  charts: [{ type: SchemaId, ref: 'Chart' }],
 }, { timestamps: true });
+
+SightSchema.index(
+  { name: 'text', 'category.name': 'text', 'author.username': 'text' },
+  { weights: { name: 3, 'category.name': 2, 'author.username': 1 } },
+);
 
 const { statics: Statics, methods: Methods } = SightSchema;
 
@@ -70,11 +77,12 @@ Statics.getSightById = function getSightById(id) {
 
 // TODO: Implement better method for getting featured sights
 Statics.filter = function filter(query) {
-  const { category } = query;
+  const category = query.category ? ObjectId(query.category) : undefined;
   const q = {
-    category: ObjectId(category),
+    category,
   };
-  return this.find({ category: { $regex: query.category || '' } }, 'name')
+  clean(q);
+  return this.find(q, 'name')
     .populate({ path: 'author', select: 'username -_id' })
     .populate({ path: 'category', select: 'name -_id' }).lean()
     .exec()

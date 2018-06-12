@@ -67,9 +67,9 @@
     </div>
     <div class="row">
       <div class="col d-flex justify-content-end">
-        <button type="submit" name="button" class='btn btn-primary align-self-end'>
+        <a-button type="submit" variant='success' class='align-self-end'>
           Create Sight
-        </button>
+        </a-button>
       </div>
     </div>
   </form>

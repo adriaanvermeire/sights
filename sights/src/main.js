@@ -4,6 +4,7 @@ import 'vue-awesome/icons';
 import VueChartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 
+import aButton from '@/components/Inputs/Button';
 import Icon from 'vue-awesome/components/Icon';
 import utils from '@/utils';
 import App from './App';
@@ -21,6 +22,7 @@ Vue.use(VueChartkick, { adapter: Chart });
 Vue.use(require('vue-moment'));
 
 Vue.component('icon', Icon);
+Vue.component('a-button', aButton);
 
 const token = localStorage.getItem('user-token');
 if (token) {
