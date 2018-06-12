@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-const { auth } = require('./middleware');
+const { auth, filterAuth } = require('./middleware');
 const { detectType } = require('../utils');
 
 const express = require('express');
