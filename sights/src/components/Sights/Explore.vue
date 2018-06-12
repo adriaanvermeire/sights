@@ -95,6 +95,10 @@ export default {
 
   li {
     margin-right: 1rem;
+
+    button.success::after {
+      content: '\00d7';
+    }
   }
 }
 #cards {
