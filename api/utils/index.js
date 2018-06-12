@@ -162,3 +162,10 @@ module.exports.longestCategory = function longestCategory(categories) {
   return maxLength;
 };
 
+module.exports.clean = function clean(obj) {
+  for (const propName in obj) {
+    if (obj[propName] === null || obj[propName] === undefined) {
+      delete obj[propName];
+    }
+  }
+};
