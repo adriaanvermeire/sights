@@ -2,7 +2,7 @@
 <div class="card p-0">
     <div class="card-body">
         <div class="card-title d-flex justify-content-between align-items-center">
-            <h5 class="m-0 text-left">Sight: {{ title }}</h5>
+            <h5 class="m-0 text-left">{{ title }}</h5>
             <div class="actions">
               <button
                 @click.prevent='like($event, id)'
