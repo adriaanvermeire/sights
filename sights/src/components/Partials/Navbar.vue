@@ -105,7 +105,7 @@ export default {
 @import '@/assets/scss/vars.scss';
 
 nav{
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: inset 0 -1px 0 rgba(88,134,196,.2), 0 2px 10px rgba(34,61,97,.05);
   padding-top: 0;
   padding-bottom: 0;
   height: 60px;
