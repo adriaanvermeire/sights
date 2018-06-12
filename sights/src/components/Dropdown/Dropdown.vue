@@ -61,6 +61,7 @@ export default {
     right: 0;
     border-radius: 0.25rem;
     margin-top: 0.7rem;
+    z-index: 1001;
     ul {
         padding: 0.5rem 0;
         li {
