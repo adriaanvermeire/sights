@@ -14,6 +14,7 @@ const upload = multer({ dest });
 
 const Dataset = require('../models/dataset');
 const Sight = require('../models/sight');
+const User = require('../models/user');
 
 const datatypes = require('../config/datatypes');
 
@@ -101,6 +102,25 @@ router.post('/charts/:id', async (req, res) => {
   await sight.save();
   sight = await sight.populate('charts').execPopulate();
   return res.send(sight);
+});
+
+router.post('/like/:sightId', async (req, res) => {
+  const promises = [];
+  let results = [];
+  const { sightId } = req.params;
+  promises.push(Sight.findById(sightId));
+  promises.push(User.findById(req.body.user));
+  try {
+    results = await Promise.all(promises);
+    const [sight, user] = results;
+    if (user) {
+      const likeCount = await sight.like(user);
+      return res.send({ success: true, likeCount });
+    }
+    throw new Error('User not found');
+  } catch (err) {
+    return res.sendStatus(404);
+  }
 });
 
 router.get('/:sightId', async (req, res) => {
