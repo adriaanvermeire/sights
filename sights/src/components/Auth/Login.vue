@@ -51,9 +51,11 @@
 </template>
 
 <script>
+import Notify from '@/mixins/Notifications';
 import { AUTH_REQUEST } from '@/store/actions/auth';
 
 export default {
+  mixins: [Notify],
   data() {
     return {
       email: '',
@@ -66,6 +68,7 @@ export default {
       this.errors.clear();
       this.$store.dispatch(AUTH_REQUEST, { email, password })
         .then(() => {
+          this.success('You were logged in successfully!');
           this.$router.push('/');
         })
         .catch((err) => {

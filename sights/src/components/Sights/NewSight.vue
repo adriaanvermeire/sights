@@ -44,8 +44,10 @@ import NewSightForm from '@/components/Sights/NewSight/NewSightForm';
 import { FormWizard, TabContent, WizardStep } from 'vue-form-wizard';
 import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 import { SIGHT_INACTIVE } from '@/store/actions/sight';
+import Notify from '@/mixins/Notifications';
 
 export default {
+  mixins: [Notify],
   data() {
     return {
       parsing: false,
@@ -91,6 +93,7 @@ export default {
       this.$refs.wizard.$emit('on-complete');
     },
     onComplete() {
+      this.success('Your Sight is done. Enjoy!');
       this.$router.push({ name: 'SightDetail', params: { id: this.sight } });
     },
   },

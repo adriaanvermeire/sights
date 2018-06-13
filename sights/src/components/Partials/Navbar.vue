@@ -46,12 +46,13 @@
 
 <script>
 import { mixin as clickaway } from 'vue-clickaway';
+import Notify from '@/mixins/Notifications';
 import { AUTH_LOGOUT } from '@/store/actions/auth';
 import Avatar from 'vue-avatar';
 import Dropdown from '@/components/Dropdown/Dropdown';
 
 export default {
-  mixins: [clickaway],
+  mixins: [clickaway, Notify],
   data() {
     return {
       sight: '',
@@ -72,6 +73,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch(AUTH_LOGOUT).then(() => {
+        this.success('You were logged out successfully!');
         this.$router.push({ name: 'Home' });
       });
     },
@@ -109,7 +111,7 @@ nav{
   padding-top: 0;
   padding-bottom: 0;
   height: 60px;
-
+  z-index: 500;
   font-family: 'IBM Plex Sans';
   font-weight: bold;
 
