@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import SightService from '@/services/SightService';
 import SightCard from '@/components/Card/SightCard';
 import SearchBar from './SearchBar';
 
@@ -30,14 +29,6 @@ export default {
     };
   },
   methods: {
-    async loadSights(filter) {
-      try {
-        const response = (await SightService.getSights(filter)).data;
-        this.sights = response.sights;
-      } catch (err) {
-        console.log(err);
-      }
-    },
     searchCategory(payload) {
       this.filterCategory = payload.name;
     },
@@ -50,10 +41,6 @@ export default {
       }
       return filter;
     },
-  },
-  async created() {
-    await this.loadSights();
-    this.loading = false;
   },
   components: {
     SightCard, SearchBar,
