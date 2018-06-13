@@ -11,8 +11,8 @@
             </a-button>
         </li>
         </ul>
-        <!-- <search placeholder='Search sights here...'></search> -->
-        <ais-search-box></ais-search-box>
+        <search ref="search"
+            v-on-clickaway='blurSearch' placeholder='Search sights here...'></search>
     </div>
 </template>
 
@@ -20,9 +20,10 @@
 import CategoryService from '@/services/CategoryService';
 import Search from '@/components/Inputs/Search';
 import { Component } from 'vue-instantsearch';
+import { mixin as clickaway } from 'vue-clickaway';
 
 export default {
-  mixins: [Component],
+  mixins: [Component, clickaway],
   data() {
     return {
       categories: [],
@@ -52,6 +53,9 @@ export default {
       // Check both search and category filters
       this.$emit('search', data);
       this.searchStore.refresh();
+    },
+    blurSearch() {
+      this.$refs.search.focus(false);
     },
   },
   async created() {

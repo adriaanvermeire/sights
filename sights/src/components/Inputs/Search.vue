@@ -1,7 +1,8 @@
 <template>
-    <div id="search">
+    <div id="search" @click='focus' >
         <icon name='search'></icon>
-        <input @focus='focus' @blur='focus(false)' :placeholder='placeholder' type="text">
+        <ais-input
+            :placeholder="placeholder"></ais-input>
     </div>
 </template>
 
@@ -10,7 +11,12 @@ export default {
   props: ['placeholder'],
   methods: {
     focus(state = true) {
-      if (state) { this.$el.classList.add('active'); } else { this.$el.classList.remove('active'); }
+      if (state) {
+        this.$el.classList.add('active');
+      } else {
+        this.$el.classList.remove('active');
+        this.$el.querySelector('input').blur();
+      }
     },
   },
 };
@@ -24,7 +30,7 @@ export default {
     &:hover, &.active {
         box-shadow: 0 0 4px 0 rgba(43,49,63,.14), 0 8px 10px 0 rgba(43,49,63,.06);
     }
-    input[type=text]{
+    input{
         background-color: #fdfdfd;
         border: 1px solid transparent;
         padding:  0.375rem 0.5rem;
