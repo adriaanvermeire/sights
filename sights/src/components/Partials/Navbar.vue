@@ -94,7 +94,7 @@ export default {
     Avatar, Dropdown,
   },
   watch: {
-    $route(to, from) {
+    $route() {
       this.$refs.dropdown.show = false;
     },
   },

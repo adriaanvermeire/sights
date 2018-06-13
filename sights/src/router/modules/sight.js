@@ -1,5 +1,5 @@
 import NewSight from '@/components/Sights/NewSight';
-import Explore from '@/components/Sights/Explore';
+import Explore from '@/components/Explore/Explore';
 import SightDetail from '@/components/Sights/SightDetail';
 import { auth } from '../middleware';
 

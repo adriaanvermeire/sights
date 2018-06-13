@@ -31,7 +31,6 @@ export default {
   props: ['text', 'actions'],
   methods: {
     toggleDropdown(e, state) {
-      console.log('hello');
       this.show = typeof state === 'undefined' ? !this.show : state;
     },
   },

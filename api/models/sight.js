@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-multi-assign */
 const mongoose = require('mongoose');
+const algoliasearch = require('algoliasearch');
 const Chart = require('./chart');
 const { clean } = require('../utils');
 
@@ -20,6 +21,9 @@ SightSchema.index(
   { name: 'text', 'category.name': 'text', 'author.username': 'text' },
   { weights: { name: 3, 'category.name': 2, 'author.username': 1 } },
 );
+
+const client = algoliasearch('OQTWW0B4H3', '0c7e2911c7ac282807c7e09e3c387ee2');
+const algolia = client.initIndex('sights');
 
 const { statics: Statics, methods: Methods } = SightSchema;
 
@@ -71,19 +75,45 @@ Methods.like = async function like(user) {
   const _id = user._id.toString();
   if (this.author.toString() !== _id) {
     if (!this.likes.includes(_id)) {
-      console.log('Liking');
       this.likes.push(_id);
       user.likes.push(this._id);
     } else {
-      console.log('Unliking');
       this.likes.splice(this.likes.indexOf(_id), 1);
       user.likes.splice(user.likes.indexOf(this._id), 1);
     }
     await Promise.all([this.save(), user.save()]);
+    this.updateAlgolia();
   }
   return this.likes.length;
 };
 
+Methods.addToAlgolia = async function addToAlgolia() {
+  const sight = await this.populate('author').populate('category').execPopulate();
+  algolia.addObject({
+    objectID: sight.id,
+    name: sight.name,
+    author: sight.author.username,
+    category: sight.category.name,
+    likes: sight.likes,
+    likeCount: sight.likes.length,
+  }, (err) => {
+    if (err) throw err;
+  });
+};
+
+Methods.updateAlgolia = async function updateAlgolia() {
+  const sight = await this.populate('author').populate('category').execPopulate();
+  algolia.saveObject({
+    objectID: sight.id,
+    name: sight.name,
+    author: sight.author.username,
+    category: sight.category.name,
+    likes: sight.likes,
+    likeCount: sight.likes.length,
+  }, (err) => {
+    if (err) throw err;
+  });
+};
 
 // Statics
 
