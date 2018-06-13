@@ -5,7 +5,6 @@ import VueChartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 import InstantSearch from 'vue-instantsearch';
 import Notifications from 'vue-notification';
-import velocity from 'velocity-animate';
 
 import aButton from '@/components/Inputs/Button';
 import Icon from 'vue-awesome/components/Icon';
@@ -24,7 +23,6 @@ Vue.use(VeeValidate, { events: 'change', fieldsBagName: 'validationFields' });
 Vue.use(VueChartkick, { adapter: Chart });
 Vue.use(InstantSearch);
 Vue.use(Notifications);
-Vue.use(Notifications, { velocity });
 Vue.use(require('vue-moment'));
 
 Vue.component('icon', Icon);
