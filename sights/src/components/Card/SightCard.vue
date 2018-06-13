@@ -71,11 +71,11 @@ export default {
   },
   mounted() {
     this.title = this.sight.name;
-    this.author = this.sight.author.username;
-    this.category = this.sight.category.name;
-    this.liked = this.sight.liked;
-    this.likes = this.sight.likes.length;
-    this.id = this.sight._id;
+    this.author = this.sight.author;
+    this.category = this.sight.category;
+    this.liked = this.sight.likes.includes(this.userId);
+    this.likes = this.sight.likeCount;
+    this.id = this.sight.objectID;
   },
   components: {
     Card,
