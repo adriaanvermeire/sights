@@ -24,6 +24,7 @@ export default {
 
 <style scoped lang='scss'>
 #search {
+    display: flex;
     position: relative;
     box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
 

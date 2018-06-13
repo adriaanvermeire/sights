@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     searchCategory(payload) {
-      this.filterCategory = payload.name;
+      this.filterCategory = payload.label;
     },
   },
   computed: {
