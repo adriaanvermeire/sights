@@ -63,7 +63,6 @@ export default {
         bivariate: this.bivariate,
       }));
       const response = rawResponse.data;
-      // TODO: Add notification for successfully creating sight
       if (response.success) {
         this.$emit('charts-success');
       }

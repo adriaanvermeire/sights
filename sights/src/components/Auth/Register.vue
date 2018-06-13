@@ -82,10 +82,12 @@
 </template>
 
 <script>
+import Notify from '@/mixins/Notifications';
 import { AUTH_REQUEST } from '@/store/actions/auth';
 import AuthenticationService from '@/services/AuthenticationService';
 
 export default {
+  mixins: [Notify],
   data() {
     return {
       details: {
@@ -104,6 +106,7 @@ export default {
         if (resp.success) {
           const { email, password } = this.details;
           this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
+            this.success('You were registered successfully!');
             this.$router.push('/');
           });
         } else if (resp.msg) {

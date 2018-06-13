@@ -110,7 +110,6 @@ export default {
           this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
           this.$emit('submit-success', response.data);
         } else {
-        // TODO: Change this to notification
           this.$emit('submit-error', response.err);
         }
       } catch (error) {
