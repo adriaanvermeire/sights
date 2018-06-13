@@ -12,6 +12,8 @@
                 </router-link>
             </div>
             <div id="profile-data">
+                <span>{{ likes }}</span>
+                <like-button :sight='{ author, liked, likes, id }'/>
                 Made by
                 <router-link :to="{ name: 'Home'}">
                     <b>{{ author || ''}}</b>
@@ -22,15 +24,18 @@
 </template>
 
 <script>
+import LikeButton from '@/components/Inputs/LikeButton';
+
 export default {
   computed: {
     createdAt() { return this.$store.getters.sightCreation; },
     author() { return this.$store.getters.sightAuthor; },
     category() { return this.$store.getters.sightCategory; },
+    liked() { return this.$store.state.sight.liked; },
+    likes() { return this.$store.state.sight.likes.length; },
+    id() { return this.$store.state.sight.id; },
   },
-  created() {
-    console.log('Getters', this.$store.getters);
-  },
+  components: { LikeButton },
 };
 </script>
 

@@ -2,18 +2,19 @@
 <div class="card p-0">
     <div class="card-body">
         <div class="card-title d-flex justify-content-between align-items-center">
+            <router-link :to="{ name: 'SightDetail', params: { id }}" class='text-dark'>
             <h5 class="m-0 text-left">{{ title }}</h5>
+            </router-link>
             <div class="actions">
               <button
                 @click.prevent='like($event, id)'
                 class="btn btn-link p-0" :class='{ liked }' id="like">
-                  <transition name='likeSight'>
-                    <icon v-if='liked' name="heart"></icon>
-                  </transition>
-                    <icon v-if='!liked' name="regular/heart"></icon>
-              </button>
-              <button class="btn btn-link p-0" id="share">
-                  <icon name="share-alt"></icon>
+                  <div class="heart">
+                    <transition name='likeSight'>
+                      <icon v-if='liked' name="heart"></icon>
+                    </transition>
+                      <icon v-if='!liked' name="regular/heart"></icon>
+                  </div>
               </button>
             </div>
         </div>
@@ -35,9 +36,10 @@
 
 <script>
 import SightService from '@/services/SightService';
-import Card from './CardBase';
+import Notify from '@/mixins/Notifications';
 
 export default {
+  mixins: [Notify],
   data() {
     return {
       id: '',
@@ -77,9 +79,6 @@ export default {
     this.likes = this.sight.likeCount;
     this.id = this.sight.objectID;
   },
-  components: {
-    Card,
-  },
 };
 </script>
 
@@ -103,6 +102,20 @@ button#like {
      color: $red;
    }
     padding: 0;
+
+    .heart {
+      margin-left: 0.5rem;
+      position: relative;
+      height: 1.2rem;
+      width: 1.2rem;
+      svg {
+        height: inherit;
+        width: inherit;
+        right: 0.275rem;
+        position: absolute;
+      }
+    }
+
 }
 
 .likeSight-enter-active {

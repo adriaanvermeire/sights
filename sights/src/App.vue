@@ -67,11 +67,15 @@ export default {
 .notification {
   padding: 15px;
   margin: 0 5px 5px;
-  margin-top: calc(60px + 0.5rem);
+  margin-top: 0.5rem;
   font-size: 1rem;
   color: $black;
   background-color: $light;
   box-shadow: 0 0 4px 0 rgba(43,49,63,.14), 0 8px 10px 0 rgba(43,49,63,.06);
+
+  .notification-wrapper:first-child & {
+    margin-top: calc(60px + 0.5rem);
+  }
 
   &.success {
     border-right: 5px solid $green;

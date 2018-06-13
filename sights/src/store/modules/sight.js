@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 import SightService from '@/services/SightService';
-import { SIGHT_CHARTS, SIGHT_ACTIVE, SIGHT_INACTIVE } from '../actions/sight';
+import { SIGHT_CHARTS, SIGHT_ACTIVE, SIGHT_INACTIVE, SIGHT_LIKE } from '../actions/sight';
 
 const state = {
   // single source of data
@@ -10,6 +10,8 @@ const state = {
   name: '',
   id: false,
   createdAt: false,
+  likes: [],
+  liked: false,
 };
 
 const actions = {
@@ -18,11 +20,18 @@ const actions = {
     const sight = (await SightService.updateCharts(state.id, payload.charts)).data;
     commit(SIGHT_ACTIVE, sight);
   },
-  [SIGHT_ACTIVE]({ commit }, payload) {
-    commit(SIGHT_ACTIVE, payload.sight);
+  [SIGHT_ACTIVE]({ commit, rootState }, payload) {
+    const { sight } = payload;
+    sight.liked = sight.likes.includes(rootState.user.profile._id);
+    commit(SIGHT_ACTIVE, sight);
   },
   [SIGHT_INACTIVE]({ commit }) {
     commit(SIGHT_INACTIVE);
+  },
+  [SIGHT_LIKE]: async ({ commit, state, rootState }, payload) => {
+    const user = rootState.user.profile._id;
+    (await SightService.like(state.id, user));
+    commit(SIGHT_LIKE, payload.liked, user);
   },
 };
 const mutations = {
@@ -34,6 +43,8 @@ const mutations = {
     state.name = sight.name;
     state.id = sight._id;
     state.createdAt = sight.createdAt;
+    state.likes = sight.likes;
+    state.liked = sight.liked;
   },
   [SIGHT_INACTIVE](state) {
     state.author = false;
@@ -42,6 +53,16 @@ const mutations = {
     state.name = '';
     state.id = false;
     state.createdAt = false;
+    state.likes = [];
+    state.liked = false;
+  },
+  [SIGHT_LIKE](state, liked, user) {
+    state.liked = liked;
+    if (liked) {
+      state.likes.push(user);
+    } else {
+      state.likes.splice(state.likes.indexOf(user, 1));
+    }
   },
 };
 
