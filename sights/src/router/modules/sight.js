@@ -8,6 +8,7 @@ export default [
     path: '/explore',
     name: 'Explore',
     component: Explore,
+    props: route => ({ query: route.query.q }),
   },
   {
     path: '/sights/new',

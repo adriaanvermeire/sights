@@ -5,6 +5,7 @@
           api-key="97e17abaac2e3a6bd2677c5176b7ec7d"
           index-name="sights"
           :query-parameters="categoryFilter"
+          :query="query"
       >
       <search-bar @search="searchCategory($event)"/>
       <ais-results>
@@ -28,6 +29,12 @@ export default {
       filterCategory: '',
     };
   },
+  props: {
+    query: {
+      type: String,
+      default: '',
+    },
+  },
   methods: {
     searchCategory(payload) {
       this.filterCategory = payload.name;
@@ -41,6 +48,9 @@ export default {
       }
       return filter;
     },
+  },
+  created() {
+    this.filterCategory = this.$route.query.category;
   },
   components: {
     SightCard, SearchBar,

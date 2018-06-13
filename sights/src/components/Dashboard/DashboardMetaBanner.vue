@@ -7,7 +7,7 @@
             </div>
             <div id="category">
                 Category:
-                <router-link :to="{ name: 'Home'}">
+                <router-link :to="{ name: 'Explore', query: { category }}">
                     <b>{{ category ||''}}</b>
                 </router-link>
             </div>
