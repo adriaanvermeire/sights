@@ -1,8 +1,7 @@
 <template lang="html">
   <div id="explore" class='container-fluid mx-auto px-5 pb-5'>
     <ais-index
-          app-id="OQTWW0B4H3"
-          api-key="97e17abaac2e3a6bd2677c5176b7ec7d"
+          :searchStore="searchStore"
           index-name="sights"
           :query-parameters="categoryFilter"
           :query="query"
@@ -39,6 +38,8 @@
 </template>
 
 <script>
+import { createFromAlgoliaCredentials } from 'vue-instantsearch';
+import Spinner from '@/components/Spinner/Spinner';
 import SightCard from '@/components/Card/SightCard';
 import SearchBar from './SearchBar';
 
@@ -48,6 +49,7 @@ export default {
       sights: [],
       loading: true,
       filterCategory: '',
+      searchStore: '',
     };
   },
   props: {
@@ -72,8 +74,13 @@ export default {
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
     },
+    loading() {
+      return this.searchStore._isSearchStalled;
+    },
   },
   created() {
+    this.searchStore = createFromAlgoliaCredentials('OQTWW0B4H3', '97e17abaac2e3a6bd2677c5176b7ec7d');
+
     this.filterCategory = this.$route.query.category;
   },
   components: {
