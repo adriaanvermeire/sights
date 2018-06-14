@@ -12,6 +12,7 @@ export default {
         dark: { dark: true },
         light: { light: true },
         success: { success: true },
+        'success-outline': { 'success-outline': true },
         default: { default: true },
       },
     };
@@ -70,6 +71,23 @@ button {
           color: #2c3e50;
           }
 
+    }
+
+    &.success-outline {
+      border: 2px solid #09eba7;
+      background-color: transparent;
+      &:hover {
+        background-color: #09eba7;
+        * {
+          color: #2c3e50;
+        }
+      }
+       * {
+          &:hover {
+            text-decoration: none;
+          }
+          color: #09eba7;
+        }
     }
 
     &.light {
