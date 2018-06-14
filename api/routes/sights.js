@@ -71,6 +71,15 @@ router.post('/new', routeMiddlewareNew, (req, res) => {
     });
 });
 
+router.get('/featured', async (req, res) => {
+  try {
+    const sights = await Sight.featured();
+    res.send(sights);
+  } catch (err) {
+    throw err;
+  }
+});
+
 router.get('/search', filterAuth, (req, res) => {
   const { category } = req.query;
   Sight.filter({ category }, req.user)

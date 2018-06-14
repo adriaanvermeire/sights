@@ -5,7 +5,8 @@ import VueChartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 import InstantSearch from 'vue-instantsearch';
 import Notifications from 'vue-notification';
-
+import VueTabs from 'vue-nav-tabs';
+import 'vue-nav-tabs/themes/vue-tabs.css';
 import aButton from '@/components/Inputs/Button';
 import Icon from 'vue-awesome/components/Icon';
 import utils from '@/utils';
@@ -23,6 +24,7 @@ Vue.use(VeeValidate, { events: 'change', fieldsBagName: 'validationFields' });
 Vue.use(VueChartkick, { adapter: Chart });
 Vue.use(InstantSearch);
 Vue.use(Notifications);
+Vue.use(VueTabs);
 Vue.use(require('vue-moment'));
 
 Vue.component('icon', Icon);

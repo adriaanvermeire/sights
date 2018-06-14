@@ -8,7 +8,7 @@
           :query="query"
       >
       <search-bar @search="searchCategory($event)"/>
-      <ais-results>
+      <ais-results class='sights-grid'>
         <template slot-scope="{ result }">
           <sight-card :key='result.objectID' :sight='result'/>
         </template>
@@ -57,36 +57,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.ais-results {
-  display: grid;
-  grid-gap: 1rem;
-  justify-content: space-between;
-}
-</style>
-
-<style lang="scss">
-@media screen and (max-width: 40em) {
-  .ais-results {
-    grid-template-columns: repeat(auto-fill, 100%);
-  }
-}
-@media screen and (min-width: 40em) {
-  .ais-results {
-    grid-template-columns: repeat(auto-fill, 48%);
-  }
-}
-
-@media screen and (min-width: 60em) {
-  .ais-results {
-      grid-template-columns: repeat(auto-fill, minmax(19%, 32%));
-  }
-}
-
-@media screen and (min-width: 80em) {
-  .ais-results {
-    grid-template-columns: repeat(auto-fill, minmax(0, 19%));
-  }
-}
-</style>

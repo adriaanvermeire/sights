@@ -104,4 +104,33 @@ export default {
   opacity:0;
   transform: translateX(150%);
 }
+
+.sights-grid {
+  display: grid;
+  grid-gap: 1rem;
+  justify-content: space-between;
+}
+@media screen and (max-width: 40em) {
+  .sights-grid {
+    grid-template-columns: repeat(auto-fill, 100%);
+  }
+}
+@media screen and (min-width: 40em) {
+  .sights-grid {
+    grid-template-columns: repeat(auto-fill, 48%);
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .sights-grid {
+      grid-template-columns: repeat(auto-fill, minmax(19%, 32%));
+  }
+}
+
+@media screen and (min-width: 80em) {
+  .sights-grid {
+    grid-template-columns: repeat(auto-fill, minmax(0, 19%));
+  }
+}
+
 </style>
