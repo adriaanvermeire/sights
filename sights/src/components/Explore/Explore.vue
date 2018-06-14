@@ -13,6 +13,27 @@
           <sight-card :key='result.objectID' :sight='result'/>
         </template>
       </ais-results>
+      <ais-no-results>
+          <template slot-scope="props">
+            <p>
+              No Sights found
+              <span v-if='filterCategory'>in category <b>{{ filterCategory }}</b></span>
+              <span v-if="props.query"> with searchterm <b>{{ props.query }}</b></span>
+              <span v-if="!filterCategory && !props.query"> for this query</span>...
+            </p>
+            <template v-if='isAuthenticated'>
+              <a-button variant='success'><router-link :to="{ name: 'NewSight' }">Add some here!</router-link></a-button>
+            </template>
+            <template v-else>
+              <div class="no-results-action">
+                <a-button variant='success-outline'>Register</a-button>
+                or
+                <a-button variant='success'>Login</a-button>
+                <p class='mt-2'>to add some!</p>
+              </div>
+            </template>
+          </template>
+      </ais-no-results>
     </ais-index>
   </div>
 </template>
@@ -47,6 +68,9 @@ export default {
         filter.filters = `category:${this.filterCategory}`;
       }
       return filter;
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     },
   },
   created() {
