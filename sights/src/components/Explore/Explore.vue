@@ -7,6 +7,7 @@
           :query="query"
       >
       <search-bar @search="searchCategory($event)"/>
+      <spinner v-if='loading' text='Loading Sights'/>
       <ais-results class='sights-grid'>
         <template slot-scope="{ result }">
           <sight-card :key='result.objectID' :sight='result'/>
@@ -25,9 +26,13 @@
             </template>
             <template v-else>
               <div class="no-results-action">
-                <a-button variant='success-outline'>Register</a-button>
+                <a-button variant='success-outline'>
+                  <router-link :to="{ name: 'Register'}">Register</router-link>
+                </a-button>
                 or
-                <a-button variant='success'>Login</a-button>
+                <a-button variant='success'>
+                  <router-link :to="{ name: 'Login'}">Login</router-link>
+                </a-button>
                 <p class='mt-2'>to add some!</p>
               </div>
             </template>
@@ -47,7 +52,6 @@ export default {
   data() {
     return {
       sights: [],
-      loading: true,
       filterCategory: '',
       searchStore: '',
     };
@@ -84,7 +88,7 @@ export default {
     this.filterCategory = this.$route.query.category;
   },
   components: {
-    SightCard, SearchBar,
+    SightCard, SearchBar, Spinner,
   },
 };
 </script>
