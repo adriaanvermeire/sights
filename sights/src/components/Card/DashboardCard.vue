@@ -19,6 +19,7 @@ export default {
 <style lang='scss'>
 @import '@/assets/scss/vars.scss';
 
+
 .btn-drag {
     cursor:move;
 }

@@ -69,8 +69,8 @@ export default {
   margin: 0 5px 5px;
   margin-top: 0.5rem;
   font-size: 1rem;
-  color: $black;
-  background-color: $light;
+  color: $white;
+  background-color: $black;
   box-shadow: 0 0 4px 0 rgba(43,49,63,.14), 0 8px 10px 0 rgba(43,49,63,.06);
 
   .notification-wrapper:first-child & {

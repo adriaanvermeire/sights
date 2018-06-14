@@ -59,7 +59,7 @@ export default {
         button.classList.toggle('liked');
         this.likes = (await SightService.like(id, this.userId)).data.likeCount;
       } else {
-        console.log('You can\'t like your own sights!');
+        this.danger('You can\'t like your own sights!');
       }
     },
   },

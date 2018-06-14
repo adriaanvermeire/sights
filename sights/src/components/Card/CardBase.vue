@@ -95,9 +95,20 @@ export default {
 @import '@/assets/scss/vars.scss';
 
 .card-wrap {
-    overflow: hidden;
     display: flex;
+    overflow-x: hidden;
+    padding-bottom: 0.2rem;
     justify-content: center;
+}
+
+.card {
+  box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
+  background-color: $light;
+  border: none;
+  border-radius: 0;
+  .card-footer {
+    border-top: none;
+  }
 }
 
 #drag-overlay {
