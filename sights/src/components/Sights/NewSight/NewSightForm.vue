@@ -2,7 +2,7 @@
 <div class="form-wrapper container">
   <form @submit.prevent="submitForm"
     method="post" enctype="multipart/form-data" class=''>
-    <span v-for='error in errors' :key='error' class='text-danger'>{{ error }}</span>
+    <span v-for='error in backendErrors' :key='error' class='text-danger'>{{ error }}</span>
     <div class="row mb-3 w-100">
       <div class="col-12 col-md-2
         d-flex justify-content-md-end justify-content-center align-items-center">
@@ -14,7 +14,11 @@
                       placeholder="Name of your Sight"
                       v-validate="'required|min:5|alpha_num'"
                       name='sightName' autocomplete='sightName'
+                      data-vv-as="name"
                       required />
+      </div>
+      <div v-if="hasError('sightName')" class='error col-12'>
+        {{ firstError('sightName') }}
       </div>
     </div>
     <div class="row mb-3 w-100 p-0">
@@ -43,6 +47,9 @@
                       placeholder="JSON entrypoint: i.e. data"
                       name="entrypoint" autocomplete='entrypoint' />
       </div>
+      <div v-if="hasError('dataset')" class='error col-12'>
+        {{ firstError('dataset') }}
+      </div>
     </div>
     <div class="row mb-3 w-100">
       <div class="col-12 col-md-2
@@ -56,11 +63,16 @@
         <select
         id='sightCategory'
         v-model="sight.category"
-        class="mb-3" required>
+        class="mb-3" required
+        name='category'
+        v-validate="'required'">
         <option
           v-for='category of categories'
           :value="category.value" :key='category.text'>{{category.text}}</option>
         </select>
+      </div>
+      <div v-if="hasError('sightCategory')" class='error col-12'>
+        {{ firstError('sightCategory') }}
       </div>
     </div>
     <div class="row">
@@ -79,8 +91,10 @@ import SightService from '@/services/SightService';
 import CategoryService from '@/services/CategoryService';
 import { SIGHT_ACTIVE } from '@/store/actions/sight';
 import TextInput from '@/components/Inputs/TextInput';
+import ErrorMixin from '@/mixins/Error';
 
 export default {
+  mixins: [ErrorMixin],
   data() {
     return {
       sight: {
@@ -91,29 +105,32 @@ export default {
       },
       data: [],
       categories: [],
-      errors: [],
+      backendErrors: [],
     };
   },
   methods: {
     async submitForm() {
-      this.errors = [];
-      const fd = new FormData();
-      fd.append('dataset', this.sight.dataset, this.sight.dataset.name);
-      fd.append('name', this.sight.name);
-      fd.append('category', this.sight.category);
-      fd.append('entrypoint', this.sight.entrypoint);
-      this.$emit('sight-submit');
-      try {
-        const response = (await SightService.addSight(fd)).data;
-        if (response.success) {
-          this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
-          this.$emit('submit-success', response.data);
-        } else {
-          this.$emit('submit-error', response.err);
+      const res = await this.$validator.validateAll();
+      if (res) {
+        this.backendErrors = [];
+        const fd = new FormData();
+        fd.append('dataset', this.sight.dataset, this.sight.dataset.name);
+        fd.append('name', this.sight.name);
+        fd.append('category', this.sight.category);
+        fd.append('entrypoint', this.sight.entrypoint);
+        this.$emit('sight-submit');
+        try {
+          const response = (await SightService.addSight(fd)).data;
+          if (response.success) {
+            this.$store.dispatch(SIGHT_ACTIVE, { sight: response.currentSight });
+            this.$emit('submit-success', response.data);
+          } else {
+            this.$emit('submit-error', response.err);
+          }
+        } catch (error) {
+          this.parseErrorResponse(error.response);
+          this.$emit('submit-error');
         }
-      } catch (error) {
-        this.parseErrorResponse(error.response);
-        this.$emit('submit-error');
       }
     },
     onFileSelected(e) {
@@ -126,7 +143,7 @@ export default {
       const { errors } = response.data.err;
       for (let i = 0; i < errors.length; i += 1) {
         const error = errors[i];
-        this.errors.push(error.messages.join(', '));
+        this.backendErrors.push(error.messages.join(', '));
       }
     },
   },
@@ -142,6 +159,12 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+@import '@/assets/scss/vars.scss';
+.error {
+    text-align: right;
+    color: $red;
+}
+
 select {
     box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
     background-color: #fdfdfd;

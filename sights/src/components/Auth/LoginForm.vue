@@ -10,9 +10,9 @@
         v-model.trim="email"
         v-validate="'required|email'"
         />
-        <span v-if="errors.has('email')"
-        class='text-right' :class='{ "d-block": errors.has("email")}'
-        >{{errors.first('email')}}</span>
+    </div>
+    <div v-if="hasError('email')" class='error col-12'>
+    {{ firstError('email') }}
     </div>
     </div>
     <div class='form-row mb-2'>
@@ -25,13 +25,13 @@
         v-model.trim="password"
         v-validate="'required'"
         />
-        <span v-if="errors.has('password')"
-        class='text-right' :class='{ "d-block": errors.has("password")}'
-        >{{errors.first('password')}}</span>
+    </div>
+    <div v-if="hasError('password')" class='error col-12'>
+    {{ firstError('password') }}
     </div>
     </div>
     <span class='d-flex justify-content-end'>
-    <a-button v-if="register-link" variant='success-outline'>
+    <a-button v-if="registerLink" variant='success-outline' class='mr-1'>
       <router-link :to="{ name: 'Register' }"  >
         Register
       </router-link>
@@ -43,11 +43,12 @@
 
 <script>
 import Notify from '@/mixins/Notifications';
+import ErrorMixin from '@/mixins/Error';
 import { AUTH_REQUEST } from '@/store/actions/auth';
 import TextInput from '@/components/Inputs/TextInput';
 
 export default {
-  mixins: [Notify],
+  mixins: [Notify, ErrorMixin],
   data() {
     return {
       email: '',
@@ -58,17 +59,20 @@ export default {
     'register-link': { default: true },
   },
   methods: {
-    login() {
-      const { email, password } = this;
-      this.errors.clear();
-      this.$store.dispatch(AUTH_REQUEST, { email, password })
-        .then(() => {
-          this.success('You were logged in successfully!');
-          this.$router.push('/');
-        })
-        .catch((err) => {
-          this.errors.add('password', err.data.msg, 'server');
-        });
+    async login() {
+      const res = await this.$validator.validateAll();
+      if (res) {
+        const { email, password } = this;
+        this.errors.clear();
+        this.$store.dispatch(AUTH_REQUEST, { email, password })
+          .then(() => {
+            this.success('You were logged in successfully!');
+            this.$router.push('/');
+          })
+          .catch((err) => {
+            this.errors.add('password', err.data.msg, 'server');
+          });
+      }
     },
   },
   components: {
@@ -77,6 +81,10 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style scoped lang='scss'>
+@import '@/assets/scss/vars.scss';
+.error {
+    text-align: right;
+    color: $red;
+}
 </style>
