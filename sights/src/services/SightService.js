@@ -10,6 +10,9 @@ export default {
   getDatatypes() {
     return Api().get('sights/datatypes');
   },
+  getFeatured() {
+    return Api().get('sights/featured');
+  },
   submitTypes(data) {
     return Api().post('sights/datatypes', data);
   },

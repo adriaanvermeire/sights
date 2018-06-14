@@ -53,13 +53,17 @@ export default {
   props: ['sight'],
   methods: {
     async like(event, id) {
-      if (this.author !== this.user) {
-        const button = event.currentTarget;
-        this.liked = !this.liked;
-        button.classList.toggle('liked');
-        this.likes = (await SightService.like(id, this.userId)).data.likeCount;
+      if (this.isAuthenticated) {
+        if (this.author !== this.user) {
+          const button = event.currentTarget;
+          this.liked = !this.liked;
+          button.classList.toggle('liked');
+          this.likes = (await SightService.like(id, this.userId)).data.likeCount;
+        } else {
+          this.danger('You can\'t like your own Sights');
+        }
       } else {
-        this.danger('You can\'t like your own sights!');
+        this.danger('You need to have an account to like a Sight');
       }
     },
   },
@@ -69,6 +73,9 @@ export default {
     },
     userId() {
       return this.$store.getters.getProfile._id;
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     },
   },
   mounted() {

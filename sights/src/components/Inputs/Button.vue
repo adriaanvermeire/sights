@@ -62,6 +62,14 @@ button {
 
     &.success {
         background-color: #09eba7;
+
+        * {
+          &:hover {
+            text-decoration: none;
+          }
+          color: #2c3e50;
+          }
+
     }
 
     &.light {

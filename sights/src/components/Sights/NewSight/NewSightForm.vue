@@ -9,13 +9,12 @@
         <label for="sightName"><strong>Name</strong><span class="text-danger"> *</span></label>
       </div>
       <div class="col-md col-12">
-        <input v-model.trim="sight.name"
+        <text-input v-model.trim="sight.name"
                       id='sightName'
-                      type="text"
                       placeholder="Name of your Sight"
                       v-validate="'required|min:5|alpha_num'"
                       name='sightName' autocomplete='sightName'
-                      class='form-control' required>
+                      required />
       </div>
     </div>
     <div class="row mb-3 w-100 p-0">
@@ -38,12 +37,11 @@
         <label for="sightEntrypoint"><strong>Entrypoint</strong></label>
       </div>
       <div class="col-12 col-md-6">
-        <input v-model="sight.entrypoint"
+        <text-input v-model="sight.entrypoint"
                       id='sightEntrypoint'
                       type="text"
                       placeholder="JSON entrypoint: i.e. data"
-                      name="entrypoint" autocomplete='entrypoint'
-                      class='form-control'>
+                      name="entrypoint" autocomplete='entrypoint' />
       </div>
     </div>
     <div class="row mb-3 w-100">
@@ -58,7 +56,7 @@
         <select
         id='sightCategory'
         v-model="sight.category"
-        class="mb-3 form-control" required>
+        class="mb-3" required>
         <option
           v-for='category of categories'
           :value="category.value" :key='category.text'>{{category.text}}</option>
@@ -80,6 +78,7 @@
 import SightService from '@/services/SightService';
 import CategoryService from '@/services/CategoryService';
 import { SIGHT_ACTIVE } from '@/store/actions/sight';
+import TextInput from '@/components/Inputs/TextInput';
 
 export default {
   data() {
@@ -138,9 +137,25 @@ export default {
       this.categories.push({ value: cat._id, text: cat.name });
     });
   },
+  components: { TextInput },
 };
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
+select {
+    box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
+    background-color: #fdfdfd;
+    border: 1px solid transparent;
+    padding:  0.375rem;
+    width: 100%;
 
+    &:focus, &:active {
+        outline: none;
+    }
+
+    &::placeholder {
+        text-transform: lowercase;
+        color: lighten(lightgray, 1%);
+    }
+}
 </style>

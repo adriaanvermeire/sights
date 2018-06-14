@@ -144,6 +144,22 @@ Statics.filter = async function filter(query, user) {
   return sights;
 };
 
+Statics.featured = async function featured() {
+  const sights = await this.aggregate()
+    .addFields({ likeCount: { $size: '$likes' } })
+    .sort({ likeCount: -1 })
+    .limit(5)
+    .lookup({
+      from: 'users', localField: 'author', foreignField: '_id', as: 'author',
+    })
+    .lookup({
+      from: 'categories', localField: 'category', foreignField: '_id', as: 'category',
+    })
+    .project('likes likeCount category.name author.username name')
+    .exec();
+  return sights;
+};
+
 Statics.create = function create(data) {
   const {
     dataset, category, author, name,
