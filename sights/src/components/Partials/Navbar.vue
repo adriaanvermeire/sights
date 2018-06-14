@@ -1,12 +1,12 @@
 <template lang="html">
-<nav class="navbar navbar-expand-lg navbar-light bg-primary d-flex justify-content-between">
+<nav class="navbar navbar-expand-lg navbar-light bg-primary d-flex align-items-stretch justify-content-between">
   <router-link :to='{ name: "Home" }' class='navbar-brand'>
       <img class='logo' src="@/assets/graphics/logo-sights-inverse-notext.png" alt="">
       Sights
   </router-link>
   <h2 class='text-white m-0' v-if='sightName'>{{ sightName }}</h2>
   <div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class='navbar-nav align-items-center'>
+    <ul class='navbar-nav align-items-stretch h-100 navbar-nav'>
       <li class="nav-item">
         <router-link class='nav-link' :to='{ name: "Home"}'>Home</router-link>
       </li>
@@ -20,7 +20,7 @@
         <li class="nav-item">
           <router-link class='nav-link' :to='{ name: "NewSight"}'>Add Sight</router-link>
         </li>
-        <li class="nav-item pr-0 dropdown">
+        <li class="nav-item dropdown">
           <dropdown
             v-on-clickaway='hideDropdown'
             ref="dropdown" aria-labelledby="profileDropdown" :actions='dropdownActions'>
@@ -35,7 +35,7 @@
         <li class="nav-item">
           <router-link class='nav-link' :to='{ name: "Register"}'>Register</router-link>
         </li>
-        <li class="nav-item pr-0">
+        <li class="nav-item">
           <router-link class='nav-link' :to='{ name: "Login"}'>Login</router-link>
         </li>
       </template>
@@ -108,8 +108,7 @@ export default {
 
 nav{
   box-shadow: inset 0 -1px 0 rgba(88,134,196,.2), 0 2px 10px rgba(34,61,97,.05);
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
   height: 60px;
   z-index: 500;
   font-family: 'IBM Plex Sans';
@@ -119,8 +118,31 @@ nav{
     color: white !important;
   }
 
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    &:hover {
+      background-color: darken($green, 5%);
+    }
+  }
+
   #navbarCollapse {
     flex-grow: 0;
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        background-color: darken($green, 5%);
+      }
+
+      &:last-child {
+        padding: 0 1em;
+      }
+    }
   }
 
   .logo {
