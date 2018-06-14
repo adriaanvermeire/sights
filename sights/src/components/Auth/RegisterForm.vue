@@ -10,10 +10,10 @@
         v-model.trim="details.username"
         v-validate="'required|alpha_num|min:3|max:30'"
         />
-        <span v-if="errors.has('username')"
-        class='text-right' :class='{ "d-block": errors.has("username")}'
-        >{{errors.first('username')}}</span>
-    </div>
+      </div>
+      <div v-if="hasError('username')" class='error col-12'>
+          {{ firstError('username') }}
+      </div>
     </div>
     <div class='form-row mb-2'>
     <div class='col-4 justify-content-end d-flex'>
@@ -25,9 +25,9 @@
         v-model.trim="details.email"
         v-validate="'required|email'"
         />
-        <span v-if="errors.has('email')"
-        class='text-right' :class='{ "d-block": errors.has("email")}'
-        >{{errors.first('email')}}</span>
+    </div>
+    <div v-if="hasError('email')" class='error col-12'>
+        {{ firstError('email') }}
     </div>
     </div>
     <div class='form-row mb-2'>
@@ -40,10 +40,10 @@
         v-model.trim="details.password"
         v-validate="'required|min:6'"
         />
-        <span v-if="errors.has('password')"
-        class='text-right' :class='{ "d-block": errors.has("password")}'
-        >{{errors.first('password')}}</span>
-    </div>
+      </div>
+      <div v-if="hasError('password')" class='error col-12'>
+          {{ firstError('password') }}
+      </div>
     </div>
     <div class='form-row mb-2'>
     <div class='col-4 justify-content-end d-flex'>
@@ -55,10 +55,11 @@
         type='password' name='passwordVerification'
         v-model.trim="details.passwordVerification"
         v-validate="'required|min:6|confirmed:password'"
+        data-vv-as="password confirmation"
         />
-        <span v-if="errors.has('passwordVerification')"
-        class='text-right' :class='{ "d-block": errors.has("passwordVerification")}'
-        >{{errors.first('passwordVerification')}}</span>
+    </div>
+    <div v-if="hasError('passwordVerification')" class='error col-12'>
+        {{ firstError('passwordVerification') }}
     </div>
     </div>
     <span class="d-flex justify-content-end">
@@ -69,12 +70,13 @@
 
 <script>
 import Notify from '@/mixins/Notifications';
+import ErrorMixin from '@/mixins/Error';
 import { AUTH_REQUEST } from '@/store/actions/auth';
 import AuthenticationService from '@/services/AuthenticationService';
 import TextInput from '@/components/Inputs/TextInput';
 
 export default {
-  mixins: [Notify],
+  mixins: [Notify, ErrorMixin],
   data() {
     return {
       details: {
@@ -102,15 +104,17 @@ export default {
         } else {
           this.errors.add('passwordVerification', 'Something went wrong. Try again', 'client');
         }
-      } else {
-        // alert('Fill in all the fields correctly, please.');
       }
     },
   },
-  components: { TextInput },
+  components: { TextInput, Error },
 };
 </script>
 
-<style scoped>
-
+<style scoped lang='scss'>
+@import '@/assets/scss/vars.scss';
+.error {
+    text-align: right;
+    color: $red;
+}
 </style>
