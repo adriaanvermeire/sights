@@ -124,6 +124,7 @@ export default {
       margin-top: 1.8em;
       text-align: left;
       ul {
+        padding: 0;
         list-style-type: none;
         h5 {
           font-weight: 300;

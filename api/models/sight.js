@@ -15,12 +15,8 @@ const SightSchema = mongoose.Schema({
   category: { type: SchemaId, ref: 'Category' },
   charts: [{ type: SchemaId, ref: 'Chart' }],
   likes: [String], // Object id's of users who liked
+  views: { type: Number, default: 0 },
 }, { timestamps: true });
-
-SightSchema.index(
-  { name: 'text', 'category.name': 'text', 'author.username': 'text' },
-  { weights: { name: 3, 'category.name': 2, 'author.username': 1 } },
-);
 
 const client = algoliasearch('OQTWW0B4H3', '0c7e2911c7ac282807c7e09e3c387ee2');
 const algolia = client.initIndex('sights');
@@ -41,7 +37,6 @@ Methods.generateUnivariateGraphs = async function generateUnivariateGraphs() {
     }
   }
   this.charts = await Promise.all(charts);
-  console.log('univariate done');
   await this.save();
 };
 
@@ -67,7 +62,6 @@ Methods.generateBivariateGraphs = async function generateBivariateGraphs() {
     }
   }
   this.charts.push(...await Promise.all(chartPromises));
-  console.log('bivariate done');
   await this.save();
 };
 
@@ -115,6 +109,11 @@ Methods.updateAlgolia = async function updateAlgolia() {
   });
 };
 
+Methods.addView = function addView() {
+  this.views += 1;
+  return this.save();
+};
+
 // Statics
 
 Statics.getSightById = function getSightById(id) {
@@ -142,6 +141,14 @@ Statics.filter = async function filter(query, user) {
     }
   }
   return sights;
+};
+
+Statics.personal = function personal(author) {
+  return this.find({ author })
+    .populate({ path: 'author', select: 'username -_id' })
+    .populate({ path: 'category', select: 'name -_id' })
+    .populate({ path: 'dataset', select: 'originalName mimetype size updatedAt path' })
+    .exec();
 };
 
 Statics.featured = async function featured() {

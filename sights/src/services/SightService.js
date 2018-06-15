@@ -22,4 +22,7 @@ export default {
   like(id, user) {
     return Api().post(`sights/like/${id}`, { user });
   },
+  personal() {
+    return Api().get('sights/personal');
+  },
 };

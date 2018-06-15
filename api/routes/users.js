@@ -9,6 +9,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const Sight = require('../models/sight');
 
 // register
 router.post('/register', validate(validation.register), (req, res) => {
@@ -75,8 +76,11 @@ router.post('/authenticate', validate(validation.login), (req, res) => {
 });
 
 // profile
-router.get('/profile', auth, (req, res) => {
-  res.json({ user: req.user });
+router.get('/profile', auth, async (req, res) => {
+  const user = await req.user.populate({
+    path: 'likes', model: Sight, select: '-charts', populate: [{ path: 'author', select: 'username -_id' }, { path: 'category', select: 'name -_id' }],
+  }).execPopulate();
+  res.json({ user });
 });
 
 module.exports = router;
