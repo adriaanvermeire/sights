@@ -75,8 +75,9 @@ router.post('/authenticate', validate(validation.login), (req, res) => {
 });
 
 // profile
-router.get('/profile', auth, (req, res) => {
-  res.json({ user: req.user });
+router.get('/profile', auth, async (req, res) => {
+  const user = await req.user.populate('likes').execPopulate();
+  res.json({ user });
 });
 
 module.exports = router;
