@@ -145,7 +145,10 @@ Statics.filter = async function filter(query, user) {
 };
 
 Statics.personal = function personal(author) {
-  return this.find({ author }).exec();
+  return this.find({ author })
+    .populate({ path: 'author', select: 'username -_id' })
+    .populate({ path: 'category', select: 'name -_id' })
+    .exec();
 };
 
 Statics.featured = async function featured() {
