@@ -17,9 +17,5 @@ export default new Router({
     ...SightRoutes,
     ...GeneralRoutes,
     ...AdminRoutes,
-    {
-      component: TestGround,
-      path: '/test',
-    },
   ],
 });

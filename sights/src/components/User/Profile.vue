@@ -1,6 +1,6 @@
 <template lang="html">
 <div id="profile">
-  <h1>This is the profile page</h1>
+  <h1>Profile</h1>
 </div>
 </template>
 
@@ -12,5 +12,6 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <navbar class='mb-4'/>
+    <navbar/>
     <router-view/>
     <notifications
       classes="notification"
@@ -58,6 +58,7 @@ export default {
 
   &>*:nth-child(2){
     flex: 1 1 auto;
+    margin-top: 1em;
   }
 
 }
@@ -110,6 +111,14 @@ export default {
   grid-gap: 1rem;
   justify-content: space-between;
 }
+
+.expanded-sights-grid {
+  display: grid;
+  grid-gap: 1rem;
+  justify-content: space-between;
+  grid-template-columns: repeat(auto-fill, 100%);
+}
+
 @media screen and (max-width: 40em) {
   .sights-grid {
     grid-template-columns: repeat(auto-fill, 100%);
