@@ -80,6 +80,15 @@ router.get('/featured', async (req, res) => {
   }
 });
 
+router.get('/personal', auth, async (req, res) => {
+  try {
+    const sights = await Sight.personal(req.user._id);
+    res.send(sights);
+  } catch (err) {
+    throw err;
+  }
+});
+
 router.get('/search', filterAuth, (req, res) => {
   const { category } = req.query;
   Sight.filter({ category }, req.user)

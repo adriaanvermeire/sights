@@ -144,6 +144,10 @@ Statics.filter = async function filter(query, user) {
   return sights;
 };
 
+Statics.personal = function personal(author) {
+  return this.find({ author }).exec();
+};
+
 Statics.featured = async function featured() {
   const sights = await this.aggregate()
     .addFields({ likeCount: { $size: '$likes' } })
