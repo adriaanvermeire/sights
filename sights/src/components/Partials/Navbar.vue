@@ -7,37 +7,37 @@
   <h2 class='text-white m-0' v-if='sightName'>{{ sightName }}</h2>
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class='navbar-nav align-items-stretch h-100 navbar-nav'>
-      <li class="nav-item">
-        <router-link class='nav-link' :to='{ name: "Home"}'>Home</router-link>
-      </li>
-      <li class="nav-item">
-        <router-link class='nav-link' :to='{ name: "Explore"}'>Explore</router-link>
-      </li>
+      <router-link tag='li' class='nav-item' :to='{ name: "Home"}'>
+        <a class='nav-link'>Home</a>
+      </router-link>
+      <router-link tag='li' class='nav-item' :to='{ name: "Explore"}'>
+        <a class='nav-link'>Explore</a>
+      </router-link>
       <template v-if='isAuthenticated'>
-        <li class="nav-item">
-          <router-link class='nav-link' :to='{ name: "MySights"}'>My Sights</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class='nav-link' :to='{ name: "NewSight"}'>Add Sight</router-link>
-        </li>
-        <li class="nav-item dropdown">
-          <dropdown
-            v-on-clickaway='hideDropdown'
-            ref="dropdown" aria-labelledby="profileDropdown" :actions='dropdownActions'>
-            <avatar :username="username" :size='40' />
-            <template slot="below">
-              <a @click.prevent='logout' id='logout' href="#">Logout</a>
-            </template>
-          </dropdown>
-        </li>
+      <router-link tag='li' class='nav-item' :to='{ name: "MySights"}'>
+        <a class='nav-link'>My Sights</a>
+      </router-link>
+      <router-link tag='li' class='nav-item' :to='{ name: "NewSight"}'>
+        <a class='nav-link'>Add Sights</a>
+      </router-link>
+      <li class="nav-item dropdown">
+        <dropdown
+          v-on-clickaway='hideDropdown'
+          ref="dropdown" aria-labelledby="profileDropdown" :actions='dropdownActions'>
+          <avatar :username="username" :size='40' />
+          <template slot="below">
+            <a @click.prevent='logout' id='logout' href="#">Logout</a>
+          </template>
+        </dropdown>
+      </li>
       </template>
       <template v-else>
-        <li class="nav-item">
-          <router-link class='nav-link' :to='{ name: "Register"}'>Register</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class='nav-link' :to='{ name: "Login"}'>Login</router-link>
-        </li>
+          <router-link tag='li' class='nav-item' :to='{ name: "Register"}'>
+            <a class='nav-link'>Register</a>
+          </router-link>
+          <router-link tag='li' class='nav-item' :to='{ name: "Login"}'>
+           <a class='nav-link'>Login</a>
+          </router-link>
       </template>
     </ul>
   </div>
@@ -123,6 +123,8 @@ nav{
     align-items: center;
     padding-left: 1em;
     padding-right: 1em;
+    transition: 0.2s all ease-out;
+
     &:hover {
       background-color: darken($green, 5%);
     }
@@ -134,8 +136,8 @@ nav{
     .nav-item {
       display: flex;
       align-items: center;
-
-      &:hover {
+      transition: 0.2s all ease-out;
+      &:hover, &.router-link-exact-active {
         background-color: darken($green, 5%);
       }
 
