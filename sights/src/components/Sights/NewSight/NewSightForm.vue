@@ -12,7 +12,7 @@
         <text-input v-model.trim="sight.name"
                       id='sightName'
                       placeholder="Name of your Sight"
-                      v-validate="'required|min:5|alpha_num'"
+                      v-validate="'required|min:5'"
                       name='sightName' autocomplete='sightName'
                       data-vv-as="name"
                       required />
