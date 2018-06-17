@@ -1,5 +1,6 @@
 import NewSight from '@/components/Sights/NewSight';
 import Explore from '@/components/Explore/Explore';
+import SightRoot from '@/components/Sights/SightRoot';
 import SightDetail from '@/components/Sights/SightDetail';
 import EditSight from '@/components/Sights/EditSight';
 import { auth } from '../middleware';
@@ -19,13 +20,18 @@ export default [
   },
   {
     path: '/sights/:id',
-    name: 'SightDetail',
-    component: SightDetail,
+    component: SightRoot,
     children: [
       {
+        path: '',
+        name: 'SightDetail',
+        component: SightDetail,
+      },
+      {
         path: 'edit',
-        component: EditSight,
         name: 'EditSight',
+        component: EditSight,
+        beforeEnter: auth.ifAuthenticated,
       },
     ],
   },

@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-const { auth, filterAuth } = require('./middleware');
+const { auth, filterAuth, ownSight } = require('./middleware');
 const { detectType } = require('../utils');
 
 const express = require('express');
@@ -23,7 +23,8 @@ const routeMiddlewareNew = [
   upload.single('dataset'),
   validate(validation.sight),
 ];
-router.post('/new', routeMiddlewareNew, (req, res) => {
+
+router.post('/new', auth, routeMiddlewareNew, (req, res) => {
   // req.file is the `dataset` file
   // req.body will hold the text fields, if there were any
   const {
@@ -103,9 +104,9 @@ router.get('/search/noAuth', (req, res) => {
     .catch(e => res.status(404).send({ success: false, err: e }));
 });
 
-router.get('/datatypes', (req, res) => res.send({ datatypes }));
+router.get('/datatypes', auth, (req, res) => res.send({ datatypes }));
 
-router.post('/datatypes', async (req, res) => {
+router.post('/datatypes', [auth, ownSight], async (req, res) => {
   const { currentSight } = req.body;
   const { fields } = req.body;
   const sight = await Sight.findById(currentSight).exec();
@@ -121,7 +122,8 @@ router.post('/datatypes', async (req, res) => {
   return res.send({ success: true });
 });
 
-router.post('/charts/:id', async (req, res) => {
+// TODO: OWN MIDDLEWARE
+router.post('/charts/:id', [auth, ownSight], async (req, res) => {
   let sight = await Sight.findById(req.params.id).exec();
   const chartIds = req.body.charts.map(c => c._id);
   sight.charts = chartIds;
@@ -130,7 +132,7 @@ router.post('/charts/:id', async (req, res) => {
   return res.send(sight);
 });
 
-router.post('/like/:sightId', async (req, res) => {
+router.post('/like/:sightId', auth, async (req, res) => {
   const promises = [];
   let results = [];
   const { sightId } = req.params;
@@ -147,6 +149,27 @@ router.post('/like/:sightId', async (req, res) => {
   } catch (err) {
     return res.sendStatus(404);
   }
+});
+
+router.get('/edit/:sightId', [auth, ownSight], async (req, res) => {
+  const sight = await Sight.findById(req.params.sightId)
+    .populate('charts')
+    .populate({ path: 'author', select: 'username -_id' })
+    .populate({ path: 'category', select: 'name -_id' })
+    .exec();
+  sight.addView();
+  if (sight) {
+    return res.send(sight);
+  }
+  return res.sendStatus(404);
+});
+
+router.post('/edit/:sightId', [auth, ownSight], async (req, res) => {
+  const { name, description, category } = req.body;
+  const sight = await Sight.findById(req.params.sightId);
+  sight.set({ name, description, category });
+  await sight.save();
+  return res.send(sight);
 });
 
 router.get('/:sightId', async (req, res) => {

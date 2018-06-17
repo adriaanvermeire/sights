@@ -7,6 +7,9 @@ export default {
   getSight(id) {
     return Api().get(`sights/${id}`);
   },
+  editSight(id) {
+    return Api().get(`sights/edit/${id}`);
+  },
   getDatatypes() {
     return Api().get('sights/datatypes');
   },
