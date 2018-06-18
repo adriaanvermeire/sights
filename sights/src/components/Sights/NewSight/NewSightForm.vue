@@ -66,6 +66,7 @@
         class="mb-3" required
         name='category'
         v-validate="'required'">
+        <option value="" disabled>Select a category</option>
         <option
           v-for='category of categories'
           :value="category.value" :key='category.text'>{{category.text}}</option>
@@ -73,6 +74,17 @@
       </div>
       <div v-if="hasError('sightCategory')" class='error col-12'>
         {{ firstError('sightCategory') }}
+      </div>
+    </div>
+    <div class="row mb-3 w-100">
+      <div class="col-12 col-md-2
+        d-flex justify-content-md-end justify-content-center justify-content-end">
+        <label for="sightCategory">
+          <strong>Description</strong>
+        </label>
+      </div>
+      <div class="col-md col-12">
+        <textarea name="description" id="description" placeholder="What's your Sight about?"></textarea>
       </div>
     </div>
     <div class="row">
@@ -100,7 +112,7 @@ export default {
       sight: {
         name: '',
         dataset: null,
-        category: null,
+        category: '',
         entrypoint: '',
       },
       data: [],
@@ -165,7 +177,7 @@ export default {
     color: $red;
 }
 
-select {
+select, #description {
     box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
     background-color: #fdfdfd;
     border: 1px solid transparent;
@@ -181,4 +193,9 @@ select {
         color: lighten(lightgray, 1%);
     }
 }
+
+#description {
+  min-height: 20vh;
+}
+
 </style>
