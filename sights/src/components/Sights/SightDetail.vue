@@ -10,7 +10,6 @@ import { SIGHT_INACTIVE, SIGHT_ACTIVE } from '@/store/actions/sight';
 import SightService from '@/services/SightService';
 import Spinner from '@/components/Spinner/Spinner';
 import Dashboard from '../Dashboard/Dashboard';
-import Sidebar from '../Partials/Sidebar';
 
 export default {
   data() {
@@ -39,7 +38,6 @@ export default {
   },
   components: {
     Dashboard,
-    Sidebar,
     Spinner,
   },
   beforeRouteLeave(to, from, next) {
