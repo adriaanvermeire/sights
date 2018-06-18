@@ -45,8 +45,11 @@
   </div>
   <div id="featured">
     <h2>Most popular of the week:</h2>
-    <div class="sights-grid">
+    <div class="sights-grid" v-if='sights.length'>
       <sight-card v-for="sight of sights" :key="sight._id" :sight="sight" />
+    </div>
+    <div id='noSights' v-else>
+      <h5>There are no Sights to be found. Come back later!</h5>
     </div>
     <router-link :to="{ name: 'Explore' }">Check out more >></router-link>
   </div>
@@ -161,6 +164,10 @@ export default {
     font-size: 1.1em;
     font-weight: bold;
     align-self: flex-end;
+  }
+
+  #noSights {
+    height: 20vh;
   }
 }
 </style>
