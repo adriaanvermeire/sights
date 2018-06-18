@@ -12,6 +12,7 @@ const state = {
   createdAt: false,
   likes: [],
   liked: false,
+  description: '',
 };
 
 const actions = {
@@ -45,6 +46,7 @@ const mutations = {
     state.createdAt = sight.createdAt;
     state.likes = sight.likes;
     state.liked = sight.liked;
+    state.description = sight.description;
   },
   [SIGHT_INACTIVE](state) {
     state.author = false;
@@ -55,6 +57,7 @@ const mutations = {
     state.createdAt = false;
     state.likes = [];
     state.liked = false;
+    state.description = '';
   },
   [SIGHT_LIKE](state, liked, user) {
     state.liked = liked;
@@ -74,6 +77,7 @@ const getters = {
   sightName: state => state.name,
   sightId: state => state.id,
   sightCreation: state => state.createdAt,
+  sightDescription: state => state.description,
 };
 
 const store = {

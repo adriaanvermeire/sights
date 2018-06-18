@@ -11,13 +11,18 @@
                     <b>{{ category ||''}}</b>
                 </router-link>
             </div>
-            <div id="profile-data">
-                <span>{{ likes }}</span>
-                <like-button :sight='{ author, liked, likes, id }'/>
-                Made by
-                <router-link :to="{ name: 'Home'}">
-                    <b>{{ author || ''}}</b>
-                </router-link>
+            <div id="right">
+                <div id="profile-data">
+                    <span>{{ likes }}</span>
+                    <like-button :sight='{ author, liked, likes, id }'/>
+                    Made by
+                    <router-link :to="{ name: 'Home'}">
+                        <b>{{ author || ''}}</b>
+                    </router-link>
+                </div>
+                <button class='btn btn-link' @click='toggleSidebar'>
+                    <icon name="bars"></icon>
+                </button>
             </div>
         </div>
     </div>
@@ -27,6 +32,11 @@
 import LikeButton from '@/components/Inputs/LikeButton';
 
 export default {
+  methods: {
+    toggleSidebar() {
+      this.$emit('toggle-sidebar');
+    },
+  },
   computed: {
     createdAt() { return this.$store.getters.sightCreation; },
     author() { return this.$store.getters.sightAuthor; },
@@ -47,10 +57,18 @@ export default {
     #dashboard-meta-content {
         display: flex;
         justify-content:space-between;
-
+        align-items: center;
         a {
             color: $black;
         }
+
+        #right {
+            display: flex;
+            align-items: center;
+            & + button {
+                margin-left: 1em;
+            }
+         }
     }
 }
 </style>
