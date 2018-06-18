@@ -40,6 +40,7 @@ router.post('/new', auth, routeMiddlewareNew, (req, res) => {
       category: req.body.category,
       author: req.user._id,
       name: req.body.name,
+      description: req.body.description,
     }))
     .then((sight) => {
       currentSight = sight;
