@@ -157,7 +157,6 @@ router.get('/edit/:sightId', [auth, ownSight], async (req, res) => {
     .populate({ path: 'author', select: 'username -_id' })
     .populate({ path: 'category', select: 'name -_id' })
     .exec();
-  sight.addView();
   if (sight) {
     return res.send(sight);
   }
