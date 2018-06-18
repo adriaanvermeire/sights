@@ -84,7 +84,9 @@
         </label>
       </div>
       <div class="col-md col-12">
-        <textarea name="description" id="description" placeholder="What's your Sight about?"></textarea>
+        <textarea
+          v-model='sight.description'
+          name="description" id="description" placeholder="What's your Sight about?"></textarea>
       </div>
     </div>
     <div class="row">
@@ -114,6 +116,7 @@ export default {
         dataset: null,
         category: '',
         entrypoint: '',
+        description: '',
       },
       data: [],
       categories: [],
@@ -130,6 +133,7 @@ export default {
         fd.append('name', this.sight.name);
         fd.append('category', this.sight.category);
         fd.append('entrypoint', this.sight.entrypoint);
+        fd.append('description', this.sight.description);
         this.$emit('sight-submit');
         try {
           const response = (await SightService.addSight(fd)).data;
