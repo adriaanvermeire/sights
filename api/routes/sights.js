@@ -123,7 +123,6 @@ router.post('/datatypes', [auth, ownSight], async (req, res) => {
   return res.send({ success: true });
 });
 
-// TODO: OWN MIDDLEWARE
 router.post('/charts/:id', [auth, ownSight], async (req, res) => {
   let sight = await Sight.findById(req.params.id).exec();
   const chartIds = req.body.charts.map(c => c._id);
