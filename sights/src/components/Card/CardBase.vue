@@ -115,7 +115,7 @@ export default {
     }
 
     .sortable-chosen > & {
-        // display: block;
+        display: block;
         background-color: $green;
     }
 }

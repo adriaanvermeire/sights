@@ -62,6 +62,13 @@ export default {
     Spinner,
     Sidebar,
   },
+  beforeCreate() {
+    if (this.$route.name === 'EditSight') {
+      this.$store.commit(DETAIL_SIDEBARTYPE, 'edit');
+    } else {
+      this.$store.commit(DETAIL_SIDEBARTYPE, 'guest');
+    }
+  },
   beforeRouteLeave(to, from, next) {
     if (!this.edited) {
       if (to.name !== 'EditSight' && to.name !== 'SightDetail') {
