@@ -97,7 +97,9 @@ export default {
   },
   watch: {
     $route() {
-      this.$refs.dropdown.show = false;
+      if (this.$refs.dropdown) {
+        this.$refs.dropdown.show = false;
+      }
     },
   },
 };

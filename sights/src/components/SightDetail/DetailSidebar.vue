@@ -1,8 +1,17 @@
 <template>
 <div id="sidebar">
     <div id="sidebar-content" v-if='type !== "edit"'>
-        <h4>{{ name }}</h4>
-        <p>{{ description }}</p>
+        <div id="top">
+            <h4>{{ name }}</h4>
+            <p>{{ description }}</p>
+        </div>
+        <div id="bottom">
+            <router-link :to="{ name: 'EditSight', params: { id: sightId }}">
+                <a-button v-if='isMine' variant='warning'>
+                    Edit Sight
+                </a-button>
+            </router-link>
+        </div>
     </div>
     <edit-sidebar ref='editSidebar' @reload-sight='$emit("reload-sight")' @edited='$emit("edited")' v-else />
 </div>
@@ -18,6 +27,12 @@ export default {
   computed: {
     name() { return this.$store.getters.sightName; },
     description() { return this.$store.getters.sightDescription; },
+    isMine() {
+      return this.$store.getters.sightAuthor === this.$store.getters.getProfile.username;
+    },
+    sightId() {
+      return this.$store.getters.sightId;
+    },
   },
   components: { EditSidebar },
 };
@@ -42,6 +57,18 @@ export default {
 
     p, h4, h5{
         text-align: left;
+    }
+    #sidebar-content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        #bottom {
+            button {
+                width: 100%;
+            }
+        }
     }
 }
 </style>

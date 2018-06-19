@@ -7,6 +7,9 @@
         </transition>
         <div id="edit-form">
             <h4>Editing Sight</h4>
+            <router-link :to="{ name: 'SightDetail', params: { id: sightId }}">
+              See public version
+            </router-link>
             <hr>
             <form @submit.prevent="submitForm">
                 <div class="row mb-2">
@@ -176,6 +179,9 @@ export default {
         this.edited = true;
         this.$store.commit(SIGHT_UPDATE_CATEGORY, this.categories.filter(c => c.value === value)[0].text);
       },
+    },
+    sightId() {
+      return this.$store.getters.sightId;
     },
   },
   async mounted() {

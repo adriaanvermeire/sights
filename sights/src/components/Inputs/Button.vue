@@ -14,6 +14,7 @@ export default {
         success: { success: true },
         'success-outline': { 'success-outline': true },
         default: { default: true },
+        warning: { warning: true },
       },
     };
   },
@@ -34,6 +35,7 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+@import '@/assets/scss/vars.scss';
 button {
     cursor: pointer;
     padding: 0.375em 1em;
@@ -92,6 +94,14 @@ button {
 
     &.light {
         background-color: #fdfdfd;
+    }
+
+    &.warning {
+      background-color: $yellow;
+
+      * {
+        color: $black;
+      }
     }
 }
 </style>

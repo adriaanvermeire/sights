@@ -44,7 +44,7 @@ export default {
       this.$refs.sidebar.$refs.editSidebar.resetDone();
     },
   },
-  async created() {
+  async mounted() {
     this.sight = await this.loadSight();
     this.loading = false;
     await this.$store.dispatch(SIGHT_ACTIVE, { sight: this.sight });
@@ -56,7 +56,9 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     if (!this.edited) {
-      this.$store.dispatch(SIGHT_INACTIVE);
+      if (to.name !== 'EditSight' && to.name !== 'SightDetail') {
+        this.$store.dispatch(SIGHT_INACTIVE);
+      }
       next();
     } else {
       this.$refs.sidebar.$refs.editSidebar.showEditMessage();
