@@ -163,12 +163,14 @@ router.get('/edit/:sightId', [auth, ownSight], async (req, res) => {
   return res.sendStatus(404);
 });
 
-router.post('/edit/:sightId', [auth, ownSight], async (req, res) => {
-  const { name, description, category } = req.body;
-  const sight = await Sight.findById(req.params.sightId);
+router.post('/edit', [auth, ownSight], async (req, res) => {
+  const {
+    name, description, category, id,
+  } = req.body;
+  const sight = await Sight.findById(id);
   sight.set({ name, description, category });
   await sight.save();
-  return res.send(sight);
+  return res.send({ success: true });
 });
 
 router.get('/:sightId', async (req, res) => {
@@ -178,6 +180,7 @@ router.get('/:sightId', async (req, res) => {
     .populate({ path: 'category', select: 'name -_id' })
     .exec();
   sight.addView();
+  console.log(sight);
   if (sight) {
     return res.send(sight);
   }

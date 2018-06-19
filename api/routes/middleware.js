@@ -4,7 +4,7 @@ const Sight = require('../models/sight');
 exports.auth = passport.authenticate('jwt', { session: false });
 exports.filterAuth = passport.authenticate('jwt', { session: false, failureRedirect: '/sights/search/noAuth' });
 exports.ownSight = async function ownSight(req, res, next) {
-  const id = req.params.id || req.params.sightId || req.body.currentSight;
+  const id = req.params.id || req.params.sightId || req.body.currentSight || req.body.id;
   if (id) {
     const sight = await Sight.findById(id).lean().exec();
     console.log(sight.author, req.user.id);

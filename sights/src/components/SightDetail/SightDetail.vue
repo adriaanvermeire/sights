@@ -1,9 +1,9 @@
 <template lang="html">
   <div id="dashboard">
     <spinner v-if='loading' text='Loading Sight' />
-    <dashboard @toggle-sidebar='sidebar = !sidebar' v-show='!loading'/>
+    <dashboard @toggle-sidebar='toggleSidebar' v-show='!loading'/>
     <transition name='sidebar'>
-      <sidebar v-show='sidebar'/>
+      <sidebar ref='sidebar' @edited='edited = true' @reload-sight='reloadSight' :type='type' v-show='sidebar || type==="edit"'/>
     </transition>
   </div>
 </template>
@@ -16,11 +16,13 @@ import Dashboard from '../Dashboard/Dashboard';
 import Sidebar from './DetailSidebar';
 
 export default {
+  props: ['type'],
   data() {
     return {
       loading: true,
       sight: {},
       sidebar: false,
+      edited: false,
     };
   },
   methods: {
@@ -28,8 +30,21 @@ export default {
       const id = this.$route.params.id;
       return (await SightService.getSight(id)).data;
     },
+    toggleSidebar() {
+      if (!this.edited) {
+        this.sidebar = !this.sidebar;
+      } else {
+        this.$refs.sidebar.$refs.editSidebar.showEditMessage();
+      }
+    },
+    async reloadSight() {
+      this.edited = false;
+      this.sight = await this.loadSight();
+      await this.$store.dispatch(SIGHT_ACTIVE, { sight: this.sight });
+      this.$refs.sidebar.$refs.editSidebar.resetDone();
+    },
   },
-  async mounted() {
+  async created() {
     this.sight = await this.loadSight();
     this.loading = false;
     await this.$store.dispatch(SIGHT_ACTIVE, { sight: this.sight });
@@ -40,8 +55,12 @@ export default {
     Sidebar,
   },
   beforeRouteLeave(to, from, next) {
-    this.$store.dispatch(SIGHT_INACTIVE);
-    next();
+    if (!this.edited) {
+      this.$store.dispatch(SIGHT_INACTIVE);
+      next();
+    } else {
+      this.$refs.sidebar.$refs.editSidebar.showEditMessage();
+    }
   },
 };
 </script>

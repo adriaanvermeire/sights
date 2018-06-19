@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
 import SightService from '@/services/SightService';
-import { SIGHT_CHARTS, SIGHT_ACTIVE, SIGHT_INACTIVE, SIGHT_LIKE } from '../actions/sight';
+import { SIGHT_CHARTS, SIGHT_ACTIVE, SIGHT_INACTIVE, SIGHT_LIKE, SIGHT_UPDATE_CATEGORY,
+  SIGHT_UPDATE_DESCRIPTION, SIGHT_UPDATE_NAME } from '../actions/sight';
 
 const state = {
   // single source of data
@@ -66,6 +67,15 @@ const mutations = {
     } else {
       state.likes.splice(state.likes.indexOf(user, 1));
     }
+  },
+  [SIGHT_UPDATE_CATEGORY](state, category) {
+    state.category = category;
+  },
+  [SIGHT_UPDATE_DESCRIPTION](state, description) {
+    state.description = description;
+  },
+  [SIGHT_UPDATE_NAME](state, name) {
+    state.name = name;
   },
 };
 

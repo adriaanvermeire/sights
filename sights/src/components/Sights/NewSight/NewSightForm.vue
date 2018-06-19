@@ -120,7 +120,6 @@ export default {
       },
       data: [],
       categories: [],
-      backendErrors: [],
     };
   },
   methods: {
@@ -152,20 +151,10 @@ export default {
     onFileSelected(e) {
       this.sight.dataset = e.target.files[0];
     },
-    showError(error) {
-      this.errors.push(error);
-    },
-    parseErrorResponse(response) {
-      const { errors } = response.data.err;
-      for (let i = 0; i < errors.length; i += 1) {
-        const error = errors[i];
-        this.backendErrors.push(error.messages.join(', '));
-      }
-    },
+
   },
   async mounted() {
     const rawCategories = (await CategoryService.all()).data.categories;
-    console.log(rawCategories);
     rawCategories.forEach((cat) => {
       this.categories.push({ value: cat._id, text: cat.name });
     });

@@ -30,7 +30,8 @@ export default [
       {
         path: 'edit',
         name: 'EditSight',
-        component: EditSight,
+        component: SightDetail,
+        props() { return { type: 'edit' }; },
         beforeEnter: auth.ifAuthenticated,
       },
     ],

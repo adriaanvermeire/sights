@@ -10,6 +10,9 @@ export default {
   editSight(id) {
     return Api().get(`sights/edit/${id}`);
   },
+  updateSight(body) {
+    return Api().post('sights/edit', body);
+  },
   getDatatypes() {
     return Api().get('sights/datatypes');
   },
