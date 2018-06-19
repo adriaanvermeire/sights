@@ -20,7 +20,7 @@ const SightSchema = mongoose.Schema({
 }, { timestamps: true });
 
 const client = algoliasearch('OQTWW0B4H3', '0c7e2911c7ac282807c7e09e3c387ee2');
-const algolia = client.initIndex('dev_sights');
+const algolia = client.initIndex(process.env.ALGOLIA_INDEX);
 
 const { statics: Statics, methods: Methods } = SightSchema;
 
