@@ -128,7 +128,10 @@ router.post('/charts/:id', [auth, ownSight], async (req, res) => {
   const chartIds = req.body.charts.map(c => c._id);
   sight.charts = chartIds;
   await sight.save();
-  sight = await sight.populate('charts').execPopulate();
+  sight = await sight.populate('charts')
+    .populate({ path: 'author', select: 'username -_id' })
+    .populate({ path: 'category', select: 'name -_id' })
+    .execPopulate();
   return res.send(sight);
 });
 
