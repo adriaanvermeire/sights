@@ -132,6 +132,13 @@ router.post('/charts/:id', [auth, ownSight], async (req, res) => {
   return res.send(sight);
 });
 
+router.post('/charts/:id/add', [auth, ownSight], async (req, res) => {
+  const { field, type } = req.body;
+  const sight = await Sight.findById(req.params.id).exec();
+  sight.addChart(field, type);
+  return res.send({ success: true });
+});
+
 router.post('/like/:sightId', auth, async (req, res) => {
   const promises = [];
   let results = [];
@@ -178,9 +185,9 @@ router.get('/:sightId', async (req, res) => {
     .populate('charts')
     .populate({ path: 'author', select: 'username -_id' })
     .populate({ path: 'category', select: 'name -_id' })
+    .populate({ path: 'dataset', select: 'fields -_id' })
     .exec();
   sight.addView();
-  console.log(sight);
   if (sight) {
     return res.send(sight);
   }

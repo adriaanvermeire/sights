@@ -25,6 +25,9 @@ export default {
   updateCharts(id, charts) {
     return Api().post(`sights/charts/${id}`, { charts });
   },
+  addChart(id, chart) {
+    return Api().post(`sights/charts/${id}/add`, { ...chart });
+  },
   like(id, user) {
     return Api().post(`sights/like/${id}`, { user });
   },

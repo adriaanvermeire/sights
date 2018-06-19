@@ -1,9 +1,10 @@
 <script>
+import { DETAIL_SIDEBARTYPE } from '@/store/actions/detail';
 import Card from './CardBase';
 import PickChart from '../Charts/PickChart';
 
 export default {
-  props: ['chart', 'type'],
+  props: ['chart'],
   methods: {
     toggleCardInfo(id) {
       const card = document.getElementById(`card-${id}`);
@@ -12,6 +13,12 @@ export default {
     remove() {
       const id = this.chart._id;
       this.$emit('remove-chart', id);
+    },
+  },
+  computed: {
+    sidebarType: {
+      get() { return this.$store.getters.sidebarType; },
+      set(value) { this.$store.commit(DETAIL_SIDEBARTYPE, value); },
     },
   },
   components: {

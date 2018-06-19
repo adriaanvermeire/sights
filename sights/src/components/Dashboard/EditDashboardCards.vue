@@ -1,13 +1,15 @@
 <template>
     <draggable v-model="draggableCards" v-bind:options="dragOptions" class='container-fluid'>
         <transition-group name='card-drag' tag='div' class='row d-flex px-2 flex-md-row'>
-            <template  v-for="chart of draggableCards">
+            <template  v-for="(chart, i) of draggableCards">
                 <univariate-card
                   @remove-chart="removeChart"
-                  v-if='chart.univariate' type='edit' :chart='chart' :key='chart._id'/>
+                  v-if='chart.univariate' :chart='chart' :key='chart._id'/>
                 <bivariate-card
                   @remove-chart="removeChart"
-                  v-if='!chart.univariate' type='edit' :chart='chart' :key='chart._id'/>
+                  v-if='!chart.univariate' :chart='chart' :key='chart._id'/>
+                <add-chart
+                  v-if='i === draggableCards.length -1' :key='`${chart._id}${i}`' />
             </template>
         </transition-group>
     </draggable>
@@ -19,11 +21,12 @@ import draggable from 'vuedraggable';
 import UnivariateCard from '@/components/Card/UnivariateCard';
 import BivariateCard from '@/components/Card/BivariateCard';
 import Notify from '@/mixins/Notifications';
+import AddChart from '@/components/Card/AddChart';
 
 export default {
   mixins: [Notify],
   components: {
-    UnivariateCard, BivariateCard, draggable,
+    UnivariateCard, BivariateCard, draggable, AddChart,
   },
   methods: {
     removeChart(id) {
@@ -39,7 +42,7 @@ export default {
   computed: {
     sidebarOpen: {
       get() {
-        return this.$store.state.sidebar.open;
+        return this.$store.getters.sidebarOpen;
       },
     },
     draggableCards: {

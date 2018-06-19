@@ -107,7 +107,7 @@ export default {
       return this.chart.data[0];
     },
     edit() {
-      return this.type === 'edit';
+      return this.sidebarType === 'edit';
     },
   },
 };

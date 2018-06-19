@@ -1,27 +1,26 @@
 <template lang="html">
   <div id="dashboard">
     <spinner v-if='loading' text='Loading Sight' />
-    <dashboard @toggle-sidebar='toggleSidebar' :type='type' v-show='!loading'/>
+    <dashboard v-show='!loading'/>
     <transition name='sidebar'>
-      <sidebar ref='sidebar' @edited='edited = true' @reload-sight='reloadSight' :type='type' v-show='sidebar || type==="edit"'/>
+      <sidebar ref='sidebar' @edited='edited = true' @reload-sight='reloadSight' v-show='sidebarOpen || sidebarType !== "guest"'/>
     </transition>
   </div>
 </template>
 
 <script>
 import { SIGHT_INACTIVE, SIGHT_ACTIVE } from '@/store/actions/sight';
+import { DETAIL_SIDEBAR, DETAIL_SIDEBARTYPE } from '@/store/actions/detail';
 import SightService from '@/services/SightService';
 import Spinner from '@/components/Spinner/Spinner';
 import Dashboard from '../Dashboard/Dashboard';
 import Sidebar from './DetailSidebar';
 
 export default {
-  props: ['type'],
   data() {
     return {
       loading: true,
       sight: {},
-      sidebar: false,
       edited: false,
     };
   },
@@ -32,7 +31,7 @@ export default {
     },
     toggleSidebar() {
       if (!this.edited) {
-        this.sidebar = !this.sidebar;
+        this.$store.commit(DETAIL_SIDEBAR);
       } else {
         this.$refs.sidebar.$refs.editSidebar.showEditMessage();
       }
@@ -44,7 +43,16 @@ export default {
       this.$refs.sidebar.$refs.editSidebar.resetDone();
     },
   },
-  async mounted() {
+  computed: {
+    sidebarType: {
+      get() { return this.$store.getters.sidebarType; },
+      set(value) { this.$store.commit(DETAIL_SIDEBARTYPE, value); },
+    },
+    sidebarOpen: {
+      get() { return this.$store.getters.sidebarOpen; },
+    },
+  },
+  async created() {
     this.sight = await this.loadSight();
     this.loading = false;
     await this.$store.dispatch(SIGHT_ACTIVE, { sight: this.sight });

@@ -1,29 +1,35 @@
 <template>
 <div id="sidebar">
-    <div id="sidebar-content" v-if='type !== "edit"'>
+    <div id="sidebar-content" v-if="!sidebarType || sidebarType === 'guest'">
         <div id="top">
             <h4>{{ name }}</h4>
             <p>{{ description }}</p>
         </div>
-        <div id="bottom">
-            <router-link :to="{ name: 'EditSight', params: { id: sightId }}">
-                <a-button v-if='isMine' variant='warning'>
-                    Edit Sight
-                </a-button>
-            </router-link>
+        <div id="bottom" v-if='isMine'>
+            <a-button  variant='warning' @click.native='sidebarType = "edit"'>
+                Edit Sight
+            </a-button>
+            <a-button variant='warning' @click.native='sidebarType = "addChart"'>
+                Add chart
+            </a-button>
         </div>
     </div>
-    <edit-sidebar ref='editSidebar' @reload-sight='$emit("reload-sight")' @edited='$emit("edited")' v-else />
+    <edit-sidebar
+        ref='editSidebar'
+        @reload-sight='$emit("reload-sight")' @edited='$emit("edited")'
+        v-else-if='sidebarType === "edit"' />
+    <add-chart-sidebar
+        @reload-sight='$emit("reload-sight")'
+        v-else-if="sidebarType === 'addChart'"/>
 </div>
 </template>
 
 <script>
+import { DETAIL_SIDEBARTYPE } from '@/store/actions/detail';
 import EditSidebar from './EditSidebar';
+import AddChartSidebar from './AddChartSidebar';
 
 export default {
-  props: {
-    type: { type: String, default: 'guest' },
-  },
   computed: {
     name() { return this.$store.getters.sightName; },
     description() { return this.$store.getters.sightDescription; },
@@ -33,15 +39,19 @@ export default {
     sightId() {
       return this.$store.getters.sightId;
     },
+    sidebarType: {
+      get() { return this.$store.getters.sidebarType; },
+      set(value) { this.$store.commit(DETAIL_SIDEBARTYPE, value); },
+    },
   },
-  components: { EditSidebar },
+  components: { EditSidebar, AddChartSidebar },
 };
 </script>
 
 <style scoped lang='scss'>
 @import '@/assets/scss/vars.scss';
 #sidebar {
-    width: 30vw;
+    width: 50%;
     background-color: $light;
     box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
     overflow-x: hidden;
@@ -65,8 +75,10 @@ export default {
         justify-content: space-between;
 
         #bottom {
+            display: flex;
+            justify-content: space-between;
             button {
-                width: 100%;
+                width: 45%;
             }
         }
     }
