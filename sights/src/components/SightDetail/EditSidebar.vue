@@ -7,6 +7,9 @@
         </transition>
         <div id="edit-form">
             <h4>Editing Sight</h4>
+            <button @click='sidebarType = "guest"' class='btn btn-link'>
+              See public version
+            </button>
             <hr>
             <form @submit.prevent="submitForm">
                 <div class="row mb-2">
@@ -75,6 +78,7 @@ import TextInput from '@/components/Inputs/TextInput';
 import CategoryService from '@/services/CategoryService';
 import SightService from '@/services/SightService';
 import { SIGHT_UPDATE_CATEGORY, SIGHT_UPDATE_DESCRIPTION, SIGHT_UPDATE_NAME } from '@/store/actions/sight';
+import { DETAIL_SIDEBARTYPE } from '@/store/actions/detail';
 import ErrorMixin from '@/mixins/Error';
 import SmallSpinner from '@/components/Spinner/SmallSpinner';
 
@@ -176,6 +180,13 @@ export default {
         this.edited = true;
         this.$store.commit(SIGHT_UPDATE_CATEGORY, this.categories.filter(c => c.value === value)[0].text);
       },
+    },
+    sightId() {
+      return this.$store.getters.sightId;
+    },
+    sidebarType: {
+      get() { return this.$store.getters.sidebarType; },
+      set(value) { this.$store.commit(DETAIL_SIDEBARTYPE, value); },
     },
   },
   async mounted() {

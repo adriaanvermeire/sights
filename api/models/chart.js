@@ -56,11 +56,15 @@ Statics.getChartById = function getChartById(id, callback) {
   this.findById(id, callback);
 };
 
-Statics.createUnivariate = async function createUnivariate({ data, field }) {
+Statics.createUnivariate = async function createUnivariate({ data, field, type }) {
   const dataArray = [];
   dataArray.push(data);
   const chart = new this({ data: dataArray, fields: [field] });
-  await chart.figureOutType();
+  if (!type) {
+    await chart.figureOutType();
+  } else {
+    chart.type = type;
+  }
   return chart.save();
 };
 

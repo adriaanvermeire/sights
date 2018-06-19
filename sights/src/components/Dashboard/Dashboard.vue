@@ -1,22 +1,27 @@
 <template>
     <div id="dashboard-wrapper">
-        <dashboard-meta-banner @toggle-sidebar='toggleSidebar' />
-        <dashboard-cards />
+        <dashboard-meta-banner />
+        <dashboard-cards v-if='sidebarType !== "edit"' />
+        <edit-dashboard-cards v-else/>
     </div>
 </template>
 
 <script>
+import { DETAIL_SIDEBARTYPE } from '@/store/actions/detail';
 import DashboardCards from './DashboardCards';
+import EditDashboardCards from './EditDashboardCards';
 import DashboardMetaBanner from './DashboardMetaBanner';
 
 export default {
-  methods: {
-    toggleSidebar() {
-      this.$emit('toggle-sidebar');
+  computed: {
+    sidebarType: {
+      get() { return this.$store.getters.sidebarType; },
+      set(value) { this.$store.commit(DETAIL_SIDEBARTYPE, value); },
     },
   },
   components: {
     DashboardCards,
+    EditDashboardCards,
     DashboardMetaBanner,
   },
 };

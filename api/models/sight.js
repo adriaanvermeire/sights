@@ -27,6 +27,14 @@ const { statics: Statics, methods: Methods } = SightSchema;
 
 // Document Methods
 
+Methods.addChart = async function addChart(field, type) {
+  const { dataset } = (await this.populate('dataset').execPopulate());
+  const fieldData = dataset.data[field];
+  const newChart = await Chart.createUnivariate({ data: fieldData, field, type });
+  this.charts.push(newChart);
+  await this.save();
+};
+
 Methods.generateUnivariateGraphs = async function generateUnivariateGraphs() {
   const { dataset } = (await this.populate('dataset').execPopulate());
   const fields = Object.keys(dataset.data);

@@ -1,5 +1,7 @@
 <template>
-<card :width='1' :id="`card-${chart._id}`" class='draggable align-items-stretch d-flex'>
+<card
+    :width='1' :id="`card-${chart._id}`" :draggable="edit"
+    :class="{ draggable: edit}" class='align-items-stretch d-flex'>
     <template slot="title">
         <h5 class='m-0'
             v-if='/bar|column/.test(chart.type)'>
@@ -11,11 +13,16 @@
         Showing the most occurring values for <i>{{ chart.fields[0] }}</i>.
     </template>
     <template slot="actions">
-        <div class="action">
-            <button @click='toggleCardInfo(chart._id)' class='btn btn-link info-btn py-0'>
-                <icon name='info-circle'/>
-            </button>
-        </div>
+        <button
+            title='More info on this chart'
+            @click='toggleCardInfo(chart._id)' class='btn btn-link info-btn py-0 action'>
+            <icon name='info-circle'/>
+        </button>
+        <button
+            title='Remove Chart'
+            v-if='edit' @click='remove' class='btn btn-link info-btn py-0 action'>
+            <icon name='trash'/>
+        </button>
     </template>
     <pick-chart :chart='chart'/>
     <template slot="dragOverlay">
@@ -99,10 +106,19 @@ export default {
     chartData() {
       return this.chart.data[0];
     },
+    edit() {
+      return this.sidebarType === 'edit';
+    },
   },
 };
 </script>
 
 <style scoped lang='scss'>
+@import '@/assets/scss/vars.scss';
 
+.action {
+    color: $black;
+    padding: 0;
+    padding-left: 0.5em;
+}
 </style>

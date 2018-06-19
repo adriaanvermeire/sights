@@ -3,7 +3,9 @@
     :class="cardWidth"
     class='mb-4 card-wrap'>
     <div class="card w-100">
-        <div class="top-half w-25 h-25" @mouseover='toggleDrag' @mouseout="toggleDrag">
+        <div
+            class="top-half w-25 h-25"
+            v-if='draggable' @mouseover='toggleDrag' @mouseout="toggleDrag">
             <button class="btn btn-link btn-drag p-0" v-show='showDrag'>
                 <icon name="ellipsis-v" color='grey'></icon>
                 <icon name="ellipsis-v" color='grey'></icon>
@@ -59,13 +61,14 @@
 </div>
 </template>
 <script>
+
 export default {
   data() {
     return {
       showDrag: false,
     };
   },
-  props: ['width'],
+  props: ['width', 'draggable'],
   methods: {
     toggleDrag() {
       this.showDrag = !this.showDrag;
@@ -145,7 +148,7 @@ export default {
         border-radius: 0.25rem;
         z-index: 10;
         display: none;
-        overflow-y: scroll;
+        overflow-y: auto;
         .info-active & {
             display: block;
             transform: translateX(0);

@@ -30,11 +30,12 @@
 
 <script>
 import LikeButton from '@/components/Inputs/LikeButton';
+import { DETAIL_SIDEBAR } from '@/store/actions/detail';
 
 export default {
   methods: {
     toggleSidebar() {
-      this.$emit('toggle-sidebar');
+      this.$store.commit(DETAIL_SIDEBAR);
     },
   },
   computed: {

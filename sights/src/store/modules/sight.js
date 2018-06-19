@@ -14,6 +14,7 @@ const state = {
   likes: [],
   liked: false,
   description: '',
+  fields: [],
 };
 
 const actions = {
@@ -25,6 +26,8 @@ const actions = {
   [SIGHT_ACTIVE]({ commit, rootState }, payload) {
     const { sight } = payload;
     sight.liked = sight.likes.includes(rootState.user.profile._id);
+    sight.fields = sight.dataset.fields.map(f => f.name);
+    delete sight.dataset;
     commit(SIGHT_ACTIVE, sight);
   },
   [SIGHT_INACTIVE]({ commit }) {
@@ -48,6 +51,7 @@ const mutations = {
     state.likes = sight.likes;
     state.liked = sight.liked;
     state.description = sight.description;
+    state.fields = sight.fields;
   },
   [SIGHT_INACTIVE](state) {
     state.author = false;
