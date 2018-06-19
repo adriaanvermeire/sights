@@ -8,6 +8,10 @@
         v-else-if='type == "column" && chart.univariate'
         :data='dataOne.relativeCounts'
         :field='dataOne.name' :height='300'/>
+      <pie-chart
+        v-else-if='type == "pie" && chart.univariate'
+        :data='dataOne.relativeCounts'
+        :field='dataOne.name' :height='300'/>
       <line-chart
         v-else-if='/line|area/.test(type) && chart.univariate'
         :data='dataOne.counts'
@@ -18,6 +22,7 @@
 <script>
 import BarChart from '@/components/Charts/BarChart';
 import ColumnChart from '@/components/Charts/ColumnChart';
+import PieChart from '@/components/Charts/PieChart';
 import LineChart from '@/components/Charts/LineChart';
 
 export default {
@@ -44,6 +49,7 @@ export default {
     BarChart,
     ColumnChart,
     LineChart,
+    PieChart,
   },
 };
 </script>

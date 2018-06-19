@@ -32,6 +32,19 @@ export default {
       legend: {
         display: false,
       },
+      tooltips: {
+        callbacks: {
+          label(item, data) {
+            const { index } = item;
+            const datas = data.datasets[0].data;
+            const { labels } = data;
+            return `${labels[index]}: ${datas[index].y}%`;
+          },
+          title(item, data) {
+            return data.datasets[0].label;
+          },
+        },
+      },
     });
   },
 };
