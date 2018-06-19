@@ -1,15 +1,18 @@
 <template>
     <div id="dashboard-wrapper">
         <dashboard-meta-banner @toggle-sidebar='toggleSidebar' />
-        <dashboard-cards />
+        <dashboard-cards v-if='type !== "edit"' />
+        <edit-dashboard-cards v-else/>
     </div>
 </template>
 
 <script>
 import DashboardCards from './DashboardCards';
+import EditDashboardCards from './EditDashboardCards';
 import DashboardMetaBanner from './DashboardMetaBanner';
 
 export default {
+  props: ['type'],
   methods: {
     toggleSidebar() {
       this.$emit('toggle-sidebar');
@@ -17,6 +20,7 @@ export default {
   },
   components: {
     DashboardCards,
+    EditDashboardCards,
     DashboardMetaBanner,
   },
 };

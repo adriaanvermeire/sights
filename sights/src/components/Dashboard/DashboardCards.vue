@@ -1,23 +1,25 @@
 <template>
-    <draggable v-model="draggableCards" v-bind:options="dragOptions" class='container-fluid'>
-        <transition-group name='card-drag' tag='div' class='row d-flex px-2 flex-md-row'>
+    <div class='container-fluid'>
+        <div class='row d-flex px-2 flex-md-row'>
             <template  v-for="chart of draggableCards">
-                <univariate-card v-if='chart.univariate' :chart='chart' :key='chart._id'/>
-                <bivariate-card v-if='!chart.univariate' :chart='chart' :key='chart._id'/>
+                <univariate-card
+                  v-if='chart.univariate' :chart='chart' :type='type' :key='chart._id'/>
+                <bivariate-card
+                  v-if='!chart.univariate' :chart='chart' :type='type' :key='chart._id'/>
             </template>
-        </transition-group>
-    </draggable>
+        </div>
+    </div>
 </template>
 
 <script>
 import { SIGHT_CHARTS } from '@/store/actions/sight';
-import draggable from 'vuedraggable';
 import UnivariateCard from '@/components/Card/UnivariateCard';
 import BivariateCard from '@/components/Card/BivariateCard';
 
 export default {
+  props: ['type'],
   components: {
-    UnivariateCard, BivariateCard, draggable,
+    UnivariateCard, BivariateCard,
   },
   computed: {
     sidebarOpen: {

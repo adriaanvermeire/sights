@@ -3,11 +3,15 @@ import Card from './CardBase';
 import PickChart from '../Charts/PickChart';
 
 export default {
-  props: ['chart'],
+  props: ['chart', 'type'],
   methods: {
     toggleCardInfo(id) {
       const card = document.getElementById(`card-${id}`);
       card.classList.toggle('info-active');
+    },
+    remove() {
+      const id = this.chart._id;
+      this.$emit('remove-chart', id);
     },
   },
   components: {

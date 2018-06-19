@@ -1,5 +1,5 @@
 <template>
-<card :width='1' :id="`card-${chart._id}`" class='draggable align-items-stretch d-flex'>
+<card :width='1' :id="`card-${chart._id}`" :draggable="type ==='edit'" :class="{ draggable: type ==='edit'}" class='align-items-stretch d-flex'>
     <template slot="title">
         <h5 class='m-0'>Relation between {{ fields }}.</h5>
     </template>
@@ -44,7 +44,7 @@ export default {
     },
   },
   created() {
-    console.log(this.chart);
+    // console.log(this.chart);
   },
   components: {
     ScatterChart,

@@ -1,7 +1,7 @@
 <template lang="html">
   <div id="dashboard">
     <spinner v-if='loading' text='Loading Sight' />
-    <dashboard @toggle-sidebar='toggleSidebar' v-show='!loading'/>
+    <dashboard @toggle-sidebar='toggleSidebar' :type='type' v-show='!loading'/>
     <transition name='sidebar'>
       <sidebar ref='sidebar' @edited='edited = true' @reload-sight='reloadSight' :type='type' v-show='sidebar || type==="edit"'/>
     </transition>
