@@ -1,6 +1,5 @@
 <template>
-<div @click='addChart'
-    class='col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 card-wrap'>
+<div @click='addChart' class='card-wrap'>
     <div class="card w-100">
         <div class="card-body d-flex align-items-center justify-content-center flex-column">
                 <icon name="plus" scale='4'></icon>

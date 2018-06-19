@@ -1,7 +1,7 @@
 <template>
 <card
     :width='1' :id="`card-${chart._id}`" :draggable="edit"
-    :class="{ draggable: edit}" class='align-items-stretch d-flex'>
+    :class="{ draggable: edit}" class='align-items-stretch'>
     <template slot="title">
         <h5 class='m-0'
             v-if='/bar|column/.test(chart.type)'>
@@ -115,7 +115,9 @@ export default {
 
 <style scoped lang='scss'>
 @import '@/assets/scss/vars.scss';
-
+.card {
+    display: flex;
+}
 .action {
     color: $black;
     padding: 0;

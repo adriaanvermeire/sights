@@ -1,6 +1,6 @@
 <template>
     <div class='container-fluid'>
-        <div class='row d-flex px-2 flex-md-row'>
+        <div class='charts-grid'>
             <template  v-for="chart of draggableCards">
                 <univariate-card
                   v-if='chart.univariate' :chart='chart' :key='chart._id'/>
@@ -44,4 +44,32 @@ export default {
 
 <style scoped lang='scss'>
 
+.charts-grid {
+  display: grid;
+  grid-gap: 1rem;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 40em) {
+  .charts-grid {
+    grid-template-columns: repeat(auto-fill, 100%);
+  }
+}
+@media screen and (min-width: 40em) {
+  .charts-grid {
+    grid-template-columns: repeat(auto-fill, 48%);
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .charts-grid {
+      grid-template-columns: repeat(auto-fill, minmax(24%, 32%));
+  }
+}
+
+@media screen and (min-width: 80em) {
+  .charts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(0, 24%));
+  }
+}
 </style>

@@ -7,7 +7,7 @@
         </transition>
         <div id="edit-form">
             <h4>Editing Sight</h4>
-            <button @click='sidebarType = "guest"' class='btn btn-link'>
+            <button @click='sidebarType = "guest"' class='btn btn-link p-0'>
               See public version
             </button>
             <hr>

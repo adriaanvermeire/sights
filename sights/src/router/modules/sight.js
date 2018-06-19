@@ -2,7 +2,6 @@ import NewSight from '@/components/Sights/NewSight';
 import Explore from '@/components/Explore/Explore';
 import SightRoot from '@/components/Sights/SightRoot';
 import SightDetail from '@/components/SightDetail/SightDetail';
-import EditSight from '@/components/Sights/EditSight';
 import { auth } from '../middleware';
 
 export default [
