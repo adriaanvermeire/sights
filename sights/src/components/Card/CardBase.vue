@@ -1,8 +1,6 @@
 <template>
-<div
-    :class="cardWidth"
-    class='mb-4 card-wrap'>
-    <div class="card w-100">
+<!-- <div class='card-wrap'> -->
+    <div class="card">
         <div
             class="top-half w-25 h-25"
             v-if='draggable' @mouseover='toggleDrag' @mouseout="toggleDrag">
@@ -58,7 +56,7 @@
             <div class="blur" @click='hideInfo'></div>
         </div>
     </div>
-</div>
+<!-- </div> -->
 </template>
 <script>
 
@@ -85,33 +83,21 @@ export default {
     hasActions() { return this.$slots.actions; },
     hasInfoOverlay() { return this.$slots.infoOverlay; },
     hasDragOverlay() { return this.$slots.dragOverlay; },
-    cardWidth() {
-      return {
-        col: !this.width,
-        'col-xl-3 col-lg-4 col-md-6 col-sm-12': this.width === 1,
-        'col-6': this.width === 2 };
-    },
   },
 };
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/vars.scss';
 
-.card-wrap {
-    display: flex;
-    overflow-x: hidden;
-    padding-bottom: 0.2rem;
-    justify-content: center;
-}
-
 .card {
-  box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
-  background-color: $light;
-  border: none;
-  border-radius: 0;
-  .card-footer {
-    border-top: none;
-  }
+    overflow-x: hidden;
+    box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
+    background-color: $light;
+    border: none;
+    border-radius: 0;
+    .card-footer {
+        border-top: none;
+    }
 }
 
 #drag-overlay {
@@ -128,8 +114,8 @@ export default {
         color: $white;
     }
 
-    .sortable-chosen & {
-        display: block;
+    .sortable-chosen > & {
+        // display: block;
         background-color: $green;
     }
 }
@@ -147,7 +133,6 @@ export default {
         border-left: none;
         border-radius: 0.25rem;
         z-index: 10;
-        display: none;
         overflow-y: auto;
         .info-active & {
             display: block;

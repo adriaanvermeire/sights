@@ -32,8 +32,7 @@ export default {
     margin-top: 1em;
     overflow-y: auto;
     transition: all 0.5s ease-out;
-}
-#dashboard {
+    width: 100%;
     display: flex;
     flex-flow: column;
 

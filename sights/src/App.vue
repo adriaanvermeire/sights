@@ -106,17 +106,17 @@ export default {
   transform: translateX(150%);
 }
 
-.sights-grid {
-  display: grid;
-  grid-gap: 1rem;
-  justify-content: space-between;
-}
-
 .expanded-sights-grid {
   display: grid;
   grid-gap: 1rem;
   justify-content: space-between;
   grid-template-columns: repeat(auto-fill, 100%);
+}
+
+.sights-grid {
+  display: grid;
+  grid-gap: 1rem;
+  justify-content: space-between;
 }
 
 @media screen and (max-width: 40em) {

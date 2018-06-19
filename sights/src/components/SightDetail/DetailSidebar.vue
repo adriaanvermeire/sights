@@ -51,7 +51,6 @@ export default {
 <style scoped lang='scss'>
 @import '@/assets/scss/vars.scss';
 #sidebar {
-    width: 500px;
     background-color: $light;
     box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
     overflow-x: hidden;

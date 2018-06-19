@@ -80,6 +80,17 @@ export default {
   margin-top: 0;
   display: flex;
   justify-content: center;
+  overflow: hidden;
+  & > *{
+    &:first-child{
+      flex: 1 1 auto
+    }
+
+    &:nth-child(2){
+      flex: 0 0 20vw;
+      transition: margin 0.5s ease;
+    }
+  }
 
   .sidebar-enter-active, .sidebar-leave-active {
     transition: all 0.5s ease-out;
@@ -87,7 +98,7 @@ export default {
 
   .sidebar-enter, .sidebar-leave-to {
     // transform: translateX(100%);
-    width: 0;
+    margin-right: -20vw
   }
 }
 

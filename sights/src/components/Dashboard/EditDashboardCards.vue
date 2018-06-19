@@ -1,16 +1,9 @@
 <template>
     <draggable v-model="draggableCards" v-bind:options="dragOptions" class='container-fluid'>
-        <transition-group name='card-drag' tag='div' class='row d-flex px-2 flex-md-row'>
-            <template  v-for="(chart, i) of draggableCards">
-                <univariate-card
-                  @remove-chart="removeChart"
-                  v-if='chart.univariate' :chart='chart' :key='chart._id'/>
-                <bivariate-card
-                  @remove-chart="removeChart"
-                  v-if='!chart.univariate' :chart='chart' :key='chart._id'/>
-                <add-chart
-                  v-if='i === draggableCards.length -1' :key='`${chart._id}${i}`' />
-            </template>
+        <transition-group name='card-drag' tag='div' class='charts-grid'>
+                <chart-card v-for="chart of draggableCards"
+                  @remove-chart="removeChart" :chart='chart' :key='chart._id'/>
+                <add-chart :key='"addChart"'/>
         </transition-group>
     </draggable>
 </template>
@@ -18,16 +11,12 @@
 <script>
 import { SIGHT_CHARTS } from '@/store/actions/sight';
 import draggable from 'vuedraggable';
-import UnivariateCard from '@/components/Card/UnivariateCard';
-import BivariateCard from '@/components/Card/BivariateCard';
+import ChartCard from '@/components/Card/ChartCard';
 import Notify from '@/mixins/Notifications';
 import AddChart from '@/components/Card/AddChart';
 
 export default {
   mixins: [Notify],
-  components: {
-    UnivariateCard, BivariateCard, draggable, AddChart,
-  },
   methods: {
     removeChart(id) {
       const newCharts = this.draggableCards.filter(c => c._id !== id);
@@ -60,9 +49,41 @@ export default {
       };
     },
   },
+  components: {
+    draggable, AddChart, ChartCard,
+  },
 };
 </script>
 
 <style scoped lang='scss'>
 
+.charts-grid {
+  display: grid;
+  grid-gap: 1rem;
+  justify-content: space-between;
+  grid-auto-rows: 1fr
+}
+
+@media screen and (max-width: 40em) {
+  .charts-grid {
+    grid-template-columns: repeat(auto-fill, 100%);
+  }
+}
+@media screen and (min-width: 40em) {
+  .charts-grid {
+    grid-template-columns: repeat(auto-fill, 48%);
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .charts-grid {
+      grid-template-columns: repeat(auto-fill, minmax(24%, 32%));
+  }
+}
+
+@media screen and (min-width: 80em) {
+  .charts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(0, 24%));
+  }
+}
 </style>

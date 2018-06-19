@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 // Router modules
-import TestGround from '@/components/TestGround';
+// import TestGround from '@/components/TestGround';
 import AuthRoutes from './modules/auth';
 import UserRoutes from './modules/user';
 import SightRoutes from './modules/sight';
@@ -17,5 +17,9 @@ export default new Router({
     ...SightRoutes,
     ...GeneralRoutes,
     ...AdminRoutes,
+    // {
+    //   path: '/test',
+    //   component: TestGround,
+    // },
   ],
 });
