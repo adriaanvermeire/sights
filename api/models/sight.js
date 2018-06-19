@@ -16,10 +16,11 @@ const SightSchema = mongoose.Schema({
   charts: [{ type: SchemaId, ref: 'Chart' }],
   likes: [String], // Object id's of users who liked
   views: { type: Number, default: 0 },
+  description: String,
 }, { timestamps: true });
 
 const client = algoliasearch('OQTWW0B4H3', '0c7e2911c7ac282807c7e09e3c387ee2');
-const algolia = client.initIndex('sights');
+const algolia = client.initIndex(process.env.ALGOLIA_INDEX);
 
 const { statics: Statics, methods: Methods } = SightSchema;
 
@@ -169,11 +170,11 @@ Statics.featured = async function featured() {
 
 Statics.create = function create(data) {
   const {
-    dataset, category, author, name,
+    dataset, category, author, name, description,
   } = data;
 
   const sight = new this({
-    dataset, category, author, name,
+    dataset, category, author, name, description,
   });
 
   return sight.save();

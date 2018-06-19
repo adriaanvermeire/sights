@@ -1,6 +1,6 @@
 <template>
     <div id="dashboard-wrapper">
-        <dashboard-meta-banner />
+        <dashboard-meta-banner @toggle-sidebar='toggleSidebar' />
         <dashboard-cards />
     </div>
 </template>
@@ -10,6 +10,11 @@ import DashboardCards from './DashboardCards';
 import DashboardMetaBanner from './DashboardMetaBanner';
 
 export default {
+  methods: {
+    toggleSidebar() {
+      this.$emit('toggle-sidebar');
+    },
+  },
   components: {
     DashboardCards,
     DashboardMetaBanner,
@@ -18,6 +23,11 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+#dashboard-wrapper {
+    margin-top: 1em;
+    overflow-y: auto;
+    transition: all 0.5s ease-out;
+}
 #dashboard {
     display: flex;
     flex-flow: column;

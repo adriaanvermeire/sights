@@ -16,9 +16,10 @@ export default {
   methods: {
     async loadSight() {
       try {
-        const response = await SightService.getSight(this.id);
-        console.log(response);
+        const response = await SightService.editSight(this.id);
+        return response.data;
       } catch (err) {
+        this.$router.push('/');
         throw err;
       }
     },
@@ -29,7 +30,7 @@ export default {
     },
   },
   async mounted() {
-
+    this.sight = await this.loadSight();
   },
 };
 </script>

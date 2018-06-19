@@ -2,7 +2,7 @@
   <div id="explore" class='container-fluid mx-auto px-5 pb-5'>
     <ais-index
           :searchStore="searchStore"
-          index-name="sights"
+          :index-name="searchIndex"
           :query-parameters="categoryFilter"
           :query="query"
       >
@@ -54,6 +54,7 @@ export default {
       sights: [],
       filterCategory: '',
       searchStore: '',
+      index: '',
     };
   },
   props: {
@@ -84,7 +85,7 @@ export default {
   },
   created() {
     this.searchStore = createFromAlgoliaCredentials('OQTWW0B4H3', '97e17abaac2e3a6bd2677c5176b7ec7d');
-
+    this.searchIndex = process.env.ALGOLIA_INDEX;
     this.filterCategory = this.$route.query.category;
   },
   components: {

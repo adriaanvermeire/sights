@@ -7,6 +7,12 @@ export default {
   getSight(id) {
     return Api().get(`sights/${id}`);
   },
+  editSight(id) {
+    return Api().get(`sights/edit/${id}`);
+  },
+  updateSight(body) {
+    return Api().post('sights/edit', body);
+  },
   getDatatypes() {
     return Api().get('sights/datatypes');
   },

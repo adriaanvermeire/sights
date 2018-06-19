@@ -11,7 +11,6 @@
 
 <script>
 import { SIGHT_CHARTS } from '@/store/actions/sight';
-import { SIDEBAR_SHOW, SIDEBAR_HIDE } from '@/store/actions/sidebar';
 import draggable from 'vuedraggable';
 import UnivariateCard from '@/components/Card/UnivariateCard';
 import BivariateCard from '@/components/Card/BivariateCard';
@@ -19,16 +18,6 @@ import BivariateCard from '@/components/Card/BivariateCard';
 export default {
   components: {
     UnivariateCard, BivariateCard, draggable,
-  },
-  methods: {
-    toggleSidebar(id) {
-      console.log(`Clicked chart with id: ${id}`);
-      if (!this.sidebarOpen) {
-        this.$store.dispatch(SIDEBAR_SHOW, { content: 'Hello this is a test' });
-      } else {
-        this.$store.dispatch(SIDEBAR_HIDE);
-      }
-    },
   },
   computed: {
     sidebarOpen: {
