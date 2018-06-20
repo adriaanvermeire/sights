@@ -180,7 +180,15 @@ router.post('/edit', [auth, ownSight], async (req, res) => {
   const sight = await Sight.findById(id);
   sight.set({ name, description, category });
   await sight.save();
+  sight.updateAlgolia();
   return res.send({ success: true });
+});
+
+router.delete('/destroy/:id', [auth, ownSight], async (req, res) => {
+  const sight = await Sight.findById(req.params.id);
+  sight.remove({ _id: req.params.id }, () => {
+    res.send({ success: true });
+  });
 });
 
 router.get('/:sightId', async (req, res) => {
@@ -196,6 +204,7 @@ router.get('/:sightId', async (req, res) => {
   }
   return res.sendStatus(404);
 });
+
 
 router.get('/', (req, res) => {
   res.send('Sights endpoint');

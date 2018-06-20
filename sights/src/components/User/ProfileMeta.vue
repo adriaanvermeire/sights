@@ -1,6 +1,6 @@
 <template>
 <div id="profile-meta">
-    <avatar :username="profile.username" :size='50' />
+    <avatar :username="profile.username || ''" :size='50' />
     <ul id="details">
         <li><b><icon name="user"></icon> {{ profile.username }}</b></li>
         <li><icon name="envelope"></icon> {{ profile.email }}</li>
@@ -13,7 +13,7 @@ import Avatar from 'vue-avatar';
 
 export default {
   computed: {
-    profile() { return this.$store.getters.getProfile || ''; },
+    profile() { return this.$store.getters.getProfile; },
   },
   components: {
     Avatar,

@@ -15,6 +15,7 @@ export default {
         'success-outline': { 'success-outline': true },
         default: { default: true },
         warning: { warning: true },
+        danger: { danger: true },
       },
     };
   },
@@ -98,6 +99,13 @@ button {
 
     &.warning {
       background-color: $yellow;
+
+      * {
+        color: $black;
+      }
+    }
+    &.danger {
+      background-color: $red;
 
       * {
         color: $black;

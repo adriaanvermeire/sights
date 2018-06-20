@@ -13,6 +13,9 @@ export default {
   updateSight(body) {
     return Api().post('sights/edit', body);
   },
+  removeSight(id) {
+    return Api().delete(`sights/destroy/${id}`);
+  },
   getDatatypes() {
     return Api().get('sights/datatypes');
   },

@@ -70,6 +70,7 @@
                 </div>
             </form>
         </div>
+
     </div>
 </template>
 
@@ -200,6 +201,7 @@ export default {
 @import '@/assets/scss/vars.scss';
 #edit-sight {
     padding: 0 !important;
+    height: 100%;
 }
 #edit-form {
     text-align: left;
@@ -234,6 +236,7 @@ export default {
             margin-right: 0.5em;
         }
     }
+
 }
 
 .save-warning {

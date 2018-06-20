@@ -3,7 +3,7 @@
     <ais-index
           :searchStore="searchStore"
           :index-name="searchIndex"
-          :query-parameters="categoryFilter"
+          :query-parameters="filter"
           :query="query"
       >
       <search-bar @search="searchCategory($event)"/>
@@ -52,9 +52,9 @@ export default {
   data() {
     return {
       sights: [],
-      filterCategory: '',
       searchStore: '',
       index: '',
+      filterCategory: '',
     };
   },
   props: {
@@ -65,15 +65,30 @@ export default {
   },
   methods: {
     searchCategory(payload) {
-      this.filterCategory = payload.label;
+      this.$router.push({ query: { category: payload.label } });
     },
   },
   computed: {
     categoryFilter() {
+      return decodeURIComponent(this.$route.query.category || '');
+    },
+    usernameFilter() {
+      return decodeURIComponent(this.$route.query.username || '');
+    },
+    filter() {
       const filter = { filters: '' };
-      if (this.filterCategory) {
-        filter.filters = `category:${this.filterCategory}`;
+      if (this.categoryFilter) {
+        if (this.categoryFilter) {
+          filter.filters = `category:${this.categoryFilter || ''}`;
+        }
       }
+      if (this.usernameFilter) {
+        if (this.categoryFilter) {
+          filter.filters += ' AND ';
+        }
+        filter.filters += `author:${this.usernameFilter || ''}`;
+      }
+      console.log(filter);
       return filter;
     },
     isAuthenticated() {
@@ -86,7 +101,6 @@ export default {
   created() {
     this.searchStore = createFromAlgoliaCredentials('OQTWW0B4H3', '97e17abaac2e3a6bd2677c5176b7ec7d');
     this.searchIndex = process.env.ALGOLIA_INDEX;
-    this.filterCategory = this.$route.query.category;
   },
   components: {
     SightCard, SearchBar, Spinner,

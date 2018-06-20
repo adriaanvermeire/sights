@@ -2,6 +2,9 @@
     <div id="edit-sight">
         <div id="edit-form">
             <h4>Add Chart</h4>
+            <button @click='sidebarType = "guest"' class='btn btn-link p-0'>
+              See public version
+            </button>
             <hr>
             <form @submit.prevent='submitForm'>
                 <div class="row">
@@ -45,9 +48,6 @@
                     </div>
                 </div>
             </form>
-        </div>
-        <div id="bottom">
-            <a-button @click.native='backToEdit' variant="warning">Back to editing</a-button>
         </div>
     </div>
 </template>

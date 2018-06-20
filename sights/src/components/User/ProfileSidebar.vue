@@ -15,13 +15,22 @@ import ProfileMeta from './ProfileMeta';
 export default {
   data() {
     return {
-      profileRoutes: [
-        { label: 'Profile', name: { name: 'Profile' } },
+
+    };
+  },
+  computed: {
+    username() {
+      return this.$store.getters.getProfile.username;
+    },
+    profileRoutes() {
+      return [
+        { label: 'Profile', name: { name: 'Profile', params: { username: this.username } } },
         { label: 'My Sights', name: { name: 'MySights' } },
         { label: 'Liked Sights', name: { name: 'LikedSights' } },
-        { label: 'Settings', name: { name: 'Settings' } },
-      ],
-    };
+        // { label: 'Settings', name: { name: 'Settings' } },
+      ]
+      ;
+    },
   },
   components: {
     ProfileMeta,

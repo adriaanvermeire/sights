@@ -30,17 +30,9 @@ const { statics: Statics, methods: Methods } = UserSchema;
 
 // Statics
 
-Statics.publicProfile = function publicProfile(username) {
-  return this.aggregate([
+Statics.publicProfile = async function publicProfile(username) {
+  const user = await this.aggregate([
     { $match: { username } },
-    {
-      $project: {
-        _id: 0,
-        username: 1,
-        picture: 1,
-        likes: { $size: '$likes' },
-      },
-    },
     {
       $lookup: {
         from: 'sights',
@@ -48,11 +40,64 @@ Statics.publicProfile = function publicProfile(username) {
         foreignField: 'author',
         as: 'sights',
       },
-    },
-    {
-      $limit: 1,
-    },
-  ]).exec();
+    }]).exec();
+  let result;
+  if (user[0] && user[0].sights && user[0].sights.length) {
+    result = await this.aggregate([
+      { $match: { username } },
+      {
+        $lookup: {
+          from: 'sights',
+          localField: '_id',
+          foreignField: 'author',
+          as: 'sights',
+        },
+      },
+      {
+        $unwind: '$sights',
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'sights.category',
+          foreignField: '_id',
+          as: 'sights.category',
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          username: { $first: '$username' },
+          sights: { $push: '$sights' },
+        },
+      },
+      {
+        $project: {
+          username: 1,
+          picture: 1,
+          'sights.views': 1,
+          'sights.name': 1,
+          'sights.category': 1,
+          'sights.likes': 1,
+          'sights._id': 1,
+          views: {
+            $sum: '$sights.views',
+          },
+        },
+      },
+    ]).exec();
+  } else {
+    result = await this.aggregate([
+      { $match: { username } },
+      {
+        $project: {
+          username: 1,
+          picture: 1,
+        },
+      },
+    ]).exec();
+  }
+  return result;
 };
 
 Statics.getUserById = function getUserById(id, callback) {

@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const algoliasearch = require('algoliasearch');
 const Chart = require('./chart');
+const Dataset = require('./dataset');
 const { clean } = require('../utils');
 
 const { ObjectId: SchemaId } = mongoose.Schema.Types;
@@ -21,6 +22,15 @@ const SightSchema = mongoose.Schema({
 
 const client = algoliasearch('OQTWW0B4H3', '0c7e2911c7ac282807c7e09e3c387ee2');
 const algolia = client.initIndex(process.env.ALGOLIA_INDEX);
+
+SightSchema.pre('remove', function remove(next) {
+  this.removeFromAlgolia();
+  this.charts.forEach((c) => {
+    Chart.remove({ _id: c }).exec();
+  });
+  Dataset.remove({ _id: this.dataset }).exec();
+  next();
+});
 
 const { statics: Statics, methods: Methods } = SightSchema;
 
@@ -118,6 +128,12 @@ Methods.updateAlgolia = async function updateAlgolia() {
   });
 };
 
+Methods.removeFromAlgolia = async function removeFromAlgolia() {
+  algolia.deleteObject(this.id, (err) => {
+    if (err) throw err;
+  });
+};
+
 Methods.addView = function addView() {
   this.views += 1;
   return this.save();
@@ -150,6 +166,10 @@ Statics.filter = async function filter(query, user) {
     }
   }
   return sights;
+};
+
+Statics.removeSight = function removeSight(id) {
+
 };
 
 Statics.personal = function personal(author) {

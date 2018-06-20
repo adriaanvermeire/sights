@@ -1,10 +1,13 @@
 <template lang="html">
 <div id="mysights" class='container-fluid'>
   <h2>My Sights</h2>
-  <div class="expanded-sights-grid">
+  <div class="expanded-sights-grid" v-if='sights.length'>
     <expanded-sight-card
       v-for="sight of sights" :key='sight._id'
       :sight="sight"/>
+  </div>
+  <div class="text-card" v-else>
+    You haven't posted any Sights yet. <router-link :to="{ name: 'NewSight'}">Add one now!</router-link>
   </div>
 </div>
 </template>
@@ -55,9 +58,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/vars.scss';
 #mysights {
   display: flex;
   flex-direction: column;
   text-align: left;
+
+  .text-card {
+    padding: 1em 0.5em;
+    margin: 1em 0;
+    background-color: $light;
+    box-shadow: 0 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
+  }
 }
 </style>
