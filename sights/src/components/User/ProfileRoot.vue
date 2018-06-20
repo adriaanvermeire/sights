@@ -29,6 +29,7 @@ export default {
   main {
         padding: 1em;
         flex: 1 1 auto;
+        overflow: auto;
   }
 }
 </style>
