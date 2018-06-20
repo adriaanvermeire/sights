@@ -83,4 +83,10 @@ router.get('/profile', auth, async (req, res) => {
   res.json({ user });
 });
 
+router.get('/', async (req, res) => {
+  const { u } = req.query;
+  const profile = await User.publicProfile(u);
+  res.send({ success: !!profile.length, profile: profile[0] });
+});
+
 module.exports = router;

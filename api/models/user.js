@@ -21,6 +21,7 @@ const UserSchema = mongoose.Schema({
     required: true,
   },
   likes: [String], // Object id's for posts liked by the user
+  picture: String,
 }, { timestamps: true });
 
 const { statics: Statics, methods: Methods } = UserSchema;
@@ -28,6 +29,31 @@ const { statics: Statics, methods: Methods } = UserSchema;
 // Document Methods
 
 // Statics
+
+Statics.publicProfile = function publicProfile(username) {
+  return this.aggregate([
+    { $match: { username } },
+    {
+      $project: {
+        _id: 0,
+        username: 1,
+        picture: 1,
+        likes: { $size: '$likes' },
+      },
+    },
+    {
+      $lookup: {
+        from: 'sights',
+        localField: '_id',
+        foreignField: 'author',
+        as: 'sights',
+      },
+    },
+    {
+      $limit: 1,
+    },
+  ]).exec();
+};
 
 Statics.getUserById = function getUserById(id, callback) {
   return this.findById(id, callback);
