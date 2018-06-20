@@ -10,10 +10,9 @@ export default [
   {
     path: '/profile',
     component: ProfileRoot,
-    beforeEnter: auth.ifAuthenticated,
     children: [
       {
-        path: '',
+        path: ':username',
         name: 'Profile',
         component: Profile,
       },
@@ -21,22 +20,22 @@ export default [
         path: 'sights',
         name: 'MySights',
         component: MySights,
-      },
+        beforeEnter: auth.ifAuthenticated },
       {
         path: 'likes',
         name: 'LikedSights',
         component: LikedSights,
-      },
+        beforeEnter: auth.ifAuthenticated },
       {
         path: 'favorites',
         name: 'Favorites',
         component: Favorites,
-      },
+        beforeEnter: auth.ifAuthenticated },
       {
         path: 'settings',
         name: 'Settings',
         component: Settings,
-      },
+        beforeEnter: auth.ifAuthenticated },
     ],
   },
 ];
