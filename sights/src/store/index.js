@@ -5,6 +5,7 @@ import auth from './modules/auth';
 import user from './modules/user';
 import sight from './modules/sight';
 import detail from './modules/detail';
+import profile from './modules/profile';
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     user,
     sight,
     detail,
+    profile,
   },
 });
 

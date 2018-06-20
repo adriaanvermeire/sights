@@ -5,14 +5,7 @@
             <h4>{{ name }}</h4>
             <p>{{ description }}</p>
         </div>
-        <div id="bottom" v-if='isMine'>
-            <a-button  variant='warning' @click.native='sidebarType = "edit"'>
-                Edit Sight
-            </a-button>
-            <a-button variant='warning' @click.native='sidebarType = "addChart"'>
-                Add chart
-            </a-button>
-        </div>
+
     </div>
     <edit-sidebar
         ref='editSidebar'
@@ -21,15 +14,46 @@
     <add-chart-sidebar
         @reload-sight='$emit("reload-sight")'
         v-else-if="sidebarType === 'addChart'"/>
+    <div id="bottom" v-if='isMine' :class='{ delete: showDeleteConfirmation }'>
+            <a-button variant='success' @click.native='sidebarType = "addChart"' v-if='sidebarType !== "addChart" && !showDeleteConfirmation'>
+                Add chart
+            </a-button>
+            <a-button variant='warning' @click.native='sidebarType = "edit"' v-if='sidebarType !== "edit" && !showDeleteConfirmation'>
+                Edit Sight
+            </a-button>
+            <a-button :variant='showDeleteConfirmation ? "warning": "danger"' @click.native='deleteConfirmation'>
+                <icon v-if='!showDeleteConfirmation' name="trash"></icon>
+                <span v-if='showDeleteConfirmation'>Sure?</span>
+            </a-button>
+            <a-button v-if='showDeleteConfirmation' variant='danger' @click.native='removeSight'>Yes</a-button>
+            <a-button v-if='showDeleteConfirmation' variant='success' @click.native='showDeleteConfirmation = false'>Cancel</a-button>
+        </div>
 </div>
 </template>
 
 <script>
 import { DETAIL_SIDEBARTYPE } from '@/store/actions/detail';
+import SightService from '@/services/SightService';
 import EditSidebar from './EditSidebar';
 import AddChartSidebar from './AddChartSidebar';
 
 export default {
+  data() {
+    return {
+      showDeleteConfirmation: false,
+    };
+  },
+  methods: {
+    deleteConfirmation() {
+      if (!this.showDeleteConfirmation) {
+        this.showDeleteConfirmation = true;
+      }
+    },
+    async removeSight() {
+      await SightService.removeSight(this.sightId);
+      this.$router.push({ name: 'MySights' });
+    },
+  },
   computed: {
     name() { return this.$store.getters.sightName; },
     description() { return this.$store.getters.sightDescription; },
@@ -73,12 +97,18 @@ export default {
         flex-direction: column;
         justify-content: space-between;
 
-        #bottom {
-            display: flex;
-            justify-content: space-between;
-            button {
-                width: 45%;
-            }
+    }
+    #bottom {
+        display: flex;
+        width: 100%;
+
+        button:not(:last-child) {
+            margin-right: 0.5em;
+            flex: 1;
+        }
+
+        &.delete button {
+            flex: 1;
         }
     }
 }

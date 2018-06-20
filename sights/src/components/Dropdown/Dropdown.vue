@@ -8,7 +8,7 @@
             <div id="dropdown-arrow"></div>
             <ul id='dropdown-list'>
                 <li v-for='action of actions' :key='action.id' class='dropdown-item'>
-                    <router-link :to="{ name: action.route }">{{ action.name }}</router-link>
+                    <router-link :to="action.route">{{ action.name }}</router-link>
                 </li>
                 <li v-if='hasBelow' class="dropdown-divider"></li>
                 <li v-if='hasBelow' class='dropdown-item'>

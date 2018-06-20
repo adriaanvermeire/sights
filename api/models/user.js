@@ -21,6 +21,7 @@ const UserSchema = mongoose.Schema({
     required: true,
   },
   likes: [String], // Object id's for posts liked by the user
+  picture: String,
 }, { timestamps: true });
 
 const { statics: Statics, methods: Methods } = UserSchema;
@@ -28,6 +29,76 @@ const { statics: Statics, methods: Methods } = UserSchema;
 // Document Methods
 
 // Statics
+
+Statics.publicProfile = async function publicProfile(username) {
+  const user = await this.aggregate([
+    { $match: { username } },
+    {
+      $lookup: {
+        from: 'sights',
+        localField: '_id',
+        foreignField: 'author',
+        as: 'sights',
+      },
+    }]).exec();
+  let result;
+  if (user[0] && user[0].sights && user[0].sights.length) {
+    result = await this.aggregate([
+      { $match: { username } },
+      {
+        $lookup: {
+          from: 'sights',
+          localField: '_id',
+          foreignField: 'author',
+          as: 'sights',
+        },
+      },
+      {
+        $unwind: '$sights',
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'sights.category',
+          foreignField: '_id',
+          as: 'sights.category',
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          username: { $first: '$username' },
+          sights: { $push: '$sights' },
+        },
+      },
+      {
+        $project: {
+          username: 1,
+          picture: 1,
+          'sights.views': 1,
+          'sights.name': 1,
+          'sights.category': 1,
+          'sights.likes': 1,
+          'sights._id': 1,
+          views: {
+            $sum: '$sights.views',
+          },
+        },
+      },
+    ]).exec();
+  } else {
+    result = await this.aggregate([
+      { $match: { username } },
+      {
+        $project: {
+          username: 1,
+          picture: 1,
+        },
+      },
+    ]).exec();
+  }
+  return result;
+};
 
 Statics.getUserById = function getUserById(id, callback) {
   return this.findById(id, callback);

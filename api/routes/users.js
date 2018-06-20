@@ -83,4 +83,30 @@ router.get('/profile', auth, async (req, res) => {
   res.json({ user });
 });
 
+router.get('/', async (req, res) => {
+  const SIGHTS_LIMIT = 5;
+  const { u } = req.query;
+  const users = await User.publicProfile(u);
+  const profile = users[0];
+  let likes = 0;
+  if (profile.sights) {
+    profile.sights.sort((a, b) => a.likes.length < b.likes.length);
+    for (const sight of profile.sights) {
+      likes += sight.likes.length;
+      sight.category = sight.category[0].name;
+      sight.likeCount = sight.likes.length;
+      sight.objectID = `${sight._id}`;
+      delete sight._id;
+    }
+    const sightCount = profile.sights.length || 0;
+    const limit = sightCount > SIGHTS_LIMIT ? SIGHTS_LIMIT : sightCount;
+    const rest = sightCount - limit;
+    const limit2 = limit + (rest > limit * 2 ? limit * 2 : rest);
+    profile.top = profile.sights.slice(0, limit);
+    if (sightCount > SIGHTS_LIMIT) { profile.other = profile.sights.slice(limit, limit2); }
+  }
+  profile.likes = likes;
+  res.send({ success: !!profile, profile });
+});
+
 module.exports = router;

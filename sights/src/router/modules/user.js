@@ -2,18 +2,21 @@ import ProfileRoot from '@/components/User/ProfileRoot';
 import Profile from '@/components/User/Profile';
 import MySights from '@/components/User/MySights';
 import LikedSights from '@/components/User/LikedSights';
-import Favorites from '@/components/User/Favorites';
 import Settings from '@/components/User/Settings';
 import { auth } from '../middleware';
 
 export default [
   {
+    path: '/user/:username',
+    component: Profile,
+    name: 'PublicProfile',
+  },
+  {
     path: '/profile',
     component: ProfileRoot,
-    beforeEnter: auth.ifAuthenticated,
     children: [
       {
-        path: '',
+        path: ':username',
         name: 'Profile',
         component: Profile,
       },
@@ -21,22 +24,17 @@ export default [
         path: 'sights',
         name: 'MySights',
         component: MySights,
-      },
+        beforeEnter: auth.ifAuthenticated },
       {
         path: 'likes',
         name: 'LikedSights',
         component: LikedSights,
-      },
-      {
-        path: 'favorites',
-        name: 'Favorites',
-        component: Favorites,
-      },
+        beforeEnter: auth.ifAuthenticated },
       {
         path: 'settings',
         name: 'Settings',
         component: Settings,
-      },
+        beforeEnter: auth.ifAuthenticated },
     ],
   },
 ];

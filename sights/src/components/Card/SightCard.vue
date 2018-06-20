@@ -18,9 +18,9 @@
               </button>
             </div>
         </div>
-        <div class="card-text text-left">
-          <p>
-            Made by: {{ author }}
+        <div class="card-text text-left" v-if='author'>
+          <p id='author'>
+            Made by: <router-link :to="{ name: 'PublicProfile', params: { username: author }}">{{ author }}</router-link>
           </p>
         </div>
     </div>
@@ -123,6 +123,11 @@ button#like {
       }
     }
 
+}
+#author {
+  a {
+    color: $black;
+  }
 }
 
 .likeSight-enter-active {
