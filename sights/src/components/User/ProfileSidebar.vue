@@ -41,11 +41,12 @@ export default {
         padding: 0;
         text-align: right;
         li {
-            padding: 1em;
             font-size: 1.3em;
             font-weight: 500;
             transition: 0.2s all ease-out;
-            * {
+            a {
+                display: block;
+                padding: 1em;
                 color: $black;
             }
             &:hover, &.router-link-exact-active {
