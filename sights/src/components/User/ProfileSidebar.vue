@@ -1,7 +1,7 @@
 <template>
   <aside id="sidebar">
-        <profile-meta />
-        <ul id='navigation'>
+        <profile-meta @open="toggleSidebar" />
+        <ul id='navigation' :class='{ open }' >
             <router-link v-for='route of profileRoutes' :key='route.name.name' tag='li' :to="route.name">
                 <a>{{ route.label }}</a>
             </router-link>
@@ -15,7 +15,7 @@ import ProfileMeta from './ProfileMeta';
 export default {
   data() {
     return {
-
+      open: false,
     };
   },
   computed: {
@@ -32,6 +32,11 @@ export default {
       ;
     },
   },
+  methods: {
+    toggleSidebar() {
+      this.open = !this.open;
+    },
+  },
   components: {
     ProfileMeta,
   },
@@ -42,7 +47,7 @@ export default {
 @import '@/assets/scss/vars.scss';
 
 #sidebar {
-    width: 15%;
+    flex: 0 0 auto;
     background-color: $light;
     box-shadow: 2px 0 2px 0 rgba(43,49,63,.14), 0 3px 5px 0 rgba(43,49,63,.06);
     #navigation {
@@ -62,6 +67,22 @@ export default {
                 background-color: darken($light, 5%);
             }
         }
+    }
+
+    @media only screen and (max-width: 768px) {
+
+      #profile-meta ul {
+        display: none;
+      }
+
+      #navigation {
+        display: none;
+        transition: all 0.3s ease;
+        &.open {
+          display: block;
+        }
+      }
+
     }
 }
 </style>
