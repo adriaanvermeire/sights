@@ -4,7 +4,7 @@
       <img class='logo' src="@/assets/graphics/logo-sights-inverse-notext.png" alt="">
       Sights
   </router-link>
-  <h2 class='text-white m-0' v-if='sightName'>{{ sightName }}</h2>
+  <h2 class='text-white m-0 align-self-center' v-if='sightName'>{{ sightName }}</h2>
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class='navbar-nav align-items-stretch h-100 navbar-nav'>
       <router-link tag='li' class='nav-item' :to='{ name: "Home"}'>
