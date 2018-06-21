@@ -3,9 +3,8 @@
     <div id="sidebar-content" v-if="!sidebarType || sidebarType === 'guest'">
         <div id="top">
             <h4>{{ name }}</h4>
-            <p>{{ description }}</p>
+            <p><i>{{ description || "No description provided" }}</i></p>
         </div>
-
     </div>
     <edit-sidebar
         ref='editSidebar'
@@ -110,6 +109,7 @@ export default {
         &.delete button {
             flex: 1;
         }
+
     }
 }
 </style>

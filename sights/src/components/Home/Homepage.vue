@@ -95,8 +95,18 @@ export default {
 @import 'vue-nav-tabs/themes/vue-tabs.css';
 
 #top {
+  @media only screen and (max-width: 1200px) {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
   & > * {
     width: 33%;
+
+    @media only screen and (max-width: 1200px) {
+      width: 100%;
+      margin-bottom: 2em;
+    }
   }
   #left {
 

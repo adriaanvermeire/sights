@@ -1,6 +1,6 @@
 <template>
 <div id="profile-meta">
-    <avatar :username="profile.username || ''" :size='50' />
+    <avatar @click.native='$emit("open")' :username="profile.username || ''" :size='50' />
     <ul id="details">
         <li><b><icon name="user"></icon> {{ profile.username }}</b></li>
         <li><icon name="envelope"></icon> {{ profile.email }}</li>
@@ -31,6 +31,14 @@ export default {
         list-style-type: none;
         padding: 0;
         text-align: left;
+    }
+
+    @media only screen and (max-width: 768px) {
+
+      ul {
+        display: none;
+      }
+
     }
 }
 </style>

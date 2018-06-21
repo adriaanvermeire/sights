@@ -88,6 +88,11 @@ export default {
   display: flex;
   justify-content: center;
   overflow: hidden;
+
+  @media only screen and (max-width: 1200px) {
+    flex-direction: column-reverse;
+  }
+
   & > *{
     &:first-child{
       flex: 1 1 auto
@@ -96,6 +101,10 @@ export default {
     &:nth-child(2){
       flex: 0 0 20vw;
       transition: margin 0.5s ease;
+      @media only screen and (max-width: 1200px) {
+        flex: 0 0 auto;
+
+      }
     }
   }
 
@@ -105,7 +114,12 @@ export default {
 
   .sidebar-enter, .sidebar-leave-to {
     // transform: translateX(100%);
-    margin-right: -20vw
+    margin-right: -20vw;
+    @media only screen and (max-width: 1200px) {
+      margin: 0;
+      margin-top: -20vw;
+      opacity: 0;
+    }
   }
 }
 

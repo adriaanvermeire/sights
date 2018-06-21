@@ -1,7 +1,7 @@
 <template lang="html">
 <div class='container'>
   <div class='row d-flex justify-content-center'>
-    <div class='col-6'>
+    <div class='col-lg-6 col-md-8 col-12'>
       <div class='card' title='Registration'>
         <div class="card-body">
           <div class="card-title"><h3>Sign Up</h3></div>
